@@ -1,0 +1,25 @@
+{% extends "users/base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}
+New Momo User
+{% endblock title %}
+{% block content %}
+<div class="container">
+    <br>
+    <h4 class="text-center mb-4">Add new Momo User</h4>
+    <br>
+    <div class="row">
+        <div class="col-xs-6 col-sm-6 col-md-8 ml-auto mr-auto mb-3">
+            <form enctype="multipart/form-data" method="POST" >
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ form|crispy }}
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-sm btn-primary" type="submit">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

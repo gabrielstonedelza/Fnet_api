@@ -19,8 +19,7 @@ class CustomerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Customer
-        fields = ['id', 'agent', 'username', 'name', 'account_number', 'bank', 'location', 'digital_address', 'phone',
-                  'date_created']
+        fields = ['id', 'agent', 'username', 'name', 'account_number', 'bank', 'location', 'digital_address', 'phone', 'date_of_birth', 'date_created']
         read_only_fields = ['agent']
 
     def get_username(self, user):

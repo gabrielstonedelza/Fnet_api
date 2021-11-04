@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="icon" href="{% static 'users/images/connectdjango.ico' %}" type="image/x-icon">
+  <link rel="stylesheet" href="{% static 'users/css/bootstrap.min.css'%}" type="text/css">
+  <link rel="stylesheet" href="{% static 'users/css/mdb.min.css'%}" type="text/css">
+  <link rel="stylesheet" href="{% static 'users/css/all.min.css'%}" type="text/css">
+  <link rel="stylesheet" href="{% static 'users/css/animate.css'%}" type="text/css">
+  <script src="https://cdn.ckeditor.com/4.15.0/standard/ckeditor.js"></script>
+
+
+  <title>
+    {% block title %}  {% endblock %}
+  </title>
+</head>
+<body>
+
+<div class="container">
+  <div class="row text-center">
+    <div class="col-xs-6 col-sm-6 col-md-6 ml-auto mr-auto">
+      {% if message %}
+        <div class="animated bounce alert alert-{{ message.tags }}" style="font-weight: bold; padding: 20px;">
+          {{ message }}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% block content %}
+
+
+{% endblock %}
+<script src="{% static 'users/js/jquery-3.4.1.min.js'%}"></script>
+<script src="{% static 'users/js/bootstrap.min.js'%}"></script>
+<script src="{% static 'users/js/mdb.min.js'%}"></script>
+<script src="{% static 'users/js/popper.min.js'%}"></script>
+<script src="{% static 'users/js/jscode.js'%}"></script>
+<script src="{% static 'users/js/all.min.js'%}"></script>
+</body>
+</html>

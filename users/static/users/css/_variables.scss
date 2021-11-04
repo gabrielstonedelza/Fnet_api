@@ -1,0 +1,69 @@
+$primary_color : #0C4B33;
+$secondary_color: #C9F0DD;
+$temporary_color:seagreen;
+$light:#fff;
+$dark:#d3d3d3;
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    overflow-x: hidden;
+    line-height: 1.5;
+    background: #191919;
+  }
+@mixin setFlex($direction) {
+    display: flex;
+    flex-direction: $direction;
+    justify-content: center;
+    align-items: center;
+}
+
+
+a.butt{
+    position: relative;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    padding:5px;
+    background: #0C4B33;
+    border-radius: 5px;
+    transition: 0.5s ease-in;
+    &:hover{
+        background: #C9F0DD;
+        color: #000;
+    }
+}
+
+a.delete{
+    // position: relative;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    background: #ff0000;
+    border-radius: 5px;
+    transition: 0.5s ease-in;
+    &:hover{
+        background: #dd1515;
+    }
+}
+
+button.butt{
+    position: relative;
+    border: none;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    padding:5px;
+    background: #0C4B33;
+    border-radius: 5px;
+    transition: 0.5s ease-in;
+    &:hover{
+        background: #C9F0DD;
+        color: #000;
+    }
+}
