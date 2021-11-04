@@ -26,7 +26,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = ['192.241.134.34', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['.fnetghana.xyz', '192.241.134.34', 'localhost', '127.0.0.1']
 
 # Application definition
 
