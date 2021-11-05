@@ -72,7 +72,7 @@ class AgentDepositRequests(models.Model):
 
 class CustomerWithdrawal(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name="customer_withdrawing")
+    customer = models.CharField(max_length=100)
     bank = models.CharField(max_length=100, choices=BANKS, default="GT Bank")
     amount = models.CharField(max_length=500)
     date_requested = models.DateTimeField(auto_now_add=True)
