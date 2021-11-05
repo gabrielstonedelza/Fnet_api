@@ -46,7 +46,7 @@ class Customer(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=150)
     account_number = models.CharField(max_length=16)
-    # bank = models.CharField(max_length=100, choices=BANKS, default="GT Bank")
+    bank = models.CharField(max_length=100, choices=BANKS, default="GT Bank")
     location = models.CharField(max_length=100)
     digital_address = models.CharField(max_length=15)
     phone = models.CharField(max_length=15)
