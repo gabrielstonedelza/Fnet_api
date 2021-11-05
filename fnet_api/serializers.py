@@ -1,5 +1,11 @@
 from rest_framework import serializers
-from .models import FNetAdmin, Customer, AgentDepositRequests, CustomerWithdrawal, Payments
+from .models import FNetAdmin, Customer, AgentDepositRequests, CustomerWithdrawal, Payments, TwilioApi
+
+
+class TwilioSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TwilioApi
+        fields = ['account_sid', 'twi_auth']
 
 
 class FNetAdminSerializer(serializers.ModelSerializer):
@@ -19,7 +25,8 @@ class CustomerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Customer
-        fields = ['id', 'agent', 'username', 'name', 'account_number', 'bank', 'location', 'digital_address', 'phone', 'date_of_birth', 'date_created']
+        fields = ['id', 'agent', 'username', 'name', 'account_number', 'bank', 'location', 'digital_address', 'phone',
+                  'date_of_birth', 'date_created']
         read_only_fields = ['agent']
 
     def get_username(self, user):
@@ -74,7 +81,8 @@ class PaymentsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Payments
-        fields = ['id', 'agent', 'agent_username', 'mode_of_payment', 'cash_at_location', 'amount', 'payment_status', 'date_created']
+        fields = ['id', 'agent', 'agent_username', 'mode_of_payment', 'cash_at_location', 'amount', 'payment_status',
+                  'date_created']
         read_only_fields = ['agent']
 
     def get_agent_username(self, user):

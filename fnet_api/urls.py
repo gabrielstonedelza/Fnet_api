@@ -2,6 +2,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    path('twilio_details/', views.get_twilio),
     path('agent_requests/', views.get_agent_requests),
     path('agent_request_approval/<int:id>/', views.approve_request),
     path('register_customer/<str:username>/', views.register_customer),

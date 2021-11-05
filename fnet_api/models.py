@@ -18,6 +18,7 @@ REQUEST_STATUS = (
 )
 
 MODE_OF_PAYMENT = (
+    ("Select mode of payment", "Select mode of payment"),
     ("Bank Payment", "Bank Payment"),
     ("Momo Payment", "Momo Payment"),
     ("Momo pay Payment", "Momo pay Payment"),
@@ -27,6 +28,7 @@ MODE_OF_PAYMENT = (
 )
 
 PAYMENT_OFFICES = (
+    ("Cash @ location", "Cash @ location"),
     ("DVLA", "DVLA"),
     ("HEAD OFFICE", "HEAD OFFICE"),
     ("KEJETIA", "KEJETIA"),
@@ -91,3 +93,12 @@ class Payments(models.Model):
 
     def __str__(self):
         return self.payment_status
+
+
+class TwilioApi(models.Model):
+    account_sid = models.CharField(max_length=200)
+    twi_auth = models.CharField(max_length=200)
+    date_created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"twilio account added"

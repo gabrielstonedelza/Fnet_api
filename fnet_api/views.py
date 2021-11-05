@@ -1,13 +1,20 @@
 from django.shortcuts import render, get_object_or_404
 from .serializers import FNetAdminSerializer, CustomerSerializer, AgentDepositRequestSerializer, \
-    CustomerWithdrawalSerializer, PaymentsSerializer
+    CustomerWithdrawalSerializer, PaymentsSerializer, TwilioSerializer
 
-from .models import FNetAdmin, Customer, AgentDepositRequests, CustomerWithdrawal, Payments
+from .models import FNetAdmin, Customer, AgentDepositRequests, CustomerWithdrawal, Payments, TwilioApi
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework import viewsets, permissions, generics, status
 from rest_framework.response import Response
 from users.models import User
 from users.serializers import UsersSerializer
+
+
+@api_view(['GET'])
+def get_twilio(request):
+    twilio_details = TwilioApi.objects.all().order_by('-date_created')
+    serializer = TwilioSerializer(twilio_details, many=True)
+    return Response(serializer.data)
 
 
 @api_view(['GET'])
