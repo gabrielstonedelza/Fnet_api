@@ -50,7 +50,7 @@ class Customer(models.Model):
     location = models.CharField(max_length=100)
     digital_address = models.CharField(max_length=15)
     phone = models.CharField(max_length=15)
-    date_of_birth = models.DateField(default=timezone.now)
+    date_of_birth = models.CharField(max_length=15)
     date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -63,7 +63,7 @@ class AgentDepositRequests(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE, related_name="agent_requesting")
     amount = models.CharField(max_length=500)
     bank = models.CharField(max_length=100, choices=BANKS, default="GT Bank")
-    request_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
+    request_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending",blank=True)
     date_requested = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
