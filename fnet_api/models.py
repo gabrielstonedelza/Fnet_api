@@ -1,7 +1,6 @@
 from django.db import models
 from django.conf import settings
 
-
 User = settings.AUTH_USER_MODEL
 BANKS = (
     ("Access Bank", "Access Bank"),
@@ -61,9 +60,9 @@ class Customer(models.Model):
 
 class AgentDepositRequests(models.Model):
     guarantor = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
-    customer = models.CharField(max_length=30)
+    customer = models.CharField(max_length=30, blank=True)
     agent = models.ForeignKey(User, on_delete=models.CASCADE, related_name="agent_requesting")
-    amount = models.CharField(max_length=500)
+    amount = models.CharField(max_length=500, blank=True)
     bank = models.CharField(max_length=100, choices=BANKS, default="GT Bank")
     request_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
     date_requested = models.DateTimeField(auto_now_add=True)
