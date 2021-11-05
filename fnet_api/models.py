@@ -46,7 +46,7 @@ class Customer(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=150)
     account_number = models.CharField(max_length=16)
-    bank = models.CharField(max_length=100, choices=BANKS, default="GT Bank")
+    bank = models.CharField(max_length=100, choices=BANKS, default="Access Bank")
     location = models.CharField(max_length=100)
     digital_address = models.CharField(max_length=15)
     phone = models.CharField(max_length=15)
@@ -58,12 +58,12 @@ class Customer(models.Model):
 
 
 class AgentDepositRequests(models.Model):
-    guarantor = models.ForeignKey(FNetAdmin, on_delete=models.CASCADE)
+    guarantor = models.ForeignKey(FNetAdmin, on_delete=models.CASCADE, default=1)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name="customer_requesting")
     agent = models.ForeignKey(User, on_delete=models.CASCADE, related_name="agent_requesting")
     amount = models.CharField(max_length=500)
     bank = models.CharField(max_length=100, choices=BANKS, default="GT Bank")
-    request_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending",blank=True)
+    request_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
     date_requested = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
