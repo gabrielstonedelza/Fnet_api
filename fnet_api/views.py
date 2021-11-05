@@ -97,6 +97,14 @@ def customer_withdrawal_summary(request, username):
 
 
 @api_view(['GET'])
+def payment_summary(request, username):
+    user = get_object_or_404(User, username=username)
+    my_payments = Payments.objects.filter(agent=user).order_by('-date_created')
+    serializer = PaymentsSerializer(my_payments, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
 def get_payments(request):
     payments = Payments.objects.all().order_by('-date_created')
     serializer = PaymentsSerializer(payments, many=True)

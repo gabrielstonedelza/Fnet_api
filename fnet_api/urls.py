@@ -14,6 +14,7 @@ urlpatterns = [
     path('agents_customers_withdrawal_summary/<str:username>/', views.customer_withdrawal_summary),
     path('payments/', views.get_payments),
     path('make_payments/<str:username>/', views.make_payments),
-    path('approve_payments/<int:id>/', views.approve_payment)
+    path('approve_payments/<int:id>/', views.approve_payment),
+    path('payment_summary/<str:username>/', views.payment_summary)
 
 ]
