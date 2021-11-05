@@ -58,7 +58,7 @@ class Customer(models.Model):
 
 
 class AgentDepositRequests(models.Model):
-    guarantor = models.ForeignKey(FNetAdmin, on_delete=models.CASCADE, default=1)
+    guarantor = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     customer = models.CharField(max_length=30)
     agent = models.ForeignKey(User, on_delete=models.CASCADE, related_name="agent_requesting")
     amount = models.CharField(max_length=500)

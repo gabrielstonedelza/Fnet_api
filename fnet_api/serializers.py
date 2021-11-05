@@ -39,11 +39,11 @@ class AgentDepositRequestSerializer(serializers.ModelSerializer):
         read_only_fields = ['agent']
 
     def get_guarantor_username(self, user):
-        guarantor_username = user.guarantor.user.username
+        guarantor_username = user.guarantor.username
         return guarantor_username
 
     def get_customer_username(self, user):
-        customer_username = user.customer.name
+        customer_username = user.customer
         return customer_username
 
     def get_agent_username(self, user):
