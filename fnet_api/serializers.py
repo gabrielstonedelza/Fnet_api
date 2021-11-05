@@ -61,7 +61,7 @@ class CustomerWithdrawalSerializer(serializers.ModelSerializer):
         read_only_fields = ['agent']
 
     def get_customer_username(self, user):
-        customer_username = user.customer.name
+        customer_username = user.customer
         return customer_username
 
     def get_agent_username(self, user):
