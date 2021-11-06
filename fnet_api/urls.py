@@ -20,6 +20,7 @@ urlpatterns = [
     path('approve_payments/<int:id>/', views.approve_payment),
     path('payment_summary/<str:username>/', views.payment_summary),
     path('get_agent/<str:username>/', views.get_agent),
-    path('payment_detail/<int:pk>/', views.payment_detail)
+    path('payment_detail/<int:pk>/', views.payment_detail),
+    path('get_customer/<str:name>/', views.get_customer)
 
 ]

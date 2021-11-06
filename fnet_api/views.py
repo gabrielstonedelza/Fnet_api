@@ -164,3 +164,10 @@ def approve_payment(request, id):
         serializer.save()
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def get_customer(request, name):
+    customer = Customer.objects.filter(name=name)
+    serializer = CustomerSerializer(customer, many=True)
+    return Response(serializer.data)
