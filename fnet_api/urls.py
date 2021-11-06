@@ -5,6 +5,7 @@ urlpatterns = [
     path('admin_user/', views.get_admin),
     path('twilio_details/', views.get_twilio),
     path('agent_requests/', views.get_agent_requests),
+    path('request_detail/<int:pk>/', views.request_detail),
     path('agent_request_approval/<int:id>/', views.approve_request),
     path('register_customer/<str:username>/', views.register_customer),
     path('agent_deposit_request/<str:username>/', views.agent_deposit_request),

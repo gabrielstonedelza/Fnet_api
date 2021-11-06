@@ -55,6 +55,13 @@ def agent_deposit_request(request, username):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@api_view(['GET'])
+def request_detail(request, pk):
+    drequest = AgentDepositRequests.objects.get(pk=pk)
+    serializer = AgentDepositRequestSerializer(drequest, many=False)
+    return Response(serializer.data)
+
+
 @api_view(['POST'])
 def customer_withdrawal(request, username):
     agent = get_object_or_404(User, username=username)
