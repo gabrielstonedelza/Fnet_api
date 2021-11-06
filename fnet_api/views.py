@@ -80,6 +80,13 @@ def get_all_agents(request):
 
 
 @api_view(['GET'])
+def get_agent(request, username):
+    agent = User.objects.filter(username=username)
+    serializer = UsersSerializer(agent, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
 def get_admin(request):
     admin_user = User.objects.filter(pk=1)
     serializer = UsersSerializer(admin_user, many=True)
