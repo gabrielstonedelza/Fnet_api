@@ -62,6 +62,13 @@ def request_detail(request, pk):
     return Response(serializer.data)
 
 
+@api_view(['GET'])
+def payment_detail(request, pk):
+    dpayment = Payments.objects.get(pk=pk)
+    serializer = PaymentsSerializer(dpayment, many=False)
+    return Response(serializer.data)
+
+
 @api_view(['POST'])
 def customer_withdrawal(request, username):
     agent = get_object_or_404(User, username=username)
