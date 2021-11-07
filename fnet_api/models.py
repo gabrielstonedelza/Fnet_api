@@ -36,13 +36,6 @@ PAYMENT_OFFICES = (
 )
 
 
-class FNetAdmin(models.Model):
-    user = models.ForeignKey(User, default=1, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.user.username
-
-
 class Customer(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=150)
@@ -101,3 +94,39 @@ class TwilioApi(models.Model):
 
     def __str__(self):
         return f"twilio account added"
+
+
+class AdminAccountsStartedWith(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    physical_cash = models.IntegerField()
+    mtn_eCash = models.IntegerField()
+    vodafone_eCash = models.IntegerField()
+    airtel_tigo_eCash = models.IntegerField()
+    ecobank_eCash = models.IntegerField()
+    calbank_eCash = models.IntegerField()
+    fidelity_eCash = models.IntegerField()
+    date_started = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} has started accounts today"
+
+    def ecash_sum(self):
+        return self.mtn_eCash + self.vodafone_eCash + self.airtel_tigo_eCash + self.ecobank_eCash + self.calbank_eCash + self.fidelity_eCash
+
+
+class AdminAccountsCompletedWith(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    physical_cash = models.IntegerField()
+    mtn_eCash = models.IntegerField()
+    vodafone_eCash = models.IntegerField()
+    airtel_tigo_eCash = models.IntegerField()
+    ecobank_eCash = models.IntegerField()
+    calbank_eCash = models.IntegerField()
+    fidelity_eCash = models.IntegerField()
+    date_closed = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} has ended accounts today"
+
+    def ecash_sum(self):
+        return self.mtn_eCash + self.vodafone_eCash + self.airtel_tigo_eCash + self.ecobank_eCash + self.calbank_eCash + self.fidelity_eCash

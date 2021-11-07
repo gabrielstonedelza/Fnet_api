@@ -10,8 +10,8 @@ urlpatterns = [
     path('register_customer/<str:username>/', views.register_customer),
     path('agent_deposit_request/<str:username>/', views.agent_deposit_request),
     path('customer_withdrawal/<str:username>/', views.customer_withdrawal),
-    path('all_agents/', views.get_all_agents),
-    path('all_customers/', views.get_all_customers),
+    path('all_agents/', views.GetAllAgents.as_view()),
+    path('all_customers/', views.GetAllCustomers.as_view()),
     path('agent_customer_summary/<str:username>/', views.agent_customers_summary),
     path('agent_deposit_request_summary/<str:username>/', views.deposit_request_summary),
     path('agents_customers_withdrawal_summary/<str:username>/', views.customer_withdrawal_summary),
@@ -21,6 +21,11 @@ urlpatterns = [
     path('payment_summary/<str:username>/', views.payment_summary),
     path('get_agent/<str:username>/', views.get_agent),
     path('payment_detail/<int:pk>/', views.payment_detail),
-    path('get_customer/<str:name>/', views.get_customer)
+    path('get_customer/<str:name>/', views.get_customer),
+    path('admin_accounts_started/', views.admin_accounts_started),
+    path('admin_accounts_completed/', views.admin_accounts_completed),
+    path('admin_accounts_started_lists/', views.admin_accounts_started_lists),
+    path('admin_accounts_started_lists/', views.admin_accounts_completed_lists),
+    # path('user_customers/<str:username>/', views.user_customers)
 
 ]

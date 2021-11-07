@@ -1,13 +1,16 @@
 from django.shortcuts import render, get_object_or_404
-from .serializers import FNetAdminSerializer, CustomerSerializer, AgentDepositRequestSerializer, \
-    CustomerWithdrawalSerializer, PaymentsSerializer, TwilioSerializer
+from .serializers import CustomerSerializer, AgentDepositRequestSerializer, \
+    CustomerWithdrawalSerializer, PaymentsSerializer, TwilioSerializer,AdminAccountsStartedSerializer,AdminAccountsCompletedSerializer
 
-from .models import FNetAdmin, Customer, AgentDepositRequests, CustomerWithdrawal, Payments, TwilioApi
+from .models import Customer, AgentDepositRequests, CustomerWithdrawal, Payments, TwilioApi, \
+    AdminAccountsStartedWith, AdminAccountsCompletedWith
+
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework import viewsets, permissions, generics, status
 from rest_framework.response import Response
 from users.models import User
 from users.serializers import UsersSerializer
+from rest_framework import filters
 
 
 @api_view(['GET'])
@@ -80,13 +83,6 @@ def customer_withdrawal(request, username):
 
 
 @api_view(['GET'])
-def get_all_agents(request):
-    users = User.objects.all().order_by('-date_joined')
-    serializer = UsersSerializer(users, many=True)
-    return Response(serializer.data)
-
-
-@api_view(['GET'])
 def get_agent(request, username):
     agent = User.objects.filter(username=username)
     serializer = UsersSerializer(agent, many=True)
@@ -97,13 +93,6 @@ def get_agent(request, username):
 def get_admin(request):
     admin_user = User.objects.filter(pk=1)
     serializer = UsersSerializer(admin_user, many=True)
-    return Response(serializer.data)
-
-
-@api_view(['GET'])
-def get_all_customers(request):
-    customers = Customer.objects.all().order_by('-date_created')
-    serializer = CustomerSerializer(customers, many=True)
     return Response(serializer.data)
 
 
@@ -170,4 +159,64 @@ def approve_payment(request, id):
 def get_customer(request, name):
     customer = Customer.objects.filter(name=name)
     serializer = CustomerSerializer(customer, many=True)
+    return Response(serializer.data)
+
+
+# @api_view(['GET'])
+# def user_customers(request, username):
+#     user = get_object_or_404(User, username=username)
+#     u_customers = Customer.objects.filter(agent=user).order_by('-date_created')
+#     serializer = CustomerSerializer(u_customers, many=True)
+#     filter_backends = [filters.SearchFilter]
+#     search_fields = ['name']
+#     return Response(serializer.data)
+
+
+class GetAllCustomers(generics.ListAPIView):
+    queryset = Customer.objects.all().order_by('-date_created')
+    serializer_class = CustomerSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['name']
+
+
+class GetAllAgents(generics.ListAPIView):
+    queryset = User.objects.all().order_by('-date_joined')
+    serializer_class = UsersSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['username']
+
+
+@api_view(['POST'])
+def admin_accounts_started(request):
+    admin_user = User.objects.get(pk=1)
+    serializer = AdminAccountsStartedSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(user=admin_user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+def admin_accounts_completed(request):
+    admin_user = User.objects.get(pk=1)
+    serializer = AdminAccountsCompletedSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(user=admin_user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def admin_accounts_started_lists(request):
+    admin_user = User.objects.get(pk=1)
+    admin_accounts = AdminAccountsStartedWith.objects.filter(user=admin_user).order_by('-date_started')
+    serializer = AdminAccountsStartedSerializer(admin_accounts, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def admin_accounts_completed_lists(request):
+    admin_user = User.objects.get(pk=1)
+    admin_accounts = AdminAccountsCompletedWith.objects.filter(user=admin_user).order_by('-date_closed')
+    serializer = AdminAccountsCompletedSerializer(admin_accounts, many=True)
     return Response(serializer.data)

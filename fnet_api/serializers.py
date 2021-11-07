@@ -1,23 +1,11 @@
 from rest_framework import serializers
-from .models import FNetAdmin, Customer, AgentDepositRequests, CustomerWithdrawal, Payments, TwilioApi
+from .models import Customer, AgentDepositRequests, CustomerWithdrawal, Payments, TwilioApi,AdminAccountsStartedWith, AdminAccountsCompletedWith
 
 
 class TwilioSerializer(serializers.ModelSerializer):
     class Meta:
         model = TwilioApi
         fields = ['account_sid', 'twi_auth']
-
-
-class FNetAdminSerializer(serializers.ModelSerializer):
-    username = serializers.SerializerMethodField('get_username')
-
-    class Meta:
-        model = FNetAdmin
-        fields = ['id', 'username']
-
-    def get_username(self, user):
-        username = user.user.username
-        return username
 
 
 class CustomerSerializer(serializers.ModelSerializer):
@@ -88,3 +76,33 @@ class PaymentsSerializer(serializers.ModelSerializer):
     def get_agent_username(self, user):
         agent_username = user.agent.username
         return agent_username
+
+
+class AdminAccountsStartedSerializer(serializers.ModelSerializer):
+    username = serializers.SerializerMethodField('get_username')
+
+    class Meta:
+        model = AdminAccountsStartedWith
+        fields = ['id', 'user', 'username', 'physical_cash', 'mtn_eCash', 'vodafone_eCash',
+                  'airtel_tigo_eCash', 'ecobank_eCash',
+                  'calbank_eCash', 'fidelity_eCash', 'ecash_sum', 'date_started']
+        read_only_fields = ['user']
+
+    def get_username(self, mm_user):
+        username = mm_user.user.username
+        return username
+
+
+class AdminAccountsCompletedSerializer(serializers.ModelSerializer):
+    username = serializers.SerializerMethodField('get_username')
+
+    class Meta:
+        model = AdminAccountsCompletedWith
+        fields = ['id', 'user', 'username', 'physical_cash', 'mtn_eCash', 'vodafone_eCash',
+                  'airtel_tigo_eCash', 'ecobank_eCash',
+                  'calbank_eCash', 'fidelity_eCash', 'ecash_sum', 'date_closed']
+        read_only_fields = ['user']
+
+    def get_username(self, mm_user):
+        username = mm_user.user.username
+        return username
