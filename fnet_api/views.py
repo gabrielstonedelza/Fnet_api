@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from .serializers import CustomerSerializer, AgentDepositRequestSerializer, \
-    CustomerWithdrawalSerializer, PaymentsSerializer, TwilioSerializer,AdminAccountsStartedSerializer,AdminAccountsCompletedSerializer
+    CustomerWithdrawalSerializer, PaymentsSerializer, TwilioSerializer, AdminAccountsStartedSerializer, \
+    AdminAccountsCompletedSerializer
 
 from .models import Customer, AgentDepositRequests, CustomerWithdrawal, Payments, TwilioApi, \
     AdminAccountsStartedWith, AdminAccountsCompletedWith
@@ -162,14 +163,12 @@ def get_customer(request, name):
     return Response(serializer.data)
 
 
-# @api_view(['GET'])
-# def user_customers(request, username):
-#     user = get_object_or_404(User, username=username)
-#     u_customers = Customer.objects.filter(agent=user).order_by('-date_created')
-#     serializer = CustomerSerializer(u_customers, many=True)
-#     filter_backends = [filters.SearchFilter]
-#     search_fields = ['name']
-#     return Response(serializer.data)
+@api_view(['GET'])
+def user_customers(request, username):
+    user = get_object_or_404(User, username=username)
+    u_customers = Customer.objects.filter(agent=user).order_by('-date_created')
+    serializer = CustomerSerializer(u_customers, many=True)
+    return Response(serializer.data)
 
 
 class GetAllCustomers(generics.ListAPIView):
@@ -219,4 +218,28 @@ def admin_accounts_completed_lists(request):
     admin_user = User.objects.get(pk=1)
     admin_accounts = AdminAccountsCompletedWith.objects.filter(user=admin_user).order_by('-date_closed')
     serializer = AdminAccountsCompletedSerializer(admin_accounts, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def user_transaction_requests(request, username):
+    user = get_object_or_404(User, username=username)
+    all_user_requests = AgentDepositRequests.objects.filter(agent=user).order_by('-date_requested')
+    serializer = AgentDepositRequestSerializer(all_user_requests, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def user_transaction_payments(request, username):
+    user = get_object_or_404(User, username=username)
+    all_user_payments = Payments.objects.filter(agent=user).order_by('-date_created')
+    serializer = PaymentsSerializer(all_user_payments, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def user_transaction_withdrawals(request, username):
+    user = get_object_or_404(User, username=username)
+    all_user_withdrawals = CustomerWithdrawal.objects.filter(agent=user).order_by('-date_requested')
+    serializer = CustomerWithdrawalSerializer(all_user_withdrawals, many=True)
     return Response(serializer.data)

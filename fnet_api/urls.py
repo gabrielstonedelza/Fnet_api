@@ -26,6 +26,10 @@ urlpatterns = [
     path('admin_accounts_completed/', views.admin_accounts_completed),
     path('admin_accounts_started_lists/', views.admin_accounts_started_lists),
     path('admin_accounts_started_lists/', views.admin_accounts_completed_lists),
-    # path('user_customers/<str:username>/', views.user_customers)
+    path('user_customers/<str:username>/', views.user_customers),
+    path('user_transaction_requests/<str:username>/', views.user_transaction_requests),
+    path('user_transaction_payments/<str:username>/', views.user_transaction_payments),
+    path('user_transaction_withdrawals/<str:username>/', views.user_transaction_withdrawals),
+
 
 ]
