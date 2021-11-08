@@ -15,6 +15,15 @@ REQUEST_STATUS = (
     ("Approved", "Approved"),
     ("Pending", "Pending")
 )
+DEPOSIT_REQUEST_OPTIONS = (
+    ("Physical Cash", "Physical Cash"),
+    ("Mtn Ecash", "Mtn Ecash"),
+    ("Vodafone Ecash", "Vodafone Ecash"),
+    ("AirtelTigo Ecash", "AirtelTigo Ecash"),
+    ("Ecobank Ecash", "Ecobank Ecash"),
+    ("Calbank Ecash", "Calbank Ecash"),
+    ("Fidelity Ecash", "Fidelity Ecash"),
+)
 
 MODE_OF_PAYMENT = (
     ("Select mode of payment", "Select mode of payment"),
@@ -43,7 +52,7 @@ class Customer(models.Model):
     bank = models.CharField(max_length=100, choices=BANKS, default="Access Bank")
     location = models.CharField(max_length=100)
     digital_address = models.CharField(max_length=15)
-    phone = models.CharField(max_length=15,unique=True)
+    phone = models.CharField(max_length=15, unique=True)
     date_of_birth = models.CharField(max_length=15)
     date_created = models.DateTimeField(auto_now_add=True)
 
@@ -56,7 +65,7 @@ class AgentDepositRequests(models.Model):
     customer = models.CharField(max_length=30, blank=True)
     agent = models.ForeignKey(User, on_delete=models.CASCADE, related_name="agent_requesting")
     amount = models.CharField(max_length=500, blank=True)
-    bank = models.CharField(max_length=100, choices=BANKS, default="GT Bank")
+    request_option = models.CharField(max_length=100, choices=DEPOSIT_REQUEST_OPTIONS, default="Physical Cash")
     request_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
     date_requested = models.DateTimeField(auto_now_add=True)
 

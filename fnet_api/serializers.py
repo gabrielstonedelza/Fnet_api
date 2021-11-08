@@ -30,7 +30,7 @@ class AgentDepositRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = AgentDepositRequests
         fields = ['id', 'guarantor', 'customer', 'agent', 'guarantor_username', 'customer_username', 'agent_username',
-                  'amount', 'bank', 'request_status', 'date_requested']
+                  'amount', 'request_option', 'request_status', 'date_requested']
         read_only_fields = ['agent']
 
     def get_guarantor_username(self, user):
