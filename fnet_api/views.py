@@ -104,7 +104,7 @@ def get_admin(request):
 
 
 @api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 def agent_customers_summary(request):
     user = get_object_or_404(User, username=request.user.username)
     customers = Customer.objects.filter(agent=user).order_by('-date_created')
@@ -113,7 +113,7 @@ def agent_customers_summary(request):
 
 
 @api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 def deposit_request_summary(request):
     user = get_object_or_404(User, username=request.user.username)
     depo_requests = AgentDepositRequests.objects.filter(agent=user).order_by('-date_requested')
@@ -122,7 +122,7 @@ def deposit_request_summary(request):
 
 
 @api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 def customer_withdrawal_summary(request):
     user = get_object_or_404(User, username=request.user.username)
     c_withdrawals = CustomerWithdrawal.objects.filter(agent=user).order_by('-date_requested')
@@ -131,7 +131,7 @@ def customer_withdrawal_summary(request):
 
 
 @api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 def payment_summary(request):
     user = get_object_or_404(User, username=request.user.username)
     my_payments = Payments.objects.filter(agent=user).order_by('-date_created')
@@ -140,7 +140,7 @@ def payment_summary(request):
 
 
 @api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 def get_payments(request):
     payments = Payments.objects.all().order_by('-date_created')
     serializer = PaymentsSerializer(payments, many=True)
@@ -177,7 +177,7 @@ def get_customer(request, name):
 
 
 @api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 def user_customers(request):
     user = get_object_or_404(User, username=request.user.username)
     u_customers = Customer.objects.filter(agent=user).order_by('-date_created')
@@ -224,7 +224,7 @@ def admin_accounts_completed(request):
 
 
 @api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 def admin_accounts_started_lists(request):
     admin_user = User.objects.get(pk=1)
     admin_accounts = AdminAccountsStartedWith.objects.filter(user=admin_user).order_by('-date_started')
@@ -233,7 +233,7 @@ def admin_accounts_started_lists(request):
 
 
 @api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 def admin_accounts_completed_lists(request):
     admin_user = User.objects.get(pk=1)
     admin_accounts = AdminAccountsCompletedWith.objects.filter(user=admin_user).order_by('-date_closed')
@@ -242,7 +242,7 @@ def admin_accounts_completed_lists(request):
 
 
 @api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 def user_transaction_requests(request, username):
     user = get_object_or_404(User, username=username)
     all_user_requests = AgentDepositRequests.objects.filter(agent=user).order_by('-date_requested')
@@ -251,7 +251,7 @@ def user_transaction_requests(request, username):
 
 
 @api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 def user_transaction_payments(request, username):
     user = get_object_or_404(User, username=username)
     all_user_payments = Payments.objects.filter(agent=user).order_by('-date_created')
