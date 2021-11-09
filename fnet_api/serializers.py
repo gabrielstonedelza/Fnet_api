@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Customer, AgentDepositRequests, CustomerWithdrawal, Payments, TwilioApi,AdminAccountsStartedWith, AdminAccountsCompletedWith
+from .models import Customer, AgentDepositRequests, CustomerWithdrawal, Payments, TwilioApi, AdminAccountsStartedWith, \
+    AdminAccountsCompletedWith
 
 
 class TwilioSerializer(serializers.ModelSerializer):
@@ -69,7 +70,8 @@ class PaymentsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Payments
-        fields = ['id', 'agent', 'agent_username', 'mode_of_payment', 'cash_at_location', 'amount', 'payment_status',
+        fields = ['id', 'agent', 'agent_username', 'mode_of_payment', 'cash_at_location', 'amount', 'bank', 'reference',
+                  'payment_status',
                   'date_created']
         read_only_fields = ['agent']
 

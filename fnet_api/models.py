@@ -7,6 +7,7 @@ BANKS = (
     ("Cal Bank", "Cal Bank"),
     ("Fidelity Bank", "Fidelity Bank"),
     ("Ecobank", "Ecobank"),
+    ("Pan African Bank", "Pan African Bank"),
     ("First Bank of Nigeria", "First Bank of Nigeria"),
     ("SGSSB", "SGSSB")
 )
@@ -85,10 +86,12 @@ class CustomerWithdrawal(models.Model):
 
 
 class Payments(models.Model):
-    agent = models.ForeignKey(User, on_delete=models.CASCADE,default=1)
+    agent = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     mode_of_payment = models.CharField(max_length=30, choices=MODE_OF_PAYMENT, blank=True)
     cash_at_location = models.CharField(max_length=30, choices=PAYMENT_OFFICES, blank=True)
+    bank = models.CharField(max_length=50, choices=BANKS, blank=True)
     amount = models.CharField(max_length=500, blank=True)
+    reference = models.CharField(max_length=30, blank=True)
     payment_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
     date_created = models.DateTimeField(auto_now_add=True)
 
