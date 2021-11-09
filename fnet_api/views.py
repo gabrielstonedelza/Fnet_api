@@ -96,7 +96,6 @@ def get_agent(request, username):
 
 
 @api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
 def get_admin(request):
     admin_user = User.objects.filter(pk=1)
     serializer = UsersSerializer(admin_user, many=True)
