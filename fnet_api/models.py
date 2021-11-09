@@ -32,7 +32,6 @@ MODE_OF_PAYMENT = (
     ("Momo Payment", "Momo Payment"),
     ("Momo pay Payment", "Momo pay Payment"),
     ("Agent to Agent", "Agent to Agent"),
-    ("Bank Payment", "Bank Payment"),
     ("Cash left @", "Cash left @"),
 )
 
