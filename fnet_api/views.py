@@ -186,7 +186,7 @@ def user_customers(request):
 
 
 class GetAllCustomers(generics.ListAPIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
     queryset = Customer.objects.all().order_by('-date_created')
     serializer_class = CustomerSerializer
     filter_backends = [filters.SearchFilter]
@@ -194,7 +194,7 @@ class GetAllCustomers(generics.ListAPIView):
 
 
 class GetAllAgents(generics.ListAPIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
     queryset = User.objects.exclude(id=1).order_by('-date_joined')
     serializer_class = UsersSerializer
     filter_backends = [filters.SearchFilter]
