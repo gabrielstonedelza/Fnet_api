@@ -50,11 +50,11 @@ def register_customer(request):
 
 
 @api_view(['POST'])
-def user_deposit_request(request, username):
-    agent = get_object_or_404(User, username=username)
+@permission_classes([permissions.IsAuthenticated])
+def user_deposit_request(request):
     serializer = AgentDepositRequestSerializer(data=request.data)
     if serializer.is_valid():
-        serializer.save(agent=agent)
+        serializer.save(agent=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -74,11 +74,11 @@ def payment_detail(request, pk):
 
 
 @api_view(['POST'])
-def customer_withdrawal(request, username):
-    agent = get_object_or_404(User, username=username)
+@permission_classes([permissions.IsAuthenticated])
+def customer_withdrawal(request):
     serializer = CustomerWithdrawalSerializer(data=request.data)
     if serializer.is_valid():
-        serializer.save(agent=agent)
+        serializer.save(agent=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -98,32 +98,36 @@ def get_admin(request):
 
 
 @api_view(['GET'])
-def agent_customers_summary(request, username):
-    user = get_object_or_404(User, username=username)
+@permission_classes([permissions.IsAuthenticated])
+def agent_customers_summary(request):
+    user = get_object_or_404(User, username=request.user.username)
     customers = Customer.objects.filter(agent=user).order_by('-date_created')
     serializer = CustomerSerializer(customers, many=True)
     return Response(serializer.data)
 
 
 @api_view(['GET'])
-def deposit_request_summary(request, username):
-    user = get_object_or_404(User, username=username)
+@permission_classes([permissions.IsAuthenticated])
+def deposit_request_summary(request):
+    user = get_object_or_404(User, username=request.user.username)
     depo_requests = AgentDepositRequests.objects.filter(agent=user).order_by('-date_requested')
     serializer = AgentDepositRequestSerializer(depo_requests, many=True)
     return Response(serializer.data)
 
 
 @api_view(['GET'])
-def customer_withdrawal_summary(request, username):
-    user = get_object_or_404(User, username=username)
+@permission_classes([permissions.IsAuthenticated])
+def customer_withdrawal_summary(request):
+    user = get_object_or_404(User, username=request.user.username)
     c_withdrawals = CustomerWithdrawal.objects.filter(agent=user).order_by('-date_requested')
     serializer = CustomerWithdrawalSerializer(c_withdrawals, many=True)
     return Response(serializer.data)
 
 
 @api_view(['GET'])
-def payment_summary(request, username):
-    user = get_object_or_404(User, username=username)
+@permission_classes([permissions.IsAuthenticated])
+def payment_summary(request):
+    user = get_object_or_404(User, username=request.user.username)
     my_payments = Payments.objects.filter(agent=user).order_by('-date_created')
     serializer = PaymentsSerializer(my_payments, many=True)
     return Response(serializer.data)
@@ -137,11 +141,11 @@ def get_payments(request):
 
 
 @api_view(['POST'])
-def make_payments(request, username):
-    agent = get_object_or_404(User, username=username)
+@permission_classes([permissions.IsAuthenticated])
+def make_payments(request):
     serializer = PaymentsSerializer(data=request.data)
     if serializer.is_valid():
-        serializer.save(agent=agent)
+        serializer.save(agent=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -164,8 +168,9 @@ def get_customer(request, name):
 
 
 @api_view(['GET'])
-def user_customers(request, username):
-    user = get_object_or_404(User, username=username)
+@permission_classes([permissions.IsAuthenticated])
+def user_customers(request):
+    user = get_object_or_404(User, username=request.user.username)
     u_customers = Customer.objects.filter(agent=user).order_by('-date_created')
     serializer = CustomerSerializer(u_customers, many=True)
     return Response(serializer.data)
