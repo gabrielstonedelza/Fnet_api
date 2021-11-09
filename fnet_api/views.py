@@ -260,7 +260,7 @@ def user_transaction_payments(request, username):
 
 
 @api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 def user_transaction_withdrawals(request, username):
     user = get_object_or_404(User, username=username)
     all_user_withdrawals = CustomerWithdrawal.objects.filter(agent=user).order_by('-date_requested')
