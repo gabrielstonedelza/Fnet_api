@@ -7,7 +7,7 @@ BANKS = (
     ("Cal Bank", "Cal Bank"),
     ("Fidelity Bank", "Fidelity Bank"),
     ("Ecobank", "Ecobank"),
-    ("Pan African Bank", "Pan African Bank"),
+    ("Pan Africa", "Pan Africa"),
     ("First Bank of Nigeria", "First Bank of Nigeria"),
     ("SGSSB", "SGSSB")
 )
