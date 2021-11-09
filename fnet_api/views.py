@@ -40,17 +40,17 @@ def approve_request(request, id):
 
 
 @api_view(['POST'])
-def register_customer(request, username):
-    agent = get_object_or_404(User, username=username)
+@permission_classes([permissions.IsAuthenticated])
+def register_customer(request):
     serializer = CustomerSerializer(data=request.data)
     if serializer.is_valid():
-        serializer.save(agent=agent)
+        serializer.save(agent=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
-def agent_deposit_request(request, username):
+def user_deposit_request(request, username):
     agent = get_object_or_404(User, username=username)
     serializer = AgentDepositRequestSerializer(data=request.data)
     if serializer.is_valid():
