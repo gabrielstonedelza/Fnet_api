@@ -202,7 +202,7 @@ class GetAllAgents(generics.ListAPIView):
 
 
 @api_view(['POST'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 def admin_accounts_started(request):
     admin_user = User.objects.get(pk=1)
     serializer = AdminAccountsStartedSerializer(data=request.data)
@@ -213,7 +213,7 @@ def admin_accounts_started(request):
 
 
 @api_view(['POST'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 def admin_accounts_completed(request):
     admin_user = User.objects.get(pk=1)
     serializer = AdminAccountsCompletedSerializer(data=request.data)
