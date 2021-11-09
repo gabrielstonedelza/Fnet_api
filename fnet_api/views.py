@@ -22,7 +22,7 @@ def get_twilio(request):
 
 
 @api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 def get_agent_requests(request):
     # guarantor = get_object_or_404(FNetAdmin, user=user)
     all_agents_requests = AgentDepositRequests.objects.all().order_by('-date_requested')
