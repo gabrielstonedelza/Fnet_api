@@ -12,6 +12,8 @@ urlpatterns = [
     path('customer_withdrawal/', views.customer_withdrawal),
     path('all_agents/', views.GetAllAgents.as_view()),
     path('all_customers/', views.GetAllCustomers.as_view()),
+    path('customer_detail/<int:pk>/', views.customer_details),
+    path('get_user_customers/<str:username>/', views.get_user_customers),
     path('agent_customer_summary/', views.agent_customers_summary),
     path('agent_deposit_request_summary/', views.deposit_request_summary),
     path('agents_customers_withdrawal_summary/', views.customer_withdrawal_summary),

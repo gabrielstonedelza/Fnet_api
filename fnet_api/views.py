@@ -77,6 +77,14 @@ def payment_detail(request, pk):
     return Response(serializer.data)
 
 
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def customer_details(request, pk):
+    customer = Customer.objects.get(pk=pk)
+    serializer = CustomerSerializer(customer, many=False)
+    return Response(serializer.data)
+
+
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
 def customer_withdrawal(request):
@@ -180,6 +188,15 @@ def get_customer(request, name):
 @permission_classes([permissions.AllowAny])
 def user_customers(request):
     user = get_object_or_404(User, username=request.user.username)
+    u_customers = Customer.objects.filter(agent=user).order_by('-date_created')
+    serializer = CustomerSerializer(u_customers, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_user_customers(request, username):
+    user = get_object_or_404(User, username=username)
     u_customers = Customer.objects.filter(agent=user).order_by('-date_created')
     serializer = CustomerSerializer(u_customers, many=True)
     return Response(serializer.data)
