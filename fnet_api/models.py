@@ -47,7 +47,7 @@ PAYMENT_OFFICES = (
 
 class Customer(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=150)
+    name = models.CharField(max_length=150, unique=True)
     account_number = models.CharField(max_length=16)
     bank = models.CharField(max_length=100, choices=BANKS, default="Access Bank")
     location = models.CharField(max_length=100)
@@ -92,6 +92,7 @@ class Payments(models.Model):
     amount = models.CharField(max_length=500, blank=True)
     reference = models.CharField(max_length=30, blank=True)
     payment_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
+    has_closed_today = models.BooleanField(default=False)
     date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

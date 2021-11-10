@@ -31,7 +31,7 @@ def get_agent_requests(request):
 
 
 @api_view(['GET', 'PUT'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 def approve_request(request, id):
     agent_request = get_object_or_404(AgentDepositRequests, id=id)
     serializer = AgentDepositRequestSerializer(agent_request, data=request.data)
@@ -62,7 +62,7 @@ def user_deposit_request(request):
 
 
 @api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 def request_detail(request, pk):
     drequest = AgentDepositRequests.objects.get(pk=pk)
     serializer = AgentDepositRequestSerializer(drequest, many=False)
@@ -158,7 +158,7 @@ def make_payments(request):
 
 
 @api_view(['GET', 'PUT'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 def approve_payment(request, id):
     payment = get_object_or_404(Payments, id=id)
     serializer = PaymentsSerializer(payment, data=request.data)
