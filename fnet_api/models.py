@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.utils import timezone
 
 User = settings.AUTH_USER_MODEL
 BANKS = (
@@ -53,7 +54,7 @@ class Customer(models.Model):
     location = models.CharField(max_length=100)
     digital_address = models.CharField(max_length=15)
     phone = models.CharField(max_length=15, unique=True)
-    date_of_birth = models.CharField(max_length=15)
+    date_of_birth = models.DateField(default=timezone.now)
     date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
