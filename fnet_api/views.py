@@ -88,7 +88,7 @@ def customer_withdrawal(request):
 
 
 @api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 def get_agent(request, username):
     agent = User.objects.filter(username=username)
     serializer = UsersSerializer(agent, many=True)
