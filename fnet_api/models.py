@@ -72,7 +72,8 @@ class AgentDepositRequests(models.Model):
     amount = models.CharField(max_length=500, blank=True)
     request_option = models.CharField(max_length=100, choices=DEPOSIT_REQUEST_OPTIONS, default="Physical Cash")
     request_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
-    date_requested = models.DateTimeField(auto_now_add=True)
+    date_requested = models.DateField(auto_now_add=True)
+    time_requested = models.TimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Request made for {self.amount}"
@@ -98,8 +99,8 @@ class Payments(models.Model):
     reference = models.CharField(max_length=30, blank=True)
     payment_action = models.CharField(max_length=50, choices=PAYMENT_ACTIONS,default="Close Payment")
     payment_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
-
-    date_created = models.DateTimeField(auto_now_add=True)
+    date_created = models.DateField(auto_now_add=True)
+    time_created = models.TimeField(auto_now_add=True)
 
     def __str__(self):
         return self.payment_status

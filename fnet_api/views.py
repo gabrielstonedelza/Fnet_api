@@ -25,8 +25,8 @@ def get_twilio(request):
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def get_agent_requests(request):
-    # guarantor = get_object_or_404(FNetAdmin, user=user)
-    all_agents_requests = AgentDepositRequests.objects.filter(request_status="Pending").order_by('-date_requested')
+    my_date = datetime.today()
+    all_agents_requests = AgentDepositRequests.objects.filter(date_requested=f"{my_date.date()}").order_by('-date_requested')
     serializer = AgentDepositRequestSerializer(all_agents_requests, many=True)
     return Response(serializer.data)
 
@@ -124,8 +124,9 @@ def agent_customers_summary(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def deposit_request_summary(request):
+    my_date = datetime.today()
     user = get_object_or_404(User, username=request.user.username)
-    depo_requests = AgentDepositRequests.objects.filter(agent=user).order_by('-date_requested')
+    depo_requests = AgentDepositRequests.objects.filter(agent=user).filter(date_requested=f"{my_date.date()}").order_by('-date_requested')
     serializer = AgentDepositRequestSerializer(depo_requests, many=True)
     return Response(serializer.data)
 
@@ -133,8 +134,9 @@ def deposit_request_summary(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def customer_withdrawal_summary(request):
+    my_date = datetime.today()
     user = get_object_or_404(User, username=request.user.username)
-    c_withdrawals = CustomerWithdrawal.objects.filter(agent=user).order_by('-date_requested')
+    c_withdrawals = CustomerWithdrawal.objects.filter(agent=user).filter(date_requested=f"{my_date.date()}").order_by('-date_requested')
     serializer = CustomerWithdrawalSerializer(c_withdrawals, many=True)
     return Response(serializer.data)
 
@@ -142,8 +144,9 @@ def customer_withdrawal_summary(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def payment_summary(request):
+    my_date = datetime.today()
     user = get_object_or_404(User, username=request.user.username)
-    my_payments = Payments.objects.filter(agent=user).order_by('-date_created')
+    my_payments = Payments.objects.filter(agent=user).filter(date_created=f"{my_date.date()}").order_by('-date_created')
     serializer = PaymentsSerializer(my_payments, many=True)
     return Response(serializer.data)
 
@@ -151,16 +154,16 @@ def payment_summary(request):
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def get_payments(request):
-    payments = Payments.objects.all().order_by('-date_created')
+    my_date = datetime.today()
+    payments = Payments.objects.filter(date_created=f"{my_date.date()}").order_by('-date_created')
     serializer = PaymentsSerializer(payments, many=True)
     return Response(serializer.data)
 
 
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
-def make_payments(request, id):
-    deposit_request = get_object_or_404(AgentDepositRequests, id=id)
-    serializer = PaymentsSerializer(deposit_request, data=request.data)
+def make_payments(request):
+    serializer = PaymentsSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save(agent=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -263,8 +266,9 @@ def admin_accounts_completed_lists(request):
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def user_transaction_requests(request, username):
+    my_date = datetime.today()
     user = get_object_or_404(User, username=username)
-    all_user_requests = AgentDepositRequests.objects.filter(agent=user).order_by('-date_requested')
+    all_user_requests = AgentDepositRequests.objects.filter(agent=user).filter(date_requested=f"{my_date.date()}").order_by('-date_requested')
     serializer = AgentDepositRequestSerializer(all_user_requests, many=True)
     return Response(serializer.data)
 
@@ -272,8 +276,9 @@ def user_transaction_requests(request, username):
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def user_transaction_payments(request, username):
+    my_date = datetime.today()
     user = get_object_or_404(User, username=username)
-    all_user_payments = Payments.objects.filter(agent=user).order_by('-date_created')
+    all_user_payments = Payments.objects.filter(agent=user).filter(date_created=f"{my_date.date()}").order_by('-date_created')
     serializer = PaymentsSerializer(all_user_payments, many=True)
     return Response(serializer.data)
 
@@ -281,7 +286,8 @@ def user_transaction_payments(request, username):
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def user_transaction_withdrawals(request, username):
+    my_date = datetime.today()
     user = get_object_or_404(User, username=username)
-    all_user_withdrawals = CustomerWithdrawal.objects.filter(agent=user).order_by('-date_requested')
+    all_user_withdrawals = CustomerWithdrawal.objects.filter(agent=user).filter(date_requested=f"{my_date.date()}").order_by('-date_requested')
     serializer = CustomerWithdrawalSerializer(all_user_withdrawals, many=True)
     return Response(serializer.data)
