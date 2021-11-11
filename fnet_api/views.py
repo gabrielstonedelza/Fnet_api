@@ -157,8 +157,9 @@ def get_payments(request):
 
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
-def make_payments(request):
-    serializer = PaymentsSerializer(data=request.data)
+def make_payments(request, id):
+    deposit_request = get_object_or_404(AgentDepositRequests, id=id)
+    serializer = PaymentsSerializer(deposit_request, data=request.data)
     if serializer.is_valid():
         serializer.save(agent=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)

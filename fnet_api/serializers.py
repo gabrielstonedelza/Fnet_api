@@ -70,7 +70,8 @@ class PaymentsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Payments
-        fields = ['id', 'agent', 'deposit_request', 'agent_username', 'mode_of_payment', 'cash_at_location', 'amount', 'bank', 'reference', 'payment_action',
+        fields = ['id', 'agent', 'deposit_request', 'agent_username', 'mode_of_payment', 'cash_at_location', 'amount',
+                  'bank', 'reference', 'payment_action',
                   'payment_status',
                   'date_created']
         read_only_fields = ['agent']
