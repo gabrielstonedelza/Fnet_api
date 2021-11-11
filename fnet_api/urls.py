@@ -15,7 +15,7 @@ urlpatterns = [
     path('customer_detail/<int:pk>/', views.customer_details),
     path('get_user_customers/<str:username>/', views.get_user_customers),
     path('agent_customer_summary/', views.agent_customers_summary),
-    path('agent_deposit_request_summary/', views.deposit_request_summary),
+    path('agent_deposit_request_summary/<str:username>/', views.deposit_request_summary),
     path('agents_customers_withdrawal_summary/', views.customer_withdrawal_summary),
     path('payments/', views.get_payments),
     path('make_payments/', views.make_payments),
