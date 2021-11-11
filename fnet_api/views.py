@@ -185,7 +185,7 @@ def get_customer(request, name):
 
 
 @api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 def user_customers(request):
     user = get_object_or_404(User, username=request.user.username)
     u_customers = Customer.objects.filter(agent=user).order_by('-date_created')
