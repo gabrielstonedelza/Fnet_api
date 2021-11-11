@@ -12,6 +12,7 @@ from rest_framework.response import Response
 from users.models import User
 from users.serializers import UsersSerializer
 from rest_framework import filters
+from datetime import datetime
 
 
 @api_view(['GET'])
@@ -25,7 +26,7 @@ def get_twilio(request):
 @permission_classes([permissions.AllowAny])
 def get_agent_requests(request):
     # guarantor = get_object_or_404(FNetAdmin, user=user)
-    all_agents_requests = AgentDepositRequests.objects.all().order_by('-date_requested')
+    all_agents_requests = AgentDepositRequests.objects.filter(request_status="Pending").order_by('-date_requested')
     serializer = AgentDepositRequestSerializer(all_agents_requests, many=True)
     return Response(serializer.data)
 
