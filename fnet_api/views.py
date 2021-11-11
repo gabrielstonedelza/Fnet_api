@@ -71,7 +71,7 @@ def request_detail(request, pk):
 
 
 @api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 def payment_detail(request, pk):
     dpayment = Payments.objects.get(pk=pk)
     serializer = PaymentsSerializer(dpayment, many=False)
