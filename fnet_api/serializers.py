@@ -72,7 +72,7 @@ class PaymentsSerializer(serializers.ModelSerializer):
         model = Payments
         fields = ['id', 'agent', 'agent_username', 'mode_of_payment', 'cash_at_location', 'amount',
                   'bank', 'reference', 'payment_action',
-                  'payment_status',
+                  'payment_status', 'payment_for',
                   'date_created', 'time_created']
         read_only_fields = ['agent']
 

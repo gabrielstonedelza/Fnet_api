@@ -97,6 +97,7 @@ class Payments(models.Model):
     bank = models.CharField(max_length=50, choices=BANKS, blank=True)
     amount = models.CharField(max_length=500, blank=True)
     reference = models.CharField(max_length=30, blank=True)
+    payment_for = models.CharField(max_length=100, choices=DEPOSIT_REQUEST_OPTIONS, default="Physical Cash")
     payment_action = models.CharField(max_length=50, choices=PAYMENT_ACTIONS, default="Close Payment")
     payment_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
     date_created = models.DateField(auto_now_add=True)
