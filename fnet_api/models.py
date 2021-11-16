@@ -53,8 +53,6 @@ PAYMENT_OFFICES = (
 class Customer(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=150, unique=True)
-    account_number = models.CharField(max_length=16)
-    bank = models.CharField(max_length=100, choices=BANKS, default="Access Bank")
     location = models.CharField(max_length=100)
     digital_address = models.CharField(max_length=15)
     phone = models.CharField(max_length=15, unique=True)
@@ -63,6 +61,18 @@ class Customer(models.Model):
 
     def __str__(self):
         return self.name
+
+class CustomerAccounts(models.Model):
+    agent = models.ForeignKey(User, on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE,related_name= "")
+    account_number = models.CharField(max_length=16)
+    bank = models.CharField(max_length=100, choices=BANKS, default="Access Bank")
+    phone = models.CharField(max_length=15)
+    date_added = models.DateField(default=timezone.now)
+
+    def __str__(self):
+        return self.customer.name
+
 
 
 class AgentDepositRequests(models.Model):
@@ -97,7 +107,6 @@ class Payments(models.Model):
     bank = models.CharField(max_length=50, choices=BANKS, blank=True)
     amount = models.CharField(max_length=500, blank=True)
     reference = models.CharField(max_length=30, blank=True)
-    payment_for = models.CharField(max_length=100, choices=DEPOSIT_REQUEST_OPTIONS, default="Physical Cash")
     payment_action = models.CharField(max_length=50, choices=PAYMENT_ACTIONS, default="Close Payment")
     payment_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
     date_created = models.DateField(auto_now_add=True)
@@ -118,35 +127,20 @@ class TwilioApi(models.Model):
 
 class AdminAccountsStartedWith(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
-    physical_cash = models.IntegerField()
-    mtn_eCash = models.IntegerField()
-    vodafone_eCash = models.IntegerField()
-    airtel_tigo_eCash = models.IntegerField()
-    ecobank_eCash = models.IntegerField()
-    calbank_eCash = models.IntegerField()
-    fidelity_eCash = models.IntegerField()
+    physical_cash = models.IntegerField(blank=True)
+    eCash = models.IntegerField(blank=True)
     date_started = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.user.username} has started accounts today"
 
-    def ecash_sum(self):
-        return self.mtn_eCash + self.vodafone_eCash + self.airtel_tigo_eCash + self.ecobank_eCash + self.calbank_eCash + self.fidelity_eCash
 
 
 class AdminAccountsCompletedWith(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     physical_cash = models.IntegerField()
-    mtn_eCash = models.IntegerField()
-    vodafone_eCash = models.IntegerField()
-    airtel_tigo_eCash = models.IntegerField()
-    ecobank_eCash = models.IntegerField()
-    calbank_eCash = models.IntegerField()
-    fidelity_eCash = models.IntegerField()
+    eCash = models.IntegerField()
     date_closed = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.user.username} has ended accounts today"
-
-    def ecash_sum(self):
-        return self.mtn_eCash + self.vodafone_eCash + self.airtel_tigo_eCash + self.ecobank_eCash + self.calbank_eCash + self.fidelity_eCash

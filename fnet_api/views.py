@@ -1,10 +1,10 @@
 from django.shortcuts import render, get_object_or_404
 from .serializers import CustomerSerializer, AgentDepositRequestSerializer, \
     CustomerWithdrawalSerializer, PaymentsSerializer, TwilioSerializer, AdminAccountsStartedSerializer, \
-    AdminAccountsCompletedSerializer
+    AdminAccountsCompletedSerializer,CustomerAccountsSerializer
 
 from .models import Customer, AgentDepositRequests, CustomerWithdrawal, Payments, TwilioApi, \
-    AdminAccountsStartedWith, AdminAccountsCompletedWith
+    AdminAccountsStartedWith, AdminAccountsCompletedWith,CustomerAccounts
 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework import viewsets, permissions, generics, status
@@ -13,6 +13,8 @@ from users.models import User
 from users.serializers import UsersSerializer
 from rest_framework import filters
 from datetime import datetime
+
+from fnet_api import serializers
 
 
 @api_view(['GET'])
@@ -25,9 +27,34 @@ def get_twilio(request):
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def get_agent_requests(request):
-    my_date = datetime.today()
     all_agents_requests = AgentDepositRequests.objects.filter(request_status="Pending").order_by('-date_requested')
     serializer = AgentDepositRequestSerializer(all_agents_requests, many=True)
+    return Response(serializer.data)
+
+@api_view(['POST'])
+def register_customer_account(request):
+    serializer = CustomerAccountsSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(agent=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def get_customer_accounts(request):
+    customer_accounts = CustomerAccounts.objects.all().order_by('-date_added')
+    serializer = CustomerAccountsSerializer(customer_accounts, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def customer_account_detail(request,id):
+    c_detail = get_object_or_404(CustomerAccounts,id=id)
+    serializer = CustomerAccountsSerializer(c_detail)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def get_customer_account(request,phone):
+    c_detail = get_object_or_404(CustomerAccounts,phone=phone)
+    serializer = CustomerAccountsSerializer(c_detail)
     return Response(serializer.data)
 
 
@@ -59,6 +86,16 @@ def user_deposit_request(request):
     if serializer.is_valid():
         serializer.save(agent=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'PUT'])
+@permission_classes([permissions.AllowAny])
+def update_accounts(request,id):
+    account = get_object_or_404(AdminAccountsStartedWith,id=id)
+    serializer = AdminAccountsStartedSerializer(account, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

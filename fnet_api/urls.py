@@ -33,5 +33,13 @@ urlpatterns = [
     path('user_transaction_payments/<str:username>/', views.user_transaction_payments),
     path('user_transaction_withdrawals/<str:username>/', views.user_transaction_withdrawals),
 
+    path('register_customer_accounts/', views.register_customer_account),
+    path('get_customer_accounts/',views.get_customer_accounts),
+    path('customer_account_detail/<int:id>/',views.customer_account_detail),
+    path('get_customer_account/<str:phone>/',views.get_customer_account),
+    path('update_accounts/<int:id>/',views.update_accounts)
+
+
+
 
 ]
