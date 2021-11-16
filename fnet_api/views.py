@@ -26,7 +26,7 @@ def get_twilio(request):
 @permission_classes([permissions.AllowAny])
 def get_agent_requests(request):
     my_date = datetime.today()
-    all_agents_requests = AgentDepositRequests.objects.filter(date_requested=f"{my_date.date()}").order_by('-date_requested')
+    all_agents_requests = AgentDepositRequests.objects.filter(request_status="Pending").order_by('-date_requested')
     serializer = AgentDepositRequestSerializer(all_agents_requests, many=True)
     return Response(serializer.data)
 
