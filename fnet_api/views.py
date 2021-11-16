@@ -155,7 +155,7 @@ def payment_summary(request):
 @permission_classes([permissions.AllowAny])
 def get_payments(request):
     my_date = datetime.today()
-    payments = Payments.objects.filter(date_created=f"{my_date.date()}").order_by('-date_created')
+    payments = Payments.objects.filter(payment_status="Pending").order_by('-date_created')
     serializer = PaymentsSerializer(payments, many=True)
     return Response(serializer.data)
 
