@@ -270,6 +270,12 @@ def admin_accounts_started(request):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['GET'])
+def admin_account_detail(request,id):
+    account = get_object_or_404(admin_accounts_started, id=id)
+    serializer = AdminAccountsStartedSerializer(account,many=False)
+    return Response(serializer.data)
+
 
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])

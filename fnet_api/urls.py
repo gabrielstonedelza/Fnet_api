@@ -37,7 +37,8 @@ urlpatterns = [
     path('get_customer_accounts/',views.get_customer_accounts),
     path('customer_account_detail/<int:id>/',views.customer_account_detail),
     path('get_customer_account/<str:phone>/',views.get_customer_account),
-    path('update_accounts/<int:id>/',views.update_accounts)
+    path('update_accounts/<int:id>/',views.update_accounts),
+    path('admin_account_detail/<int:id>/',views.admin_account_detail)
 
 
 
