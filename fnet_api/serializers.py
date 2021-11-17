@@ -49,7 +49,7 @@ class AgentDepositRequestSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AgentDepositRequests
-        fields = ['id', 'guarantor', 'customer', 'agent', 'guarantor_username', 'customer_username', 'agent_username',
+        fields = ['id', 'guarantor', 'customer', 'agent', 'guarantor_username', 'customer_username', 'agent_username','bank',
                   'amount', 'request_option', 'request_status', 'date_requested', 'time_requested']
         read_only_fields = ['agent']
 

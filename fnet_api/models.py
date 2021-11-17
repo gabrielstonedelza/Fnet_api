@@ -79,6 +79,7 @@ class AgentDepositRequests(models.Model):
     guarantor = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     customer = models.CharField(max_length=30, blank=True)
     agent = models.ForeignKey(User, on_delete=models.CASCADE, related_name="agent_requesting")
+    bank = models.CharField(max_length=50, choices=BANKS)
     amount = models.CharField(max_length=500, blank=True)
     request_option = models.CharField(max_length=100, choices=DEPOSIT_REQUEST_OPTIONS, default="Physical Cash")
     request_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
