@@ -277,7 +277,7 @@ def admin_accounts_started(request):
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def admin_account_detail(request,id):
-    account = get_object_or_404(admin_accounts_started, id=id)
+    account = get_object_or_404(AdminAccountsStartedWith, id=id)
     serializer = AdminAccountsStartedSerializer(account,many=False)
     return Response(serializer.data)
 
