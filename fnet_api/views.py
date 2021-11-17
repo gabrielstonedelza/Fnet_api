@@ -32,6 +32,7 @@ def get_agent_requests(request):
     return Response(serializer.data)
 
 @api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
 def register_customer_account(request):
     serializer = CustomerAccountsSerializer(data=request.data)
     if serializer.is_valid():
@@ -40,18 +41,21 @@ def register_customer_account(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
+@permission_classes([permissions.AllowAny])
 def get_customer_accounts(request):
     customer_accounts = CustomerAccounts.objects.all().order_by('-date_added')
     serializer = CustomerAccountsSerializer(customer_accounts, many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])
+@permission_classes([permissions.AllowAny])
 def customer_account_detail(request,id):
     c_detail = get_object_or_404(CustomerAccounts,id=id)
     serializer = CustomerAccountsSerializer(c_detail)
     return Response(serializer.data)
 
 @api_view(['GET'])
+@permission_classes([permissions.AllowAny])
 def get_customer_account(request,phone):
     c_detail = get_object_or_404(CustomerAccounts,phone=phone)
     serializer = CustomerAccountsSerializer(c_detail)
@@ -271,6 +275,7 @@ def admin_accounts_started(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
+@permission_classes([permissions.AllowAny])
 def admin_account_detail(request,id):
     account = get_object_or_404(admin_accounts_started, id=id)
     serializer = AdminAccountsStartedSerializer(account,many=False)
