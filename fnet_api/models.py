@@ -67,7 +67,7 @@ class CustomerAccounts(models.Model):
     account_number = models.CharField(max_length=16)
     bank = models.CharField(max_length=100, choices=BANKS, default="Access Bank")
     phone = models.CharField(max_length=15)
-    date_added = models.DateField(default=timezone.now)
+    date_added = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.customer.name
