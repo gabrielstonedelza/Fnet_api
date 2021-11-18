@@ -64,7 +64,6 @@ class Customer(models.Model):
 
 class CustomerAccounts(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE,related_name="just_customer")
     account_number = models.CharField(max_length=16)
     bank = models.CharField(max_length=100, choices=BANKS, default="Access Bank")
     phone = models.CharField(max_length=15)
