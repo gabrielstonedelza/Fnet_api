@@ -12,7 +12,7 @@ from rest_framework.response import Response
 from users.models import User
 from users.serializers import UsersSerializer
 from rest_framework import filters
-from datetime import datetime
+from datetime import datetime, date, time
 
 from fnet_api import serializers
 
@@ -335,4 +335,22 @@ def user_transaction_withdrawals(request, username):
     user = get_object_or_404(User, username=username)
     all_user_withdrawals = CustomerWithdrawal.objects.filter(agent=user).filter(date_requested=f"{my_date.date()}").order_by('-date_requested')
     serializer = CustomerWithdrawalSerializer(all_user_withdrawals, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_deposit_total(request):
+    my_date = datetime.today()
+    deposit_today = AgentDepositRequests.objects.filter(date_requested=my_date.date()).order_by('-date_requested')
+    serializer = AgentDepositRequestSerializer(deposit_today,many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_payment_total(request):
+    my_date = datetime.today()
+    payement_today = Payments.objects.filter(date_created=my_date.date()).order_by('-date_created')
+    serializer = PaymentsSerializer(payement_today,many=True)
     return Response(serializer.data)

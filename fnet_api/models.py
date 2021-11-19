@@ -2,6 +2,8 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 
+import datetime
+
 User = settings.AUTH_USER_MODEL
 BANKS = (
     ("Access Bank", "Access Bank"),
@@ -87,6 +89,7 @@ class AgentDepositRequests(models.Model):
 
     def __str__(self):
         return f"Request made for {self.amount}"
+
 
 
 class CustomerWithdrawal(models.Model):
