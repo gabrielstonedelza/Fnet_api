@@ -50,15 +50,15 @@ def get_customer_accounts(request):
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def customer_account_detail(request,id):
-    c_detail = get_object_or_404(CustomerAccounts,id=id)
-    serializer = CustomerAccountsSerializer(c_detail)
+    c_detail = CustomerAccounts.objects.filter(id=id).order_by('-date_added')
+    serializer = CustomerAccountsSerializer(c_detail,many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def get_customer_account(request,phone):
-    c_detail = get_object_or_404(CustomerAccounts,phone=phone)
-    serializer = CustomerAccountsSerializer(c_detail)
+    c_detail = CustomerAccounts.objects.filter(phone=phone).order_by('-date_added')
+    serializer = CustomerAccountsSerializer(c_detail,many=True)
     return Response(serializer.data)
 
 
