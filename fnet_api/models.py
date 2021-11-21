@@ -58,10 +58,10 @@ class WithdrawReference(models.Model):
     amount = models.CharField(max_length=50)
     customer_phone = models.CharField(max_length=20)
     reference_id = models.CharField(max_length=50)
-    date_withdrew = models.DateField(default=timezone.now)
-    time_withdrew = models.TimeField(default=timezone.now)
+    date_withdrew = models.DateField(auto_now_add=True)
+    time_withdrew = models.TimeField(auto_now_add=True)
 
-    def __stre__(self):
+    def __str__(self):
         return self.reference_id
 
 
@@ -72,8 +72,8 @@ class BankPayment(models.Model):
     left_with = models.CharField(max_length=50)
     left_with_phone = models.CharField(max_length=20)
     reference_id = models.CharField(max_length=50)
-    date_paid = models.DateField(default=timezone.now)
-    time_paid = models.TimeField(default=timezone.now)
+    date_paid = models.DateField(auto_now_add=True)
+    time_paid = models.TimeField(auto_now_add=True)
 
     def __str__(self):
         return self.amount
