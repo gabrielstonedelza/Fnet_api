@@ -1,10 +1,10 @@
 from django.shortcuts import render, get_object_or_404
 from .serializers import (CustomerSerializer, AgentDepositRequestSerializer, \
-    CustomerWithdrawalSerializer, PaymentsSerializer, TwilioSerializer, AdminAccountsStartedSerializer, \
-    AdminAccountsCompletedSerializer,CustomerAccountsSerializer,BankPaymentSerializer,WithdrawSerializer)
+                          CustomerWithdrawalSerializer, PaymentsSerializer, TwilioSerializer, AdminAccountsStartedSerializer, \
+                          AdminAccountsCompletedSerializer, CustomerAccountsSerializer, CashAtPaymentSerializer, WithdrawSerializer)
 
 from .models import (Customer, AgentDepositRequests, CustomerWithdrawal, Payments, TwilioApi, \
-    AdminAccountsStartedWith, AdminAccountsCompletedWith,CustomerAccounts,BankPayment, WithdrawReference)
+                     AdminAccountsStartedWith, AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments, WithdrawReference)
 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework import viewsets, permissions, generics, status
@@ -358,7 +358,7 @@ def get_payment_total(request):
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
 def make_bank_payment(request):
-    serializer = BankPaymentSerializer(data=request.data)
+    serializer = CashAtPaymentSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save(agent=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -376,8 +376,8 @@ def add_withdraw_reference(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_user_bank_payments(request):
-    bank_payments = BankPayment.objects.filter(agent=request.user).order_by('-date_paid')
-    serializer = BankPaymentSerializer(bank_payments,many=True)
+    bank_payments = CashAtPayments.objects.filter(agent=request.user).order_by('-date_paid')
+    serializer = CashAtPaymentSerializer(bank_payments, many=True)
     return Response(serializer.data)
 
 
