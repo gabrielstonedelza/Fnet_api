@@ -1,7 +1,7 @@
 from django.db.models import fields
 from rest_framework import serializers
-from .models import Customer, AgentDepositRequests, CustomerWithdrawal, Payments, TwilioApi, AdminAccountsStartedWith, \
-    AdminAccountsCompletedWith,CustomerAccounts
+from .models import (Customer, AgentDepositRequests, CustomerWithdrawal, Payments, TwilioApi, AdminAccountsStartedWith,BankPayment,WithdrawFerence,
+    AdminAccountsCompletedWith,CustomerAccounts)
 from fnet_api import models
 
 
@@ -9,7 +9,6 @@ class TwilioSerializer(serializers.ModelSerializer):
     class Meta:
         model = TwilioApi
         fields = ['account_sid', 'twi_auth']
-
 
 class CustomerSerializer(serializers.ModelSerializer):
     username = serializers.SerializerMethodField('get_username')
@@ -23,7 +22,6 @@ class CustomerSerializer(serializers.ModelSerializer):
     def get_username(self, user):
         username = user.agent.username
         return username
-
 
 class CustomerAccountsSerializer(serializers.ModelSerializer):
     username = serializers.SerializerMethodField('get_username')
@@ -59,7 +57,6 @@ class AgentDepositRequestSerializer(serializers.ModelSerializer):
         agent_username = user.agent.username
         return agent_username
 
-
 class CustomerWithdrawalSerializer(serializers.ModelSerializer):
     customer_username = serializers.SerializerMethodField('get_customer_username')
     agent_username = serializers.SerializerMethodField('get_agent_username')
@@ -77,7 +74,6 @@ class CustomerWithdrawalSerializer(serializers.ModelSerializer):
         agent_username = user.agent.username
         return agent_username
 
-
 class PaymentsSerializer(serializers.ModelSerializer):
     agent_username = serializers.SerializerMethodField('get_agent_username')
 
@@ -93,7 +89,6 @@ class PaymentsSerializer(serializers.ModelSerializer):
         agent_username = user.agent.username
         return agent_username
 
-
 class AdminAccountsStartedSerializer(serializers.ModelSerializer):
     username = serializers.SerializerMethodField('get_username')
 
@@ -106,7 +101,6 @@ class AdminAccountsStartedSerializer(serializers.ModelSerializer):
         username = mm_user.user.username
         return username
 
-
 class AdminAccountsCompletedSerializer(serializers.ModelSerializer):
     username = serializers.SerializerMethodField('get_username')
 
@@ -118,3 +112,28 @@ class AdminAccountsCompletedSerializer(serializers.ModelSerializer):
     def get_username(self, mm_user):
         username = mm_user.user.username
         return username
+
+class BankPaymentSerializer(serializers.ModelSerializer):
+    username = serializers.SerializerMethodField('get_username')
+
+    class Meta:
+        model = BankPayment
+        fields = ['id','agent','username','bank','amount','left_with','reference_id','date_paid','time_paid']
+        read_only_fields = ['user']
+
+    def get_username(self, mm_user):
+        username = mm_user.user.username
+        return username
+
+class WithdrawSerializer(serializers.ModelSerializer):
+    username = serializers.SerializerMethodField('get_username')
+
+    class Meta:
+        model = WithdrawFerence
+        fields = ['id','agent','username','amount','reference_id','date_withdrew','time_withdrew']
+        read_only_fields = ['user']
+
+    def get_username(self, mm_user):
+        username = mm_user.user.username
+        return username
+

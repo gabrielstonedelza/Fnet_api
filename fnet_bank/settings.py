@@ -84,7 +84,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'fnet',
         'USER': 'fnetuser',
-        'PASSWORD': 'Royalsjas5',
+        'PASSWORD': 'Royalsjas',
         'HOST': 'localhost',
         'PORT': '5432',
         # 'ENGINE': 'django.db.backends.sqlite3',

@@ -36,8 +36,10 @@ DEPOSIT_REQUEST_OPTIONS = (
 MODE_OF_PAYMENT = (
     ("Select mode of payment", "Select mode of payment"),
     ("Bank Payment", "Bank Payment"),
-    ("Momo Payment", "Momo Payment"),
-    ("Momo pay Payment", "Momo pay Payment"),
+    ("Mtn", "Mtn"),
+    ("AirtelTigo", "AirtelTigo"),
+    ("Vodafone", "Vodafone"),
+    ("Momo pay", "Momo pay"),
     ("Agent to Agent", "Agent to Agent"),
     ("Cash left @", "Cash left @"),
 )
@@ -51,6 +53,28 @@ PAYMENT_OFFICES = (
     ("PAN AFRICA", "PAN AFRICA"),
 )
 
+class WithdrawFerence(models.Model):
+    agent = models.ForeignKey(User, on_delete=models.CASCADE)
+    amount = models.CharField(max_length=50)
+    reference_id = models.CharField(max_length=50)
+    date_withdrew = models.DateField(default=timezone.now)
+    time_withdrew = models.TimeField(default=timezone.now)
+
+    def __stre__(self):
+        return self.reference_id
+
+
+class BankPayment(models.Model):
+    agent = models.ForeignKey(User, on_delete=models.CASCADE)
+    bank = models.CharField(max_length=50, choices=BANKS)
+    amount = models.CharField(max_length=50)
+    left_with = models.CharField(max_length=50)
+    reference_id = models.CharField(max_length=50)
+    date_paid = models.DateField(default=timezone.now)
+    time_paid = models.TimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.amount
 
 class Customer(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -74,8 +98,6 @@ class CustomerAccounts(models.Model):
     def __str__(self):
         return self.phone
 
-
-
 class AgentDepositRequests(models.Model):
     guarantor = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     customer = models.CharField(max_length=30, blank=True)
@@ -90,8 +112,6 @@ class AgentDepositRequests(models.Model):
     def __str__(self):
         return f"Request made for {self.amount}"
 
-
-
 class CustomerWithdrawal(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
     customer = models.CharField(max_length=100)
@@ -102,7 +122,6 @@ class CustomerWithdrawal(models.Model):
     def __str__(self):
         return self.amount
 
-
 class Payments(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     mode_of_payment = models.CharField(max_length=30, choices=MODE_OF_PAYMENT, blank=True)
@@ -110,14 +129,13 @@ class Payments(models.Model):
     bank = models.CharField(max_length=50, choices=BANKS, blank=True)
     amount = models.CharField(max_length=500, blank=True)
     reference = models.CharField(max_length=30, blank=True)
-    payment_action = models.CharField(max_length=50, choices=PAYMENT_ACTIONS, default="Close Payment")
+    payment_action = models.CharField(max_length=50, choices=PAYMENT_ACTIONS, default="Not Closed")
     payment_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
     date_created = models.DateField(auto_now_add=True)
     time_created = models.TimeField(auto_now_add=True)
 
     def __str__(self):
         return self.payment_status
-
 
 class TwilioApi(models.Model):
     account_sid = models.CharField(max_length=200)
@@ -127,7 +145,6 @@ class TwilioApi(models.Model):
     def __str__(self):
         return f"twilio account added"
 
-
 class AdminAccountsStartedWith(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     physical_cash = models.IntegerField(blank=True)
@@ -136,8 +153,6 @@ class AdminAccountsStartedWith(models.Model):
 
     def __str__(self):
         return f"{self.user.username} has started accounts today"
-
-
 
 class AdminAccountsCompletedWith(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
