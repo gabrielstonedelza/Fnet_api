@@ -118,7 +118,7 @@ class CashAtPaymentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CashAtPayments
-        fields = ['id','agent','username','bank','amount','left_with','left_with_phone','reference_id','date_paid','time_paid']
+        fields = ['id','agent','username','location','amount','left_with','left_with_phone','reference_id','date_paid','time_paid']
         read_only_fields = ['agent']
 
     def get_username(self, mm_user):

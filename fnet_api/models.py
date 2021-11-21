@@ -66,7 +66,7 @@ class WithdrawReference(models.Model):
 
 class CashAtPayments(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
-    bank = models.CharField(max_length=50, choices=BANKS)
+    location = models.CharField(max_length=50)
     amount = models.CharField(max_length=50)
     left_with = models.CharField(max_length=50)
     left_with_phone = models.CharField(max_length=20)
