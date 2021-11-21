@@ -134,6 +134,6 @@ class WithdrawSerializer(serializers.ModelSerializer):
         read_only_fields = ['agent']
 
     def get_username(self, mm_user):
-        username = mm_user.user.username
+        username = mm_user.agent.username
         return username
 
