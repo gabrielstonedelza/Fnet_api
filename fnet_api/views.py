@@ -384,6 +384,6 @@ def get_user_bank_payments(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_user_withdraw_reference(request):
-    withdraw_reference = WithdrawReference.objects.filter(agent=request.user).order_by('-date_paid')
+    withdraw_reference = WithdrawReference.objects.filter(agent=request.user).order_by('-date_withdrew')
     serializer = WithdrawSerializer(withdraw_reference,many=True)
     return Response(serializer.data)
