@@ -126,7 +126,7 @@ class CustomerWithdrawal(models.Model):
 class Payments(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     mode_of_payment = models.CharField(max_length=30, choices=MODE_OF_PAYMENT, blank=True)
-    cash_at_location = models.CharField(max_length=30, choices=PAYMENT_OFFICES, blank=True)
+    cash_at_location = models.CharField(max_length=30, choices=PAYMENT_OFFICES, blank=True,default="")
     bank = models.CharField(max_length=50, choices=BANKS, blank=True)
     amount = models.CharField(max_length=500, blank=True)
     reference = models.CharField(max_length=30, blank=True)
