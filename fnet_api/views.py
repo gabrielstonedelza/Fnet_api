@@ -367,7 +367,7 @@ def make_bank_payment(request):
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
 def add_withdraw_reference(request):
-    serializer = WithdrawReference(data=request.data)
+    serializer = WithdrawSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save(user=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
