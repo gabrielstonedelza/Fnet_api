@@ -17,6 +17,7 @@ BANKS = (
 )
 PAYMENT_ACTIONS = (
     ("Select payment action", "Select payment action"),
+    ("Not Closed", "Not Closed"),
     ("Close Payment", "Close Payment"),
 )
 
