@@ -6,6 +6,7 @@ import datetime
 
 User = settings.AUTH_USER_MODEL
 BANKS = (
+    ("Select bank", "Select bank"),
     ("Access Bank", "Access Bank"),
     ("Cal Bank", "Cal Bank"),
     ("Fidelity Bank", "Fidelity Bank"),
