@@ -46,6 +46,7 @@ MODE_OF_PAYMENT = (
 )
 
 PAYMENT_OFFICES = (
+    ("Please select cash at location", "Please select cash at location"),
     ("Cash @ location", "Cash @ location"),
     ("DVLA", "DVLA"),
     ("HEAD OFFICE", "HEAD OFFICE"),
