@@ -53,9 +53,10 @@ PAYMENT_OFFICES = (
     ("PAN AFRICA", "PAN AFRICA"),
 )
 
-class WithdrawFerence(models.Model):
+class WithdrawReference(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
     amount = models.CharField(max_length=50)
+    customer_phone = models.CharField(max_length=20)
     reference_id = models.CharField(max_length=50)
     date_withdrew = models.DateField(default=timezone.now)
     time_withdrew = models.TimeField(default=timezone.now)
@@ -69,6 +70,7 @@ class BankPayment(models.Model):
     bank = models.CharField(max_length=50, choices=BANKS)
     amount = models.CharField(max_length=50)
     left_with = models.CharField(max_length=50)
+    left_with_phone = models.CharField(max_length=20)
     reference_id = models.CharField(max_length=50)
     date_paid = models.DateField(default=timezone.now)
     time_paid = models.TimeField(default=timezone.now)

@@ -1,10 +1,10 @@
 from django.shortcuts import render, get_object_or_404
-from .serializers import CustomerSerializer, AgentDepositRequestSerializer, \
+from .serializers import (CustomerSerializer, AgentDepositRequestSerializer, \
     CustomerWithdrawalSerializer, PaymentsSerializer, TwilioSerializer, AdminAccountsStartedSerializer, \
-    AdminAccountsCompletedSerializer,CustomerAccountsSerializer
+    AdminAccountsCompletedSerializer,CustomerAccountsSerializer,BankPaymentSerializer,WithdrawSerializer)
 
-from .models import Customer, AgentDepositRequests, CustomerWithdrawal, Payments, TwilioApi, \
-    AdminAccountsStartedWith, AdminAccountsCompletedWith,CustomerAccounts
+from .models import (Customer, AgentDepositRequests, CustomerWithdrawal, Payments, TwilioApi, \
+    AdminAccountsStartedWith, AdminAccountsCompletedWith,CustomerAccounts,BankPayment, WithdrawReference)
 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework import viewsets, permissions, generics, status
@@ -342,7 +342,7 @@ def user_transaction_withdrawals(request, username):
 @permission_classes([permissions.IsAuthenticated])
 def get_deposit_total(request):
     my_date = datetime.today()
-    deposit_today = AgentDepositRequests.objects.filter(date_requested=my_date.date()).order_by('-date_requested')
+    deposit_today = AgentDepositRequests.objects.filter(agent=request.user).filter(date_requested=my_date.date()).order_by('-date_requested')
     serializer = AgentDepositRequestSerializer(deposit_today,many=True)
     return Response(serializer.data)
 
@@ -351,6 +351,39 @@ def get_deposit_total(request):
 @permission_classes([permissions.IsAuthenticated])
 def get_payment_total(request):
     my_date = datetime.today()
-    payement_today = Payments.objects.filter(date_created=my_date.date()).order_by('-date_created')
+    payement_today = Payments.objects.filter(agent=request.user).filter(date_created=my_date.date()).order_by('-date_created')
     serializer = PaymentsSerializer(payement_today,many=True)
+    return Response(serializer.data)
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def make_bank_payment(request):
+    serializer = BankPaymentSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(user=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def add_withdraw_reference(request):
+    serializer = WithdrawReference(data=request.data)
+    if serializer.is_valid():
+        serializer.save(user=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_user_bank_payments(request):
+    bank_payments = BankPayment.objects.filter(agent=request.user).order_by('-date_paid')
+    serializer = BankPaymentSerializer(bank_payments,many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_user_withdraw_reference(request):
+    withdraw_reference = WithdrawReference.objects.filter(agent=request.user).order_by('-date_paid')
+    serializer = WithdrawSerializer(withdraw_reference,many=True)
     return Response(serializer.data)

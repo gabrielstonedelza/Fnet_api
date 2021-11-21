@@ -1,7 +1,7 @@
 from django.db.models import fields
 from rest_framework import serializers
-from .models import (Customer, AgentDepositRequests, CustomerWithdrawal, Payments, TwilioApi, AdminAccountsStartedWith,BankPayment,WithdrawFerence,
-    AdminAccountsCompletedWith,CustomerAccounts)
+from .models import (Customer, AgentDepositRequests, CustomerWithdrawal, Payments, TwilioApi, AdminAccountsStartedWith, BankPayment, WithdrawReference,
+                     AdminAccountsCompletedWith, CustomerAccounts)
 from fnet_api import models
 
 
@@ -118,8 +118,8 @@ class BankPaymentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BankPayment
-        fields = ['id','agent','username','bank','amount','left_with','reference_id','date_paid','time_paid']
-        read_only_fields = ['user']
+        fields = ['id','agent','username','bank','amount','left_with','left_with_phone','reference_id','date_paid','time_paid']
+        read_only_fields = ['agent']
 
     def get_username(self, mm_user):
         username = mm_user.user.username
@@ -129,9 +129,9 @@ class WithdrawSerializer(serializers.ModelSerializer):
     username = serializers.SerializerMethodField('get_username')
 
     class Meta:
-        model = WithdrawFerence
-        fields = ['id','agent','username','amount','reference_id','date_withdrew','time_withdrew']
-        read_only_fields = ['user']
+        model = WithdrawReference
+        fields = ['id','agent','username','amount','reference_id','customer_phone','date_withdrew','time_withdrew']
+        read_only_fields = ['agent']
 
     def get_username(self, mm_user):
         username = mm_user.user.username

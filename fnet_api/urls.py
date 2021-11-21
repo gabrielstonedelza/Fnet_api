@@ -40,9 +40,10 @@ urlpatterns = [
     path('update_accounts/<int:id>/',views.update_accounts),
     path('admin_account_detail/<int:id>/',views.admin_account_detail),
     path('get_deposit_total/', views.get_deposit_total),
-    path("get_payment_total/",views.get_payment_total)
+    path("get_payment_total/",views.get_payment_total),
 
-
-
-
+    path("make_bank_payment/", views.make_bank_payment),
+    path("add_withdraw_reference/", views.add_withdraw_reference),
+    path("get_bank_payments/",views.get_user_bank_payments),
+    path("get_withdraw_reference/",views.get_user_withdraw_reference)
 ]
