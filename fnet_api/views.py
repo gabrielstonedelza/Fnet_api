@@ -244,6 +244,17 @@ def get_user_customers(request, username):
     serializer = CustomerSerializer(u_customers, many=True)
     return Response(serializer.data)
 
+class GetAllUserCustomers(generics.ListAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = CustomerSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['name', 'phone']
+
+    def get_queryset(self):
+        agent = self.request.user
+        return Customer.objects.filter(agent=agent)
+
+
 class GetAllCustomers(generics.ListAPIView):
     permission_classes = [permissions.AllowAny]
     queryset = Customer.objects.all().order_by('-date_created')
@@ -376,7 +387,6 @@ def get_user_bank_payments(request):
     bank_payments = CashAtPayments.objects.filter(agent=request.user).order_by('-date_paid')
     serializer = CashAtPaymentSerializer(bank_payments, many=True)
     return Response(serializer.data)
-
 
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])

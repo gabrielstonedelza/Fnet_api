@@ -49,4 +49,5 @@ urlpatterns = [
 
     path("delete_user/<int:pk>/", views.user_delete),
     path("delete_customer/<int:pk>/", views.customer_delete),
+    path("search_user_customers/",views.GetAllUserCustomers.as_view())
 ]
