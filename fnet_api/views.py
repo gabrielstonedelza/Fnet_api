@@ -386,7 +386,7 @@ def get_user_withdraw_reference(request):
     return Response(serializer.data)
 
 @api_view(['GET', 'DELETE'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 def user_delete(request, pk):
     try:
         user = User.objects.get(pk=pk)
