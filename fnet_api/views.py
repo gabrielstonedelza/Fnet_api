@@ -394,3 +394,14 @@ def user_delete(request, pk):
     except User.DoesNotExist:
         return Http404
     return Response(status=status.HTTP_204_NO_CONTENT)
+
+@api_view(['GET', 'DELETE'])
+@permission_classes([permissions.AllowAny])
+def customer_delete(request, pk):
+    try:
+        customer = Customer.objects.get(pk=pk)
+        customer.delete()
+    except Customer.DoesNotExist:
+        return Http404
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
