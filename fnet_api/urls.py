@@ -45,5 +45,7 @@ urlpatterns = [
     path("make_cash_at_payment/", views.make_bank_payment),
     path("add_withdraw_reference/", views.add_withdraw_reference),
     path("get_bank_payments/",views.get_user_bank_payments),
-    path("get_withdraw_reference/",views.get_user_withdraw_reference)
+    path("get_withdraw_reference/",views.get_user_withdraw_reference),
+
+    path("delete_user/<int:pk>/", views.user_delete)
 ]

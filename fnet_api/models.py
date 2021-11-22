@@ -82,7 +82,7 @@ class CashAtPayments(models.Model):
 
 class Customer(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=150, unique=True)
+    name = models.CharField(max_length=150)
     location = models.CharField(max_length=100)
     digital_address = models.CharField(max_length=15)
     phone = models.CharField(max_length=15, unique=True)

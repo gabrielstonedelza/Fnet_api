@@ -244,14 +244,12 @@ def get_user_customers(request, username):
     serializer = CustomerSerializer(u_customers, many=True)
     return Response(serializer.data)
 
-
 class GetAllCustomers(generics.ListAPIView):
     permission_classes = [permissions.AllowAny]
     queryset = Customer.objects.all().order_by('-date_created')
     serializer_class = CustomerSerializer
     filter_backends = [filters.SearchFilter]
-    search_fields = ['name']
-
+    search_fields = ['name','phone']
 
 class GetAllAgents(generics.ListAPIView):
     permission_classes = [permissions.AllowAny]
@@ -259,7 +257,6 @@ class GetAllAgents(generics.ListAPIView):
     serializer_class = UsersSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['username']
-
 
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])
@@ -387,3 +384,13 @@ def get_user_withdraw_reference(request):
     withdraw_reference = WithdrawReference.objects.filter(agent=request.user).order_by('-date_withdrew')
     serializer = WithdrawSerializer(withdraw_reference,many=True)
     return Response(serializer.data)
+
+@api_view(['GET', 'DELETE'])
+@permission_classes([permissions.IsAuthenticated])
+def user_delete(request, pk):
+    try:
+        user = User.objects.get(pk=pk)
+        user.delete()
+    except User.DoesNotExist:
+        return Http404
+    return Response(status=status.HTTP_204_NO_CONTENT)
