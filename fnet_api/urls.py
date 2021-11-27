@@ -49,5 +49,10 @@ urlpatterns = [
 
     path("delete_user/<int:pk>/", views.user_delete),
     path("delete_customer/<int:pk>/", views.customer_delete),
-    path("search_user_customers/",views.GetAllUserCustomers.as_view())
+    path("search_user_customers/",views.GetAllUserCustomers.as_view()),
+
+    path('customer_request_deposit/', views.customer_deposit_request),
+    path('get_your_customers_request/', views.get_your_customers_requests),
+    path('get_customers_request/<str:phone>/',views.get_customers_requests),
+    path('approve_customer_request/<int:id>/',views.approve_customer_request)
 ]

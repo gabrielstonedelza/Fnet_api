@@ -1,7 +1,7 @@
 from django.db.models import fields
 from rest_framework import serializers
 from .models import (Customer, AgentDepositRequests, CustomerWithdrawal, Payments, TwilioApi, AdminAccountsStartedWith, CashAtPayments, WithdrawReference,
-                     AdminAccountsCompletedWith, CustomerAccounts)
+                     AdminAccountsCompletedWith, CustomerAccounts,CustomerRequestDeposit)
 from fnet_api import models
 
 
@@ -33,6 +33,18 @@ class CustomerAccountsSerializer(serializers.ModelSerializer):
     def get_username(self, user):
         username = user.agent.username
         return username
+
+class CustomerDepositRequestSerializer(serializers.ModelSerializer):
+    agent_username = serializers.SerializerMethodField('get_agent_username')
+
+    class Meta:
+        model = CustomerRequestDeposit
+        fields = ['id', 'customer_phone', 'agent', 'customer_name', 'agent_username','bank',
+                  'amount', 'request_option', 'request_status', 'date_requested', 'time_requested']
+
+    def get_agent_username(self, user):
+        agent_username = user.agent.username
+        return agent_username
 
 class AgentDepositRequestSerializer(serializers.ModelSerializer):
     guarantor_username = serializers.SerializerMethodField('get_guarantor_username')

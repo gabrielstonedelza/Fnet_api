@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import (Customer, AgentDepositRequests, CustomerWithdrawal, Payments, TwilioApi, AdminAccountsStartedWith,
-                     AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments, WithdrawReference)
+                     AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments, WithdrawReference,CustomerRequestDeposit)
 
 admin.site.register(Customer)
 admin.site.register(AgentDepositRequests)
@@ -13,4 +13,5 @@ admin.site.register(AdminAccountsCompletedWith)
 admin.site.register(CustomerAccounts)
 admin.site.register(CashAtPayments)
 admin.site.register(WithdrawReference)
+admin.site.register(CustomerRequestDeposit)
 

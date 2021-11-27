@@ -1,10 +1,10 @@
 from django.shortcuts import render, get_object_or_404
 from .serializers import (CustomerSerializer, AgentDepositRequestSerializer, \
                           CustomerWithdrawalSerializer, PaymentsSerializer, TwilioSerializer, AdminAccountsStartedSerializer, \
-                          AdminAccountsCompletedSerializer, CustomerAccountsSerializer, CashAtPaymentSerializer, WithdrawSerializer)
+                          AdminAccountsCompletedSerializer, CustomerAccountsSerializer, CashAtPaymentSerializer, WithdrawSerializer,CustomerDepositRequestSerializer)
 
 from .models import (Customer, AgentDepositRequests, CustomerWithdrawal, Payments, TwilioApi, \
-                     AdminAccountsStartedWith, AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments, WithdrawReference)
+                     AdminAccountsStartedWith, AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments, WithdrawReference,CustomerRequestDeposit)
 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework import viewsets, permissions, generics, status
@@ -22,7 +22,6 @@ def get_twilio(request):
     twilio_details = TwilioApi.objects.all().order_by('-date_created')
     serializer = TwilioSerializer(twilio_details, many=True)
     return Response(serializer.data)
-
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
@@ -415,3 +414,37 @@ def customer_delete(request, pk):
         return Http404
     return Response(status=status.HTTP_204_NO_CONTENT)
 
+
+@api_view(['GET', 'PUT'])
+@permission_classes([permissions.IsAuthenticated])
+def approve_customer_request(request, id):
+    customer_request = get_object_or_404(CustomerRequestDeposit, id=id)
+    serializer = CustomerDepositRequestSerializer(customer_request, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_customers_requests(request,phone):
+    all_customer_requests = CustomerRequestDeposit.objects.filter(customer_phone=phone).order_by('-date_requested')
+    serializer = CustomerDepositRequestSerializer(all_customer_requests, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_your_customers_requests(request):
+    your_customers_requests = CustomerRequestDeposit.objects.filter(agent=request.user).order_by('-date_requested')
+    serializer = CustomerDepositRequestSerializer(your_customers_requests, many=True)
+    return Response(serializer.data)
+
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+def customer_deposit_request(request):
+    serializer = CustomerDepositRequestSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

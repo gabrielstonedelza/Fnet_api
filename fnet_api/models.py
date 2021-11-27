@@ -56,6 +56,21 @@ PAYMENT_OFFICES = (
     ("PAN AFRICA", "PAN AFRICA"),
 )
 
+class CustomerRequestDeposit(models.Model):
+    agent = models.ForeignKey(User, on_delete=models.CASCADE, related_name="customers_agent")
+    customer_phone = models.CharField(max_length=20, blank=True)
+    customer_name = models.CharField(max_length=100,blank=True)
+    bank = models.CharField(max_length=50, choices=BANKS, blank=True, default="")
+    amount = models.CharField(max_length=500, blank=True)
+    request_option = models.CharField(max_length=100, choices=DEPOSIT_REQUEST_OPTIONS, default="Physical Cash")
+    request_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
+    date_requested = models.DateField(auto_now_add=True)
+    time_requested = models.TimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.customer_name
+
+
 class WithdrawReference(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
     amount = models.CharField(max_length=50)
