@@ -24,6 +24,7 @@ urlpatterns = [
     path('get_agent/<str:username>/', views.get_agent),
     path('payment_detail/<int:pk>/', views.payment_detail),
     path('get_customer/<str:name>/', views.get_customer),
+    path('get_customer_by_phone/<str:phone>/', views.get_customer_by_phone),
     path('admin_accounts_started/', views.admin_accounts_started),
     path('admin_accounts_completed/', views.admin_accounts_completed),
     path('admin_accounts_started_lists/', views.admin_accounts_started_lists),

@@ -225,6 +225,13 @@ def get_customer(request, name):
     serializer = CustomerSerializer(customer, many=True)
     return Response(serializer.data)
 
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_customer_by_phone(request, phone):
+    customer = Customer.objects.filter(phone=phone)
+    serializer = CustomerSerializer(customer, many=True)
+    return Response(serializer.data)
+
 
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
