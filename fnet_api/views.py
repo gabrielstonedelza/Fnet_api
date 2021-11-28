@@ -459,6 +459,6 @@ def customer_deposit_request(request):
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def get_customer_request_summary(request,phone):
-    request_summary = get_object_or_404(CustomerRequestDeposit,phone=phone)
+    request_summary = get_object_or_404(CustomerRequestDeposit,customer_phone=phone)
     serializer = CustomerDepositRequestSerializer(request_summary,many=True)
     return Response(serializer.data)
