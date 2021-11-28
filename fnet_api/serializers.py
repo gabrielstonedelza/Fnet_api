@@ -39,7 +39,7 @@ class CustomerDepositRequestSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomerRequestDeposit
-        fields = ['id', 'customer_phone', 'agent', 'customer_name', 'agent_username','bank',
+        fields = ['id', 'customer_phone', 'agent', 'customer_name', 'agent_username',
                   'amount', 'request_option', 'request_status', 'date_requested', 'time_requested']
 
     def get_agent_username(self, user):
