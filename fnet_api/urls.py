@@ -55,5 +55,6 @@ urlpatterns = [
     path('customer_request_deposit/', views.customer_deposit_request),
     path('get_your_customers_request/', views.get_your_customers_requests),
     path('get_customers_request/<str:phone>/',views.get_customers_requests),
-    path('approve_customer_request/<int:id>/',views.approve_customer_request)
+    path('approve_customer_request/<int:id>/',views.approve_customer_request),
+    path("get_customer_request_summary/<str:phone>/", views.get_customer_request_summary)
 ]

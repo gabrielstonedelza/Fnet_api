@@ -455,3 +455,10 @@ def customer_deposit_request(request):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_customer_request_summary(request,phone):
+    request_summary = get_object_or_404(CustomerRequestDeposit,phone=phone)
+    serializer = CustomerDepositRequestSerializer(request_summary,many=True)
+    return Response(serializer.data)
