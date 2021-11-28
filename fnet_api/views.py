@@ -462,3 +462,10 @@ def get_customer_request_summary(request,phone):
     request_summary = CustomerRequestDeposit.objects.filter(customer_phone=phone).order_by('-date_requested')
     serializer = CustomerDepositRequestSerializer(request_summary,many=True)
     return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def customer_request_detail(request, pk):
+    c_request = CustomerRequestDeposit.objects.get(pk=pk)
+    serializer = CustomerDepositRequestSerializer(c_request, many=False)
+    return Response(serializer.data)
