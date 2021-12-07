@@ -146,7 +146,7 @@ class Payments(models.Model):
     cash_at_location = models.CharField(max_length=30, choices=PAYMENT_OFFICES, blank=True,default="")
     bank = models.CharField(max_length=50, choices=BANKS, blank=True)
     amount = models.DecimalField(max_digits=19, decimal_places=2)
-    reference = models.CharField(max_length=30, blank=True)
+    transaction_id = models.CharField(max_length=30, blank=True)
     payment_action = models.CharField(max_length=50, choices=PAYMENT_ACTIONS, default="Not Closed")
     payment_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
     date_created = models.DateField(auto_now_add=True)
