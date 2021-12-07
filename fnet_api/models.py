@@ -109,6 +109,7 @@ class Customer(models.Model):
 class CustomerAccounts(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
     account_number = models.CharField(max_length=16)
+    account_name = models.CharField(max_length=100)
     bank = models.CharField(max_length=100, choices=BANKS, default="Access Bank")
     phone = models.CharField(max_length=15)
     date_added = models.DateTimeField(auto_now_add=True)

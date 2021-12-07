@@ -27,7 +27,7 @@ class CustomerAccountsSerializer(serializers.ModelSerializer):
     username = serializers.SerializerMethodField('get_username')
     class Meta:
         model = CustomerAccounts
-        fields = ['id','agent','username', 'account_number','bank','phone','date_added']
+        fields = ['id','agent','username', 'account_number','account_name','bank','phone','date_added']
         read_only_fields = ['agent']
 
     def get_username(self, user):
@@ -92,7 +92,7 @@ class PaymentsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Payments
         fields = ['id', 'agent', 'agent_username', 'mode_of_payment', 'cash_at_location', 'amount',
-                  'bank', 'reference', 'payment_action',
+                  'bank', 'transaction_id', 'payment_action',
                   'payment_status', 
                   'date_created', 'time_created']
         read_only_fields = ['agent']
