@@ -21,18 +21,20 @@ PAYMENT_ACTIONS = (
     ("Close Payment", "Close Payment"),
 )
 
+MOBILE_MONEY =(
+    ("Mtn","Mtn"),
+    ("AirtelTigo","AirtelTigo"),
+    ("Vodafone","Vodafone"),
+)
+
 REQUEST_STATUS = (
     ("Approved", "Approved"),
     ("Pending", "Pending")
 )
 DEPOSIT_REQUEST_OPTIONS = (
-    ("Physical Cash", "Physical Cash"),
-    ("Mtn Ecash", "Mtn Ecash"),
-    ("Vodafone Ecash", "Vodafone Ecash"),
-    ("AirtelTigo Ecash", "AirtelTigo Ecash"),
-    ("Ecobank Ecash", "Ecobank Ecash"),
-    ("Calbank Ecash", "Calbank Ecash"),
-    ("Fidelity Ecash", "Fidelity Ecash"),
+    ("Cash", "Cash"),
+    ("Mobile Money", "Mobile Money"),
+    ("Banks", "Banks"),
 )
 
 MODE_OF_PAYMENT = (
@@ -123,6 +125,8 @@ class AgentDepositRequests(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE, related_name="agent_requesting")
     bank = models.CharField(max_length=50, choices=BANKS,blank=True,default="")
     amount = models.DecimalField(max_digits=19, decimal_places=2)
+    mobile_money = models.CharField(max_length=20,choices=MOBILE_MONEY,blank=True)
+    account_number = models.CharField(max_length=20,blank=True)
     request_option = models.CharField(max_length=100, choices=DEPOSIT_REQUEST_OPTIONS, default="Physical Cash")
     request_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
     date_requested = models.DateField(auto_now_add=True)
