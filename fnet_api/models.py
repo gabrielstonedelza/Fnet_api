@@ -127,7 +127,7 @@ class AgentDepositRequests(models.Model):
     bank = models.CharField(max_length=50, choices=BANKS,blank=True,default="")
     amount = models.DecimalField(max_digits=19, decimal_places=2)
     mobile_money = models.CharField(max_length=20,choices=MOBILE_MONEY,blank=True,default="")
-    account_number = models.CharField(max_length=20,blank=True)
+    account_number = models.CharField(max_length=20,blank=True,default="")
     account_name = models.CharField(max_length=100,blank=True,default="")
     request_option = models.CharField(max_length=100, choices=DEPOSIT_REQUEST_OPTIONS, default="")
     request_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
