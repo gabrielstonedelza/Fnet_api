@@ -60,7 +60,7 @@ class CustomerRequestDeposit(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE, related_name="customers_agent")
     customer_phone = models.CharField(max_length=20, blank=True)
     customer_name = models.CharField(max_length=100,blank=True)
-    amount = models.DecimalField(max_digits=19, decimal_places=10)
+    amount = models.DecimalField(max_digits=19, decimal_places=2)
     request_option = models.CharField(max_length=100, choices=DEPOSIT_REQUEST_OPTIONS, default="Physical Cash")
     request_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
     date_requested = models.DateField(auto_now_add=True)
@@ -72,7 +72,7 @@ class CustomerRequestDeposit(models.Model):
 
 class WithdrawReference(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=19, decimal_places=10)
+    amount = models.DecimalField(max_digits=19, decimal_places=2)
     customer_phone = models.CharField(max_length=20)
     reference_id = models.CharField(max_length=50)
     date_withdrew = models.DateField(auto_now_add=True)
@@ -84,7 +84,7 @@ class WithdrawReference(models.Model):
 class CashAtPayments(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
     location = models.CharField(max_length=50)
-    amount = models.DecimalField(max_digits=19, decimal_places=10)
+    amount = models.DecimalField(max_digits=19, decimal_places=2)
     left_with = models.CharField(max_length=50)
     left_with_phone = models.CharField(max_length=20)
     reference_id = models.CharField(max_length=50)
@@ -121,7 +121,7 @@ class AgentDepositRequests(models.Model):
     customer = models.CharField(max_length=30, blank=True)
     agent = models.ForeignKey(User, on_delete=models.CASCADE, related_name="agent_requesting")
     bank = models.CharField(max_length=50, choices=BANKS,blank=True,default="")
-    amount = models.DecimalField(max_digits=19, decimal_places=10)
+    amount = models.DecimalField(max_digits=19, decimal_places=2)
     request_option = models.CharField(max_length=100, choices=DEPOSIT_REQUEST_OPTIONS, default="Physical Cash")
     request_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
     date_requested = models.DateField(auto_now_add=True)
@@ -134,7 +134,7 @@ class CustomerWithdrawal(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
     customer = models.CharField(max_length=100)
     bank = models.CharField(max_length=100, choices=BANKS, default="GT Bank")
-    amount = models.DecimalField(max_digits=19, decimal_places=10)
+    amount = models.DecimalField(max_digits=19, decimal_places=2)
     date_requested = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -145,7 +145,7 @@ class Payments(models.Model):
     mode_of_payment = models.CharField(max_length=30, choices=MODE_OF_PAYMENT, blank=True)
     cash_at_location = models.CharField(max_length=30, choices=PAYMENT_OFFICES, blank=True,default="")
     bank = models.CharField(max_length=50, choices=BANKS, blank=True)
-    amount = models.DecimalField(max_digits=19, decimal_places=10)
+    amount = models.DecimalField(max_digits=19, decimal_places=2)
     reference = models.CharField(max_length=30, blank=True)
     payment_action = models.CharField(max_length=50, choices=PAYMENT_ACTIONS, default="Not Closed")
     payment_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
@@ -165,8 +165,8 @@ class TwilioApi(models.Model):
 
 class AdminAccountsStartedWith(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
-    physical_cash = models.DecimalField(max_digits=19, decimal_places=10)
-    eCash = models.DecimalField(max_digits=19, decimal_places=10)
+    physical_cash = models.DecimalField(max_digits=19, decimal_places=2)
+    eCash = models.DecimalField(max_digits=19, decimal_places=2)
     date_started = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -174,8 +174,8 @@ class AdminAccountsStartedWith(models.Model):
 
 class AdminAccountsCompletedWith(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
-    physical_cash = models.DecimalField(max_digits=19, decimal_places=10)
-    eCash = models.DecimalField(max_digits=19, decimal_places=10)
+    physical_cash = models.DecimalField(max_digits=19, decimal_places=2)
+    eCash = models.DecimalField(max_digits=19, decimal_places=2)
     date_closed = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
