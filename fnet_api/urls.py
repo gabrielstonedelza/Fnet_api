@@ -57,5 +57,8 @@ urlpatterns = [
     path('get_customers_request/<str:phone>/',views.get_customers_requests),
     path('approve_customer_request/<int:id>/',views.approve_customer_request),
     path("get_customer_request_summary/<str:phone>/", views.get_customer_request_summary),
-    path("customer_request_detail/<int:pk>/",views.customer_request_detail)
+    path("customer_request_detail/<int:pk>/",views.customer_request_detail),
+
+    path('add_user_flag/',views.add_flag),
+    path('get_flags/',views.get_flags)
 ]

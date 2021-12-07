@@ -1,9 +1,19 @@
 from django.db.models import fields
 from rest_framework import serializers
 from .models import (Customer, AgentDepositRequests, CustomerWithdrawal, Payments, TwilioApi, AdminAccountsStartedWith, CashAtPayments, WithdrawReference,
-                     AdminAccountsCompletedWith, CustomerAccounts,CustomerRequestDeposit)
+                     AdminAccountsCompletedWith, CustomerAccounts,CustomerRequestDeposit,UserFlags)
 from fnet_api import models
 
+class UserFlagsSerializer(serializers.ModelSerializer):
+    username = serializers.SerializerMethodField('get_username')
+    class Meta:
+        model = UserFlags
+        fields = ['id','user','username','date_added']
+        read_only_fields = ['user']
+
+    def get_username(self, user):
+        username = user.agent.username
+        return username
 
 class TwilioSerializer(serializers.ModelSerializer):
     class Meta:

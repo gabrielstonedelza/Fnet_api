@@ -1,10 +1,10 @@
 from django.shortcuts import render, get_object_or_404
 from .serializers import (CustomerSerializer, AgentDepositRequestSerializer, \
                           CustomerWithdrawalSerializer, PaymentsSerializer, TwilioSerializer, AdminAccountsStartedSerializer, \
-                          AdminAccountsCompletedSerializer, CustomerAccountsSerializer, CashAtPaymentSerializer, WithdrawSerializer,CustomerDepositRequestSerializer)
+                          AdminAccountsCompletedSerializer, CustomerAccountsSerializer, CashAtPaymentSerializer, WithdrawSerializer,CustomerDepositRequestSerializer,UserFlagsSerializer)
 
 from .models import (Customer, AgentDepositRequests, CustomerWithdrawal, Payments, TwilioApi, \
-                     AdminAccountsStartedWith, AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments, WithdrawReference,CustomerRequestDeposit)
+                     AdminAccountsStartedWith, AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments, WithdrawReference,CustomerRequestDeposit,UserFlags)
 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework import viewsets, permissions, generics, status
@@ -365,8 +365,8 @@ def get_deposit_total(request):
 @permission_classes([permissions.IsAuthenticated])
 def get_payment_total(request):
     my_date = datetime.today()
-    payement_today = Payments.objects.filter(agent=request.user).filter(date_created=my_date.date()).order_by('-date_created')
-    serializer = PaymentsSerializer(payement_today,many=True)
+    payment_today = Payments.objects.filter(agent=request.user).filter(date_created=my_date.date()).order_by('-date_created')
+    serializer = PaymentsSerializer(payment_today,many=True)
     return Response(serializer.data)
 
 @api_view(['POST'])
@@ -468,4 +468,20 @@ def get_customer_request_summary(request,phone):
 def customer_request_detail(request, pk):
     c_request = CustomerRequestDeposit.objects.get(pk=pk)
     serializer = CustomerDepositRequestSerializer(c_request, many=False)
+    return Response(serializer.data)
+
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+def add_flag(request):
+    serializer = UserFlagsSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+def get_flags(request):
+    flags = UserFlags.objects.all().order_by('-date_added')
+    serializer = UserFlagsSerializer(flags,many=True)
     return Response(serializer.data)

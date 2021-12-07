@@ -71,7 +71,6 @@ class CustomerRequestDeposit(models.Model):
     def __str__(self):
         return self.customer_name
 
-
 class WithdrawReference(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=19, decimal_places=2)
@@ -186,3 +185,10 @@ class AdminAccountsCompletedWith(models.Model):
 
     def __str__(self):
         return f"{self.user.username} has ended accounts today"
+
+class UserFlags(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    date_added = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return self.user.username
