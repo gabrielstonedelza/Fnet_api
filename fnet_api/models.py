@@ -22,6 +22,7 @@ PAYMENT_ACTIONS = (
 )
 
 MOBILE_MONEY =(
+    ("Select Network","Select Network"),
     ("Mtn","Mtn"),
     ("AirtelTigo","AirtelTigo"),
     ("Vodafone","Vodafone"),
