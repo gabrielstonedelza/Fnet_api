@@ -124,7 +124,7 @@ class AgentDepositRequests(models.Model):
     customer = models.CharField(max_length=30, blank=True)
     agent = models.ForeignKey(User, on_delete=models.CASCADE, related_name="agent_requesting")
     bank = models.CharField(max_length=50, choices=BANKS,blank=True,default="")
-    amount = models.DecimalField(max_digits=19, decimal_places=2)
+    amount = models.DecimalField(max_digits=19, decimal_places=2,blank=True)
     mobile_money = models.CharField(max_length=20,choices=MOBILE_MONEY,blank=True,default="Select Network")
     account_number = models.TextField(blank=True)
     account_name = models.CharField(max_length=100,blank=True,default="")
