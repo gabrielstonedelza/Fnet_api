@@ -48,8 +48,8 @@ def get_customer_accounts(request):
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
-def get_customer_accounts_by_bank(request,bank):
-    customer_accounts = CustomerAccounts.objects.filter(bank=bank).order_by('-date_added')
+def get_customer_accounts_by_bank(request,customer_phone,bank):
+    customer_accounts = CustomerAccounts.objects.filter(phone=customer_phone).filter(bank=bank).order_by('-date_added')
     serializer = CustomerAccountsSerializer(customer_accounts, many=True)
     return Response(serializer.data)
 
