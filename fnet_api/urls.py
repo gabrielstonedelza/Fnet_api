@@ -42,6 +42,7 @@ urlpatterns = [
     path('admin_account_detail/<int:id>/',views.admin_account_detail),
     path('get_deposit_total/', views.get_deposit_total),
     path("get_payment_total/",views.get_payment_total),
+    path('get_customer_accounts_by_bank/<str:bank>/',views.get_customer_accounts_by_bank),
 
     path("make_cash_at_payment/", views.make_bank_payment),
     path("add_withdraw_reference/", views.add_withdraw_reference),
