@@ -5,6 +5,12 @@ from django.utils import timezone
 import datetime
 
 User = settings.AUTH_USER_MODEL
+ID_TYPES = (
+    ("Ghana Card","Ghana Card"),
+    ("Passport","Passport"),
+    ("Drivers License","Drivers License"),
+    ("Voters Id","Voters Id"),
+)
 BANKS = (
     ("Select bank", "Select bank"),
     ("Access Bank", "Access Bank"),
@@ -21,21 +27,38 @@ PAYMENT_ACTIONS = (
     ("Close Payment", "Close Payment"),
 )
 
-MOBILE_MONEY =(
+NETWORKS =(
     ("Select Network","Select Network"),
     ("Mtn","Mtn"),
     ("AirtelTigo","AirtelTigo"),
     ("Vodafone","Vodafone"),
 )
 
+DEPOSIT_REQUEST_OPTIONS = (
+    ("Cash","Cash"),
+    ("Mobile Money","Money Money"),
+    ("Bank","Bank"),
+)
+
+MOBILE_MONEY_DEPOSIT_TYPE = (
+    ("Regular","Regular"),
+    ("Direct","Direct"),
+    ("Agent to Agent","Agent to Agent"),
+)
+MOBILE_MONEY_ACTION = (
+    ("Deposit","Deposit"),
+    ("Withdraw","Withdraw"),
+)
+
+WITHDRAW_TYPES = (
+    ("MomoPay","MomoPay"),
+    ("Cash Out","Cash Out"),
+    ("Agent to Agent","Agent to Agent"),
+)
+
 REQUEST_STATUS = (
     ("Approved", "Approved"),
     ("Pending", "Pending")
-)
-DEPOSIT_REQUEST_OPTIONS = (
-    ("Cash", "Cash"),
-    ("Mobile Money", "Mobile Money"),
-    ("Banks", "Banks"),
 )
 
 MODE_OF_PAYMENT = (
@@ -119,32 +142,89 @@ class CustomerAccounts(models.Model):
     def __str__(self):
         return self.phone
 
-class AgentDepositRequests(models.Model):
+class CashDeposit(models.Model):
     guarantor = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
-    customer = models.CharField(max_length=30, blank=True)
-    agent = models.ForeignKey(User, on_delete=models.CASCADE, related_name="agent_requesting")
-    bank = models.CharField(max_length=50, choices=BANKS,blank=True,default="")
-    amount = models.DecimalField(max_digits=19, decimal_places=2,blank=True)
-    mobile_money = models.CharField(max_length=20,choices=MOBILE_MONEY,blank=True,default="Select Network")
-    account_number = models.TextField(blank=True)
-    account_name = models.CharField(max_length=100,blank=True,default="")
-    request_option = models.CharField(max_length=100, choices=DEPOSIT_REQUEST_OPTIONS, default="")
+    customer = models.CharField(max_length=20, blank=True)
+    agent = models.ForeignKey(User, on_delete=models.CASCADE, related_name="agent_requesting_cash")
+    amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
     request_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
     date_requested = models.DateField(auto_now_add=True)
     time_requested = models.TimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Request made for {self.amount}"
+        return f"Cash request made for {self.amount}"
+
+class BankDeposit(models.Model):
+    guarantor = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    customer = models.CharField(max_length=20, blank=True)
+    agent = models.ForeignKey(User, on_delete=models.CASCADE, related_name="agent_requesting_bank")
+    bank = models.CharField(max_length=50, choices=BANKS, blank=True, default="")
+    account_number = models.TextField(blank=True,max_length=17)
+    account_name = models.CharField(max_length=100, blank=True, default="")
+    amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
+    request_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
+    date_requested = models.DateField(auto_now_add=True)
+    time_requested = models.TimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Bank request made for {self.amount}"
+
+class MobileMoneyDeposit(models.Model):
+    customer = models.CharField(max_length=30, blank=True)
+    agent = models.ForeignKey(User, on_delete=models.CASCADE, related_name="agent_requesting")
+    network = models.CharField(max_length=20, choices=NETWORKS, blank=True, default="Select Network")
+    type = models.CharField(max_length=20,blank=True,choices=MOBILE_MONEY_DEPOSIT_TYPE)
+    action = models.CharField(max_length=20,choices=MOBILE_MONEY_ACTION)
+    amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
+    request_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
+    date_requested = models.DateField(auto_now_add=True)
+    time_requested = models.TimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Mobile money request made for {self.amount}"
+
+class UserMobileMoneyAccountsStarted(models.Model):
+    agent = models.ForeignKey(User, on_delete=models.CASCADE)
+    mtn_physical = models.DecimalField(max_digits=19, decimal_places=2)
+    tigoairtel_physical = models.DecimalField(max_digits=19, decimal_places=2)
+    vodafone_physical = models.DecimalField(max_digits=19, decimal_places=2)
+    mtn_ecash = models.DecimalField(max_digits=19, decimal_places=2)
+    tigoairtel_ecash = models.DecimalField(max_digits=19, decimal_places=2)
+    vodafone_ecash = models.DecimalField(max_digits=19, decimal_places=2)
+    physical_total = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
+    ecash_total = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
+    date_posted = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.agent.username
+
+class UserMobileMoneyAccountsClosed(models.Model):
+    agent = models.ForeignKey(User, on_delete=models.CASCADE)
+    mtn_physical = models.DecimalField(max_digits=19, decimal_places=2)
+    tigoairtel_physical = models.DecimalField(max_digits=19, decimal_places=2)
+    vodafone_physical = models.DecimalField(max_digits=19, decimal_places=2)
+    mtn_ecash = models.DecimalField(max_digits=19, decimal_places=2)
+    tigoairtel_ecash = models.DecimalField(max_digits=19, decimal_places=2)
+    vodafone_ecash = models.DecimalField(max_digits=19, decimal_places=2)
+    physical_total = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
+    ecash_total = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
+    date_posted = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.agent.username
 
 class CustomerWithdrawal(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
     customer = models.CharField(max_length=100)
     bank = models.CharField(max_length=100, choices=BANKS, default="GT Bank")
+    type = models.CharField(max_length=30,choices=WITHDRAW_TYPES)
+    id_type = models.CharField(max_length=30,choices=ID_TYPES)
+    id_number = models.CharField(max_length=20)
     amount = models.DecimalField(max_digits=19, decimal_places=2)
     date_requested = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.amount
+        return f"Withdrawal made for {self.amount}"
 
 class Payments(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
@@ -160,14 +240,6 @@ class Payments(models.Model):
 
     def __str__(self):
         return self.payment_status
-
-class TwilioApi(models.Model):
-    account_sid = models.CharField(max_length=200)
-    twi_auth = models.CharField(max_length=200)
-    date_created = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"twilio account added"
 
 class AdminAccountsStartedWith(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)

@@ -3,19 +3,16 @@ from . import views
 
 urlpatterns = [
     path('admin_user/', views.get_admin),
-    path('twilio_details/', views.get_twilio),
-    path('agent_requests/', views.get_agent_requests),
-    path('request_detail/<int:pk>/', views.request_detail),
-    path('agent_request_approval/<int:id>/', views.approve_request),
+    path('request_detail/<int:pk>/', views.cash_detail),
+    path('agent_request_approval/<int:id>/', views.cash_deposit),
     path('register_customer/', views.register_customer),
-    path('agent_deposit_request/', views.user_deposit_request),
     path('customer_withdrawal/', views.customer_withdrawal),
     path('all_agents/', views.GetAllAgents.as_view()),
     path('all_customers/', views.GetAllCustomers.as_view()),
     path('customer_detail/<int:pk>/', views.customer_details),
     path('get_user_customers/<str:username>/', views.get_user_customers),
     path('agent_customer_summary/', views.agent_customers_summary),
-    path('agent_deposit_request_summary/', views.deposit_request_summary),
+
     path('agents_customers_withdrawal_summary/', views.customer_withdrawal_summary),
     path('payments/', views.get_payments),
     path('make_payments/', views.make_payments),
@@ -40,7 +37,7 @@ urlpatterns = [
     path('get_customer_account/<str:phone>/',views.get_customer_account),
     path('update_accounts/<int:id>/',views.update_accounts),
     path('admin_account_detail/<int:id>/',views.admin_account_detail),
-    path('get_deposit_total/', views.get_deposit_total),
+    
     path("get_payment_total/",views.get_payment_total),
     path('get_customer_accounts_by_bank/<str:customer_phone>/<str:bank>/',views.get_customer_accounts_by_bank),
 
