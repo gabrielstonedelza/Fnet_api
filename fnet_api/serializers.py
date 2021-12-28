@@ -76,7 +76,7 @@ class MobileMoneyDepositSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MobileMoneyDeposit
-        fields = ['id', 'agent','customer_phone','customer_name', 'username','network','type','amount', 'date_requested', 'time_requested']
+        fields = ['id', 'agent','customer_phone','customer_name', 'username','network','type','amount', 'date_deposited', 'time_deposited']
         read_only_fields = ['agent']
 
     def get_username(self, user):

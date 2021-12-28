@@ -172,6 +172,15 @@ def post_momo_deposit(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def post_momo_withdraw(request):
+    serializer = MobileMoneyWithdrawalSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(agent=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 # post users mobile money accounts started
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])

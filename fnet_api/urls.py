@@ -79,6 +79,7 @@ urlpatterns = [
     path('post_cash_deposit/',views.post_cash_deposit),
     path('post_bank_deposit/',views.post_bank_deposit),
     path('post_momo_deposit/',views.post_momo_deposit),
+    path('post_momo_withdraw/',views.post_momo_withdraw),
     path('post_momo_accounts_started/',views.post_momo_accounts_started),
     path('post_momo_accounts_closed/',views.post_momo_accounts_closed),
 
