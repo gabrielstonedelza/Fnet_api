@@ -37,7 +37,7 @@ urlpatterns = [
     path('get_customer_account/<str:phone>/',views.get_customer_account),
     path('update_accounts/<int:id>/',views.update_accounts),
     path('admin_account_detail/<int:id>/',views.admin_account_detail),
-    
+
     path("get_payment_total/",views.get_payment_total),
     path('get_customer_accounts_by_bank/<str:customer_phone>/<str:bank>/',views.get_customer_accounts_by_bank),
 
@@ -58,5 +58,36 @@ urlpatterns = [
     path("customer_request_detail/<int:pk>/",views.customer_request_detail),
 
     path('add_user_flag/',views.add_flag),
-    path('get_flags/',views.get_flags)
+    path('get_flags/',views.get_flags),
+
+#     newly added get request
+    path('get_agent_cash_request_admin/',views.get_agent_cash_requests_admin),
+    path('get_agent_bank_request_admin/',views.get_agent_bank_requests_admin),
+    path('get_agent_momo_request_admin/',views.get_agent_mobile_money_requests_admin),
+    path('get_agent_cash_total_today_admin/<str:username>/',views.get_agents_cash_for_today),
+    path('get_agent_momo_total_today_admin/<str:username>/',views.get_agents_mobile_money_for_today),
+    path('get_agent_bank_total_today_admin/<str:username>/',views.get_agents_bank_for_today),
+    path('get_user_momo_deposits/',views.get_user_mm_deposits),
+    path('get_user_momo_withdraws/',views.get_user_mm_withdrawal),
+    path('get_agents_momo_withdraws/<str:username>/',views.get_agents_mobile_money_withdraws),
+    path('get_agents_momo_deposits/<str:username>/',views.get_agents_mobile_money_deposits),
+    path("get_user_momo_accounts_started/",views.get_user_mobile_money_accounts_started),
+    path("get_user_momo_accounts_closed/",views.get_user_mobile_money_accounts_closed),
+    path("get_agent_momo_accounts_closed/",views.get_agents_mobile_money_accounts_closed),
+    path("get_agent_momo_accounts_started/",views.get_agents_mobile_money_accounts_started),
+
+#     newly added post requests
+    path('post_cash_deposit/',views.post_cash_deposit),
+    path('post_bank_deposit/',views.post_bank_deposit),
+    path('post_momo_deposit/',views.post_momo_deposit),
+    path('post_momo_accounts_started/',views.post_momo_accounts_started),
+    path('post_momo_accounts_closed/',views.post_momo_accounts_closed),
+
+    path('approve_cash_deposit/<int:id>/',views.approve_cash_deposit),
+    path('approve_bank_deposit/<int:id>/',views.approve_bank_deposit),
+
+    path("cash_detail/<int:pk>/",views.cash_detail),
+    path("bank_detail/<int:pk>/",views.bank_detail),
+
+    path('update_customers_details/<int:id>/',views.update_customers_details)
 ]

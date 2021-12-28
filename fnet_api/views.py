@@ -161,7 +161,7 @@ def post_bank_deposit(request):
 # post users mobile money deposit
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
-def post_cash_deposit(request):
+def post_momo_deposit(request):
     serializer = MobileMoneyDepositSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save(agent=request.user)
@@ -235,7 +235,7 @@ def get_customer_account(request,phone):
 # approve users cash deposit
 @api_view(['GET', 'PUT'])
 @permission_classes([permissions.AllowAny])
-def cash_deposit(request, id):
+def approve_cash_deposit(request, id):
     agent_request = get_object_or_404(CashDeposit, id=id)
     serializer = CashDepositSerializer(agent_request, data=request.data)
     if serializer.is_valid():
@@ -248,7 +248,7 @@ def cash_deposit(request, id):
 # approve users bank deposit
 @api_view(['GET', 'PUT'])
 @permission_classes([permissions.AllowAny])
-def cash_deposit(request, id):
+def approve_bank_deposit(request, id):
     agent_request = get_object_or_404(BankDeposit, id=id)
     serializer = BankDepositSerializer(agent_request, data=request.data)
     if serializer.is_valid():
