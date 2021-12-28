@@ -1,12 +1,13 @@
 from django.contrib import admin
 
 from .models import (Customer, CustomerWithdrawal, Payments, AdminAccountsStartedWith,
-                     AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments, WithdrawReference,CustomerRequestDeposit,UserFlags,CashDeposit,BankDeposit,MobileMoneyDeposit)
+                     AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments, WithdrawReference,CustomerRequestDeposit,UserFlags,CashDeposit,BankDeposit,MobileMoneyDeposit,MobileMoneyWithdraw)
 
 admin.site.register(Customer)
 admin.site.register(CashDeposit)
 admin.site.register(BankDeposit)
 admin.site.register(MobileMoneyDeposit)
+admin.site.register(MobileMoneyWithdraw)
 admin.site.register(CustomerWithdrawal)
 admin.site.register(Payments)
 admin.site.register(AdminAccountsStartedWith)

@@ -4,7 +4,7 @@ from . import views
 urlpatterns = [
     path('admin_user/', views.get_admin),
     path('request_detail/<int:pk>/', views.cash_detail),
-    path('agent_request_approval/<int:id>/', views.cash_deposit),
+
     path('register_customer/', views.register_customer),
     path('customer_withdrawal/', views.customer_withdrawal),
     path('all_agents/', views.GetAllAgents.as_view()),
@@ -63,9 +63,8 @@ urlpatterns = [
 #     newly added get request
     path('get_agent_cash_request_admin/',views.get_agent_cash_requests_admin),
     path('get_agent_bank_request_admin/',views.get_agent_bank_requests_admin),
-    path('get_agent_momo_request_admin/',views.get_agent_mobile_money_requests_admin),
     path('get_agent_cash_total_today_admin/<str:username>/',views.get_agents_cash_for_today),
-    path('get_agent_momo_total_today_admin/<str:username>/',views.get_agents_mobile_money_for_today),
+    path('get_agent_momo_total_today_admin/<str:username>/', views.get_agents_momo_deposit_for_today),
     path('get_agent_bank_total_today_admin/<str:username>/',views.get_agents_bank_for_today),
     path('get_user_momo_deposits/',views.get_user_mm_deposits),
     path('get_user_momo_withdraws/',views.get_user_mm_withdrawal),

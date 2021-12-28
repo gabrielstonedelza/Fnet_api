@@ -1,10 +1,10 @@
 from django.shortcuts import render, get_object_or_404
 from .serializers import (CustomerSerializer, BankDepositSerializer,CashDepositSerializer,MobileMoneyDepositSerializer,
                           CustomerWithdrawalSerializer, PaymentsSerializer, AdminAccountsStartedSerializer, \
-                          AdminAccountsCompletedSerializer, CustomerAccountsSerializer, CashAtPaymentSerializer, WithdrawSerializer,CustomerDepositRequestSerializer,UserFlagsSerializer,UserMobileMoneyAccountsClosedSerializer,UserMobileMoneyAccountsStartedSerializer)
+                          AdminAccountsCompletedSerializer, CustomerAccountsSerializer, CashAtPaymentSerializer, WithdrawSerializer,CustomerDepositRequestSerializer,UserFlagsSerializer,UserMobileMoneyAccountsClosedSerializer,UserMobileMoneyAccountsStartedSerializer,MobileMoneyWithdrawalSerializer)
 
 from .models import (Customer, BankDeposit,CashDeposit,MobileMoneyDeposit, CustomerWithdrawal, Payments,
-                     AdminAccountsStartedWith, AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments, WithdrawReference,CustomerRequestDeposit,UserFlags,UserMobileMoneyAccountsStarted,UserMobileMoneyAccountsClosed)
+                     AdminAccountsStartedWith, AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments, WithdrawReference,CustomerRequestDeposit,UserFlags,UserMobileMoneyAccountsStarted,UserMobileMoneyAccountsClosed,MobileMoneyWithdraw)
 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework import viewsets, permissions, generics, status
@@ -31,13 +31,6 @@ def get_agent_bank_requests_admin(request):
     serializer = BankDepositSerializer(all_agents_bank, many=True)
     return Response(serializer.data)
 
-@api_view(['GET'])
-@permission_classes([permissions.AllowAny])
-def get_agent_mobile_money_requests_admin(request):
-    all_agents_mobile_money = MobileMoneyDeposit.objects.filter(request_status="Pending").order_by('-date_requested')
-    serializer = MobileMoneyDepositSerializer(all_agents_mobile_money, many=True)
-    return Response(serializer.data)
-
 
 # get users deposits for the day for admin
 @api_view(['GET'])
@@ -58,10 +51,19 @@ def get_agents_bank_for_today(request,username):
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
-def get_agents_mobile_money_for_today(request,username):
+def get_agents_momo_deposit_for_today(request, username):
     user = get_object_or_404(User, username=username)
     all_agents_mobile_money = MobileMoneyDeposit.objects.filter(agent=user).order_by('-date_requested')
     serializer = MobileMoneyDepositSerializer(all_agents_mobile_money, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_agents_momo_withdraw_for_today(request, username):
+    user = get_object_or_404(User, username=username)
+    all_agents_mobile_money = MobileMoneyWithdraw.objects.filter(agent=user).order_by('-date_requested')
+    serializer = MobileMoneyWithdrawalSerializer(all_agents_mobile_money, many=True)
     return Response(serializer.data)
 
 
@@ -69,15 +71,16 @@ def get_agents_mobile_money_for_today(request,username):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_user_mm_deposits(request):
-    momo_deposits = MobileMoneyDeposit.objects.filter(action="Deposit").filter(agent=request.user).order_by('-date_requested')
+    momo_deposits = MobileMoneyDeposit.objects.filter(agent=request.user).order_by('-date_requested')
     serializer = MobileMoneyDepositSerializer(momo_deposits,many=True)
     return Response(serializer.data)
+
 
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_user_mm_withdrawal(request):
-    momo_deposits = MobileMoneyDeposit.objects.filter(action="Withdraw").filter(agent=request.user).order_by('-date_requested')
-    serializer = MobileMoneyDepositSerializer(momo_deposits,many=True)
+    momo_deposits = MobileMoneyWithdraw.objects.filter(agent=request.user).order_by('-date_requested')
+    serializer = MobileMoneyWithdrawalSerializer(momo_deposits,many=True)
     return Response(serializer.data)
 
 # get mobile money transaction for admin
@@ -85,16 +88,16 @@ def get_user_mm_withdrawal(request):
 @permission_classes([permissions.AllowAny])
 def get_agents_mobile_money_withdraws(request,username):
     user = get_object_or_404(User, username=username)
-    momo_deposits = MobileMoneyDeposit.objects.filter(action="Withdraw").filter(agent=user).order_by(
+    momo_deposits = MobileMoneyWithdraw.objects.filter(agent=user).order_by(
         '-date_requested')
-    serializer = MobileMoneyDepositSerializer(momo_deposits, many=True)
+    serializer = MobileMoneyWithdrawalSerializer(momo_deposits, many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def get_agents_mobile_money_deposits(request,username):
     user = get_object_or_404(User, username=username)
-    momo_deposits = MobileMoneyDeposit.objects.filter(action="Deposits").filter(agent=user).order_by(
+    momo_deposits = MobileMoneyDeposit.objects.filter(agent=user).order_by(
         '-date_requested')
     serializer = MobileMoneyDepositSerializer(momo_deposits, many=True)
     return Response(serializer.data)

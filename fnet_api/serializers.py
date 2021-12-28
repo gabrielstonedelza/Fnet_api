@@ -1,6 +1,6 @@
 from django.db.models import fields
 from rest_framework import serializers
-from .models import (Customer, CustomerWithdrawal, Payments, AdminAccountsStartedWith, CashAtPayments, WithdrawReference, AdminAccountsCompletedWith, CustomerAccounts,CustomerRequestDeposit,UserFlags,CashDeposit,MobileMoneyDeposit,BankDeposit,UserMobileMoneyAccountsStarted,UserMobileMoneyAccountsClosed)
+from .models import (Customer, CustomerWithdrawal, Payments, AdminAccountsStartedWith, CashAtPayments, WithdrawReference, AdminAccountsCompletedWith, CustomerAccounts,CustomerRequestDeposit,UserFlags,CashDeposit,MobileMoneyDeposit,BankDeposit,UserMobileMoneyAccountsStarted,UserMobileMoneyAccountsClosed,MobileMoneyWithdraw)
 
 class UserFlagsSerializer(serializers.ModelSerializer):
     username = serializers.SerializerMethodField('get_username')
@@ -73,20 +73,20 @@ class CashDepositSerializer(serializers.ModelSerializer):
 
 class MobileMoneyDepositSerializer(serializers.ModelSerializer):
     customer_username = serializers.SerializerMethodField('get_customer_username')
-    agent_username = serializers.SerializerMethodField('get_agent_username')
+    username = serializers.SerializerMethodField('get_username')
 
     class Meta:
         model = MobileMoneyDeposit
-        fields = ['id','customer', 'agent', 'guarantor_username', 'customer_username', 'agent_username','network','type','action','amount', 'request_status', 'date_requested', 'time_requested']
+        fields = ['id','customer', 'agent', 'customer_username', 'username','network','type','amount', 'date_requested', 'time_requested']
         read_only_fields = ['agent']
 
     def get_customer_username(self, user):
         customer_username = user.customer
         return customer_username
 
-    def get_agent_username(self, user):
-        agent_username = user.agent.username
-        return agent_username
+    def get_username(self, user):
+        username = user.agent.username
+        return username
 
 class BankDepositSerializer(serializers.ModelSerializer):
     guarantor_username = serializers.SerializerMethodField('get_guarantor_username')
@@ -116,7 +116,7 @@ class CustomerWithdrawalSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomerWithdrawal
-        fields = ['id', 'agent', 'customer', 'customer_username', 'agent_username', 'bank', 'type','id_type','id_number','amount', 'date_requested']
+        fields = ['id', 'agent', 'customer', 'customer_username', 'agent_username', 'bank', 'amount', 'date_requested']
         read_only_fields = ['agent']
 
     def get_customer_username(self, user):
@@ -209,6 +209,18 @@ class UserMobileMoneyAccountsClosedSerializer(serializers.ModelSerializer):
         model = UserMobileMoneyAccountsClosed
         fields = ['id', 'agent', 'username', 'mtn_physical', 'tigoairtel_physical', 'vodafone_physical', 'mtn_ecash',
                   'tigoairtel_ecash', 'vodafone_ecash', 'physical_total', 'ecash_total', 'date_posted']
+        read_only_fields = ['agent']
+
+    def get_username(self, user):
+        username = user.agent.username
+        return username
+
+class MobileMoneyWithdrawalSerializer(serializers.ModelSerializer):
+    username = serializers.SerializerMethodField('get_username')
+
+    class Meta:
+        model = MobileMoneyWithdraw
+        fields = ['id','agent','username','customer_phone','customer_name','network','type','id_type','id_number','amount','date_requested','time_requested']
         read_only_fields = ['agent']
 
     def get_username(self, user):

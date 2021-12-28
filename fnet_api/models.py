@@ -174,14 +174,29 @@ class MobileMoneyDeposit(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE, related_name="agent_requesting")
     network = models.CharField(max_length=20, choices=NETWORKS, blank=True, default="Select Network")
     type = models.CharField(max_length=20,blank=True,choices=MOBILE_MONEY_DEPOSIT_TYPE)
-    action = models.CharField(max_length=20,choices=MOBILE_MONEY_ACTION)
     amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
-    request_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
     date_requested = models.DateField(auto_now_add=True)
     time_requested = models.TimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Mobile money request made for {self.amount}"
+
+class MobileMoneyWithdraw(models.Model):
+    agent = models.ForeignKey(User, on_delete=models.CASCADE)
+    customer_phone = models.CharField(max_length=30, blank=True)
+    customer_name = models.CharField(max_length=30, blank=True)
+    network = models.CharField(max_length=20, choices=NETWORKS, blank=True, default="Select Network")
+    type = models.CharField(max_length=30, choices=WITHDRAW_TYPES,blank=True,default="")
+    id_type = models.CharField(max_length=30, choices=ID_TYPES)
+    id_number = models.CharField(max_length=20)
+    amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
+    date_requested = models.DateField(auto_now_add=True)
+    time_requested = models.TimeField(auto_now_add=True)
+
+
+    def __str__(self):
+        return f"Withdrawal made for {self.amount}"
+
 
 class UserMobileMoneyAccountsStarted(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -218,8 +233,6 @@ class CustomerWithdrawal(models.Model):
     customer = models.CharField(max_length=100)
     bank = models.CharField(max_length=100, choices=BANKS, default="GT Bank")
     type = models.CharField(max_length=30,choices=WITHDRAW_TYPES)
-    id_type = models.CharField(max_length=30,choices=ID_TYPES)
-    id_number = models.CharField(max_length=20)
     amount = models.DecimalField(max_digits=19, decimal_places=2)
     date_requested = models.DateTimeField(auto_now_add=True)
 
