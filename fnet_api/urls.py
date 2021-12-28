@@ -72,8 +72,8 @@ urlpatterns = [
     path('get_agents_momo_deposits/<str:username>/',views.get_agents_mobile_money_deposits),
     path("get_user_momo_accounts_started/",views.get_user_mobile_money_accounts_started),
     path("get_user_momo_accounts_closed/",views.get_user_mobile_money_accounts_closed),
-    path("get_agent_momo_accounts_closed/",views.get_agents_mobile_money_accounts_closed),
-    path("get_agent_momo_accounts_started/",views.get_agents_mobile_money_accounts_started),
+    path("get_agent_momo_accounts_closed/<str:username>/",views.get_agents_mobile_money_accounts_closed),
+    path("get_agent_momo_accounts_started/<str:username>/",views.get_agents_mobile_money_accounts_started),
 
 #     newly added post requests
     path('post_cash_deposit/',views.post_cash_deposit),
@@ -88,5 +88,8 @@ urlpatterns = [
     path("cash_detail/<int:pk>/",views.cash_detail),
     path("bank_detail/<int:pk>/",views.bank_detail),
 
-    path('update_customers_details/<int:id>/',views.update_customers_details)
+    path('update_customers_details/<int:id>/',views.update_customers_details),
+
+    path('get_momo_deposit_customer/<str:phone>/',views.get_momo_deposit_customer_by_phone),
+    path('get_momo_withdraw_customer/<str:phone>/',views.get_momo_withdraw_customer_by_phone),
 ]
