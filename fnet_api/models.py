@@ -86,7 +86,7 @@ class CustomerRequestDeposit(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE, related_name="customers_agent")
     customer_phone = models.CharField(max_length=20, blank=True)
     customer_name = models.CharField(max_length=100,blank=True)
-    amount = models.CharField(max_length=100,blank=True)
+    amount = models.DecimalField(max_digits=19, decimal_places=2)
     request_option = models.CharField(max_length=100, choices=DEPOSIT_REQUEST_OPTIONS, default="Physical Cash")
     request_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
     date_requested = models.DateField(auto_now_add=True)
@@ -97,7 +97,7 @@ class CustomerRequestDeposit(models.Model):
 
 class WithdrawReference(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
-    amount = models.CharField(max_length=100,blank=True)
+    amount = models.DecimalField(max_digits=19, decimal_places=2)
     customer_phone = models.CharField(max_length=20)
     reference_id = models.CharField(max_length=50)
     date_withdrew = models.DateField(auto_now_add=True)
@@ -109,7 +109,7 @@ class WithdrawReference(models.Model):
 class CashAtPayments(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
     location = models.CharField(max_length=50)
-    amount = models.CharField(max_length=100,blank=True)
+    amount = models.DecimalField(max_digits=19, decimal_places=2)
     left_with = models.CharField(max_length=50)
     left_with_phone = models.CharField(max_length=20)
     reference_id = models.CharField(max_length=50)
@@ -146,7 +146,7 @@ class CashDeposit(models.Model):
     guarantor = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     customer = models.CharField(max_length=20, blank=True)
     agent = models.ForeignKey(User, on_delete=models.CASCADE, related_name="agent_requesting_cash")
-    amount = models.CharField(max_length=100,blank=True)
+    amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
     request_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
     date_requested = models.DateField(auto_now_add=True)
     time_requested = models.TimeField(auto_now_add=True)
@@ -161,7 +161,7 @@ class BankDeposit(models.Model):
     bank = models.CharField(max_length=50, choices=BANKS, blank=True, default="")
     account_number = models.TextField(blank=True,max_length=17)
     account_name = models.CharField(max_length=100, blank=True, default="")
-    amount = models.CharField(max_length=100,blank=True)
+    amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
     request_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
     date_requested = models.DateField(auto_now_add=True)
     time_requested = models.TimeField(auto_now_add=True)
@@ -175,7 +175,7 @@ class MobileMoneyDeposit(models.Model):
     customer_name = models.CharField(max_length=30, blank=True)
     network = models.CharField(max_length=20, choices=NETWORKS, blank=True, default="Select Network")
     type = models.CharField(max_length=20,blank=True,choices=MOBILE_MONEY_DEPOSIT_TYPE)
-    amount = models.CharField(max_length=100,blank=True)
+    amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
     date_deposited = models.DateField(auto_now_add=True)
     time_deposited = models.TimeField(auto_now_add=True)
 
@@ -190,7 +190,7 @@ class MobileMoneyWithdraw(models.Model):
     type = models.CharField(max_length=30, choices=WITHDRAW_TYPES,blank=True,default="")
     id_type = models.CharField(max_length=30, choices=ID_TYPES)
     id_number = models.CharField(max_length=20)
-    amount = models.CharField(max_length=100,blank=True)
+    amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
     date_of_withdrawal = models.DateField(auto_now_add=True)
     time_of_withdrawal = models.TimeField(auto_now_add=True)
 
@@ -247,7 +247,7 @@ class CustomerWithdrawal(models.Model):
     customer = models.CharField(max_length=100)
     bank = models.CharField(max_length=100, choices=BANKS, default="GT Bank")
     type = models.CharField(max_length=30,choices=WITHDRAW_TYPES)
-    amount = models.CharField(max_length=100,blank=True)
+    amount = models.DecimalField(max_digits=19, decimal_places=2)
     date_requested = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -258,7 +258,7 @@ class Payments(models.Model):
     mode_of_payment = models.CharField(max_length=30, choices=MODE_OF_PAYMENT, blank=True)
     cash_at_location = models.CharField(max_length=30, choices=PAYMENT_OFFICES, blank=True,default="")
     bank = models.CharField(max_length=50, choices=BANKS, blank=True)
-    amount = models.CharField(max_length=100,blank=True)
+    amount = models.DecimalField(max_digits=19, decimal_places=2)
     transaction_id = models.CharField(max_length=30, blank=True)
     payment_action = models.CharField(max_length=50, choices=PAYMENT_ACTIONS, default="Not Closed")
     payment_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
