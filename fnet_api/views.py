@@ -554,7 +554,7 @@ def user_transaction_payments(request, username):
 def user_transaction_withdrawals(request, username):
     my_date = datetime.today()
     user = get_object_or_404(User, username=username)
-    all_user_withdrawals = CustomerWithdrawal.objects.filter(agent=user).filter(date_requested=f"{my_date.date()}").order_by('-date_requested')
+    all_user_withdrawals = CustomerWithdrawal.objects.filter(agent=user).order_by('-date_requested')
     serializer = CustomerWithdrawalSerializer(all_user_withdrawals, many=True)
     return Response(serializer.data)
 
