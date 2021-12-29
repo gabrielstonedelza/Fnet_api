@@ -64,7 +64,6 @@ urlpatterns = [
     path('get_agent_cash_request_admin/',views.get_agent_cash_requests_admin),
     path('get_agent_bank_request_admin/',views.get_agent_bank_requests_admin),
     path('get_agent_cash_total_today_admin/<str:username>/',views.get_agents_cash_for_today),
-    path('get_agent_momo_total_today_admin/<str:username>/', views.get_agents_momo_deposit_for_today),
     path('get_agent_bank_total_today_admin/<str:username>/',views.get_agents_bank_for_today),
     path('get_user_momo_deposits/',views.get_user_mm_deposits),
     path('get_user_momo_withdraws/',views.get_user_mm_withdrawal),

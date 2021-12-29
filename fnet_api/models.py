@@ -123,7 +123,7 @@ class Customer(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=150,blank=True)
     location = models.CharField(max_length=100,blank=True)
-    digital_address = models.CharField(max_length=15,blank=True)
+    digital_address = models.CharField(max_length=25,blank=True)
     phone = models.CharField(max_length=15, unique=True,blank=True)
     date_of_birth = models.CharField(max_length=15,blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
