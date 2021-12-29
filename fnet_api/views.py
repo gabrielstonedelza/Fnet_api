@@ -688,7 +688,7 @@ def get_flags(request):
 
 # update customer details
 @api_view(['GET', 'PUT'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 def update_customers_details(request, id):
     customer = get_object_or_404(Customer, id=id)
     serializer = CustomerSerializer(customer, data=request.data)
