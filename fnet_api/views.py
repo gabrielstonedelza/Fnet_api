@@ -37,7 +37,7 @@ def get_agent_bank_requests_admin(request):
 @permission_classes([permissions.AllowAny])
 def get_agents_cash_for_today(request,username):
     user = get_object_or_404(User, username=username)
-    all_agents_cash = CashDeposit.objects.filter(agent=user).order_by('-date_requested')
+    all_agents_cash = CashDeposit.objects.filter(agent=user).filter(request_status="Pending").order_by('-date_requested')
     serializer = CashDepositSerializer(all_agents_cash, many=True)
     return Response(serializer.data)
 
@@ -45,7 +45,7 @@ def get_agents_cash_for_today(request,username):
 @permission_classes([permissions.AllowAny])
 def get_agents_bank_for_today(request,username):
     user = get_object_or_404(User, username=username)
-    all_agents_bank = BankDeposit.objects.filter(agent=user).order_by('-date_requested')
+    all_agents_bank = BankDeposit.objects.filter(agent=user).filter(request_status="Pending").order_by('-date_requested')
     serializer = BankDepositSerializer(all_agents_bank, many=True)
     return Response(serializer.data)
 
