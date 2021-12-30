@@ -690,6 +690,6 @@ def get_all_momo_deposit_customers(request):
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def get_all_momo_withdraw_customers(request):
-    momo_customers = MobileMoneyWithdraw.objects.all().order_by('-date_deposited')
+    momo_customers = MobileMoneyWithdraw.objects.all().order_by('-date_of_withdrawal')
     serializer = MobileMoneyWithdrawalSerializer(momo_customers,many=True)
     return Response(serializer.data)
