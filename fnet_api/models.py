@@ -178,7 +178,6 @@ class MobileMoneyDeposit(models.Model):
     amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
     charges = models.CharField(max_length=100,blank=True,default="0")
     agent_commission = models.DecimalField(max_digits=19, decimal_places=2, blank=True,default=0.0)
-    mtn_commission = models.DecimalField(max_digits=19, decimal_places=2, blank=True,default=0.0)
     date_deposited = models.DateField(auto_now_add=True)
     time_deposited = models.TimeField(auto_now_add=True)
 
