@@ -693,3 +693,21 @@ def get_all_momo_withdraw_customers(request):
     momo_customers = MobileMoneyWithdraw.objects.all().order_by('-date_of_withdrawal')
     serializer = MobileMoneyWithdrawalSerializer(momo_customers,many=True)
     return Response(serializer.data)
+
+
+# get cash and bank request for the day
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_cash_deposits_for_today(request):
+    my_date = datetime.today()
+    your_cash_requests = CashDeposit.objects.filter(agent=request.user).filter(date_created=my_date.date()).order_by('-date_requested')
+    serializer = CashDepositSerializer(your_cash_requests, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_bank_deposits_for_today(request):
+    my_date = datetime.today()
+    your_cash_requests = BankDeposit.objects.filter(agent=request.user).filter(date_created=my_date.date()).order_by('-date_requested')
+    serializer = BankDepositSerializer(your_cash_requests, many=True)
+    return Response(serializer.data)
