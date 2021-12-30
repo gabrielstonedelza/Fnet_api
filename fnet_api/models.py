@@ -176,8 +176,8 @@ class MobileMoneyDeposit(models.Model):
     network = models.CharField(max_length=20, choices=NETWORKS, blank=True, default="Select Network")
     type = models.CharField(max_length=20,blank=True,choices=MOBILE_MONEY_DEPOSIT_TYPE)
     amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
-    charges = models.DecimalField(max_digits=19, decimal_places=2, blank=True,default=0.0)
-    agent_commission = models.DecimalField(max_digits=19, decimal_places=2, blank=True,default=0.0)
+    charges = models.DecimalField(max_digits=19, decimal_places=2,default=0.0)
+    agent_commission = models.DecimalField(max_digits=19, decimal_places=2,default=0.0)
     date_deposited = models.DateField(auto_now_add=True)
     time_deposited = models.TimeField(auto_now_add=True)
 
