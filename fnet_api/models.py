@@ -176,6 +176,9 @@ class MobileMoneyDeposit(models.Model):
     network = models.CharField(max_length=20, choices=NETWORKS, blank=True, default="Select Network")
     type = models.CharField(max_length=20,blank=True,choices=MOBILE_MONEY_DEPOSIT_TYPE)
     amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
+    charges = models.CharField(max_length=100,blank=True,default="0")
+    agent_commission = models.DecimalField(max_digits=19, decimal_places=2, blank=True,default=0.0)
+    mtn_commission = models.DecimalField(max_digits=19, decimal_places=2, blank=True,default=0.0)
     date_deposited = models.DateField(auto_now_add=True)
     time_deposited = models.TimeField(auto_now_add=True)
 
@@ -191,6 +194,9 @@ class MobileMoneyWithdraw(models.Model):
     id_type = models.CharField(max_length=30, choices=ID_TYPES)
     id_number = models.CharField(max_length=20)
     amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
+    charges = models.CharField(max_length=100, blank=True, default="0")
+    agent_commission = models.DecimalField(max_digits=19, decimal_places=2, blank=True, default=0.0)
+    mtn_commission = models.DecimalField(max_digits=19, decimal_places=2, blank=True, default=0.0)
     date_of_withdrawal = models.DateField(auto_now_add=True)
     time_of_withdrawal = models.TimeField(auto_now_add=True)
 
