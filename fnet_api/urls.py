@@ -98,4 +98,6 @@ urlpatterns = [
     path('get_bank_total_today/',views.get_bank_deposits_for_today),
     path('get_deposit_commission/',views.get_deposit_commission),
     path('get_withdraw_commission/',views.get_withdraw_commission),
+    path('get_agent_deposit_commission/<str:username>/',views.get_agents_deposit_commission),
+    path('get_agent_withdraw_commission/<str:username>/',views.get_agents_withdraw_commission)
 ]

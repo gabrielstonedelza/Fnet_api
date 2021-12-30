@@ -731,3 +731,24 @@ def get_withdraw_commission(request):
         '-date_of_withdrawal')
     serializer = MobileMoneyWithdrawalSerializer(your_commission, many=True)
     return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_agents_deposit_commission(request,username):
+    user = get_object_or_404(User, username=username)
+    my_date = datetime.today()
+    your_commission = MobileMoneyDeposit.objects.filter(agent=user).filter(
+        date_deposited=my_date.date()).order_by('-date_deposited')
+    serializer = MobileMoneyDepositSerializer(your_commission, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_agents_withdraw_commission(request,username):
+    user = get_object_or_404(User, username=username)
+    my_date = datetime.today()
+    your_commission = MobileMoneyWithdraw.objects.filter(agent=user).filter(
+        date_of_withdrawal=my_date.date()).order_by(
+        '-date_of_withdrawal')
+    serializer = MobileMoneyWithdrawalSerializer(your_commission, many=True)
+    return Response(serializer.data)
