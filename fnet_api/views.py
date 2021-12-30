@@ -681,14 +681,14 @@ def update_customers_details(request, id):
 
 # get all momo deposit users
 @api_view(['GET'])
-@permission_classes([permissions.AllowAny])
+@permission_classes([permissions.IsAuthenticated])
 def get_all_momo_deposit_customers(request):
     momo_customers = MobileMoneyDeposit.objects.all().order_by('-date_deposited')
     serializer = MobileMoneyDepositSerializer(momo_customers,many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])
-@permission_classes([permissions.AllowAny])
+@permission_classes([permissions.IsAuthenticated])
 def get_all_momo_withdraw_customers(request):
     momo_customers = MobileMoneyWithdraw.objects.all().order_by('-date_of_withdrawal')
     serializer = MobileMoneyWithdrawalSerializer(momo_customers,many=True)
