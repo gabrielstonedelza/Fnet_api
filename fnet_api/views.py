@@ -546,7 +546,7 @@ def user_transaction_withdrawals(request, username):
 @permission_classes([permissions.IsAuthenticated])
 def get_payment_total(request):
     my_date = datetime.today()
-    payment_today = Payments.objects.filter(agent=request.user).filter(date_created=my_date.date()).order_by('-date_created')
+    payment_today = Payments.objects.filter(agent=request.user).filter(date_created=my_date.date()).filter(payment_status="Pending").order_by('-date_created')
     serializer = PaymentsSerializer(payment_today,many=True)
     return Response(serializer.data)
 
