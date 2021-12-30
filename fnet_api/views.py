@@ -711,3 +711,23 @@ def get_bank_deposits_for_today(request):
     your_cash_requests = BankDeposit.objects.filter(agent=request.user).filter(date_requested=my_date.date()).order_by('-date_requested')
     serializer = BankDepositSerializer(your_cash_requests, many=True)
     return Response(serializer.data)
+
+# get uses commission
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_deposit_commission(request):
+    my_date = datetime.today()
+    your_commission = MobileMoneyDeposit.objects.filter(agent=request.user).filter(date_requested=my_date.date()).order_by(
+        '-date_requested')
+    serializer = MobileMoneyDepositSerializer(your_commission, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_withdraw_commission(request):
+    my_date = datetime.today()
+    your_commission = MobileMoneyWithdraw.objects.filter(agent=request.user).filter(date_requested=my_date.date()).order_by(
+        '-date_requested')
+    serializer = MobileMoneyWithdrawalSerializer(your_commission, many=True)
+    return Response(serializer.data)

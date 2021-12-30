@@ -96,4 +96,6 @@ urlpatterns = [
     path('get_all_momo_withdrawal_customers/', views.get_all_momo_withdraw_customers),
     path('get_cash_total_today/',views.get_cash_deposits_for_today),
     path('get_bank_total_today/',views.get_bank_deposits_for_today),
+    path('get_deposit_commission/',views.get_deposit_commission),
+    path('get_withdraw_commission/',views.get_withdraw_commission),
 ]
