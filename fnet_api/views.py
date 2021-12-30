@@ -49,24 +49,6 @@ def get_agents_bank_for_today(request,username):
     serializer = BankDepositSerializer(all_agents_bank, many=True)
     return Response(serializer.data)
 
-# @api_view(['GET'])
-# @permission_classes([permissions.AllowAny])
-# def get_agents_momo_deposit_for_today(request, username):
-#     user = get_object_or_404(User, username=username)
-#     all_agents_mobile_money = MobileMoneyDeposit.objects.filter(agent=user).order_by('-date_deposited')
-#     serializer = MobileMoneyDepositSerializer(all_agents_mobile_money, many=True)
-#     return Response(serializer.data)
-#
-#
-# @api_view(['GET'])
-# @permission_classes([permissions.AllowAny])
-# def get_agents_momo_withdraw_for_today(request, username):
-#     user = get_object_or_404(User, username=username)
-#     all_agents_mobile_money = MobileMoneyWithdraw.objects.filter(agent=user).order_by('-date_of_withdrawal')
-#     serializer = MobileMoneyWithdrawalSerializer(all_agents_mobile_money, many=True)
-#     return Response(serializer.data)
-
-
 # get mobile money transactions for user
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
@@ -696,3 +678,18 @@ def update_customers_details(request, id):
         serializer.save()
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# get all momo deposit users
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_all_momo_deposit_customers(request):
+    momo_customers = MobileMoneyDeposit.objects.all().order_by('-date_deposited')
+    serializer = MobileMoneyDepositSerializer(momo_customers,many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_all_momo_withdraw_customers(request):
+    momo_customers = MobileMoneyWithdraw.objects.all().order_by('-date_deposited')
+    serializer = MobileMoneyWithdrawalSerializer(momo_customers,many=True)
+    return Response(serializer.data)

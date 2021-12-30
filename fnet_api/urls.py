@@ -92,4 +92,6 @@ urlpatterns = [
 
     path('get_momo_deposit_customer/<str:phone>/',views.get_momo_deposit_customer_by_phone),
     path('get_momo_withdraw_customer/<str:phone>/',views.get_momo_withdraw_customer_by_phone),
+    path('get_all_momo_deposit_customers/', views.get_all_momo_deposit_customers),
+    path('get_all_momo_withdrawal_customers/', views.get_all_momo_withdraw_customers),
 ]
