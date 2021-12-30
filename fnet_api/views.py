@@ -718,7 +718,7 @@ def get_bank_deposits_for_today(request):
 def get_deposit_commission(request):
     my_date = datetime.today()
     your_commission = MobileMoneyDeposit.objects.filter(agent=request.user).filter(date_deposited=my_date.date()).order_by(
-        '-date_requested')
+        '-date_deposited')
     serializer = MobileMoneyDepositSerializer(your_commission, many=True)
     return Response(serializer.data)
 
@@ -728,6 +728,6 @@ def get_deposit_commission(request):
 def get_withdraw_commission(request):
     my_date = datetime.today()
     your_commission = MobileMoneyWithdraw.objects.filter(agent=request.user).filter(date_of_withdrawal=my_date.date()).order_by(
-        '-date_requested')
+        '-date_of_withdrawal')
     serializer = MobileMoneyWithdrawalSerializer(your_commission, many=True)
     return Response(serializer.data)
