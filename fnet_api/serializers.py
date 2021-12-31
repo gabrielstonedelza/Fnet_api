@@ -190,7 +190,7 @@ class UserMobileMoneyAccountsStartedSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserMobileMoneyAccountsStarted
-        fields = ['id','agent','username','mtn_physical','tigoairtel_physical','vodafone_physical','mtn_ecash','tigoairtel_ecash','vodafone_ecash','physical_total','ecash_total','date_posted']
+        fields = ['id','agent','username','physical','mtn_ecash','tigoairtel_ecash','vodafone_ecash','ecash_total','date_posted']
         read_only_fields = ['agent']
 
     def get_username(self, user):
@@ -202,8 +202,7 @@ class UserMobileMoneyAccountsClosedSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserMobileMoneyAccountsClosed
-        fields = ['id', 'agent', 'username', 'mtn_physical', 'tigoairtel_physical', 'vodafone_physical', 'mtn_ecash',
-                  'tigoairtel_ecash', 'vodafone_ecash', 'physical_total', 'ecash_total', 'date_posted']
+        fields = ['id', 'agent', 'username', 'physical','mtn_ecash','tigoairtel_ecash', 'vodafone_ecash', 'ecash_total', 'date_posted']
         read_only_fields = ['agent']
 
     def get_username(self, user):

@@ -205,13 +205,10 @@ class MobileMoneyWithdraw(models.Model):
 
 class UserMobileMoneyAccountsStarted(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
-    mtn_physical = models.DecimalField(max_digits=19, decimal_places=2)
-    tigoairtel_physical = models.DecimalField(max_digits=19, decimal_places=2)
-    vodafone_physical = models.DecimalField(max_digits=19, decimal_places=2)
+    physical = models.DecimalField(max_digits=19, decimal_places=2)
     mtn_ecash = models.DecimalField(max_digits=19, decimal_places=2)
     tigoairtel_ecash = models.DecimalField(max_digits=19, decimal_places=2)
     vodafone_ecash = models.DecimalField(max_digits=19, decimal_places=2)
-    physical_total = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
     ecash_total = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
     date_posted = models.DateTimeField(auto_now_add=True)
 
@@ -219,21 +216,17 @@ class UserMobileMoneyAccountsStarted(models.Model):
         return self.agent.username
 
     def save(self, *args, **kwargs):
-        p_total = self.mtn_physical + self.tigoairtel_physical + self.vodafone_physical
         e_total = self.mtn_ecash + self.tigoairtel_ecash + self.vodafone_ecash
-        self.physical_total = p_total
+
         self.ecash_total = e_total
         super().save(*args, **kwargs)
 
 class UserMobileMoneyAccountsClosed(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
-    mtn_physical = models.DecimalField(max_digits=19, decimal_places=2)
-    tigoairtel_physical = models.DecimalField(max_digits=19, decimal_places=2)
-    vodafone_physical = models.DecimalField(max_digits=19, decimal_places=2)
+    physical = models.DecimalField(max_digits=19, decimal_places=2)
     mtn_ecash = models.DecimalField(max_digits=19, decimal_places=2)
     tigoairtel_ecash = models.DecimalField(max_digits=19, decimal_places=2)
     vodafone_ecash = models.DecimalField(max_digits=19, decimal_places=2)
-    physical_total = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
     ecash_total = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
     date_posted = models.DateTimeField(auto_now_add=True)
 
@@ -241,9 +234,7 @@ class UserMobileMoneyAccountsClosed(models.Model):
         return self.agent.username
 
     def save(self, *args, **kwargs):
-        p_total = self.mtn_physical + self.tigoairtel_physical + self.vodafone_physical
         e_total = self.mtn_ecash + self.tigoairtel_ecash + self.vodafone_ecash
-        self.physical_total = p_total
         self.ecash_total = e_total
         super().save(*args, **kwargs)
 

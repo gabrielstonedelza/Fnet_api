@@ -5,6 +5,7 @@ from .serializers import (CustomerSerializer, BankDepositSerializer,CashDepositS
 
 from .models import (Customer, BankDeposit,CashDeposit,MobileMoneyDeposit, CustomerWithdrawal, Payments,
                      AdminAccountsStartedWith, AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments, WithdrawReference,CustomerRequestDeposit,UserFlags,UserMobileMoneyAccountsStarted,UserMobileMoneyAccountsClosed,MobileMoneyWithdraw)
+from drf_multiple_model.views import ObjectMultipleModelAPIView
 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework import viewsets, permissions, generics, status
@@ -752,3 +753,19 @@ def get_agents_withdraw_commission(request,username):
         '-date_of_withdrawal')
     serializer = MobileMoneyWithdrawalSerializer(your_commission, many=True)
     return Response(serializer.data)
+
+# search agent commission based on date
+# class SearchAgentTransaction(generics.ListAPIView):
+#     permission_classes = [permissions.AllowAny]
+#     queryset = MobileMoneyDeposit.objects.all().order_by('-date_created')
+#     serializer_class = CustomerSerializer
+#     filter_backends = [filters.SearchFilter]
+#     search_fields = ['name','phone']
+
+class SearchAgentsMomoTransactions(ObjectMultipleModelAPIView):
+    querylist = (
+        {'queryset': MobileMoneyDeposit.objects.all().order_by('-date_deposited'), 'serializer_class': MobileMoneyDepositSerializer},
+        {'queryset': MobileMoneyWithdraw.objects.all().order_by('-date_of_withdrawal'), 'serializer_class': MobileMoneyWithdrawalSerializer},
+    )
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('date_deposited','date_of_withdrawal','agent_commission')
