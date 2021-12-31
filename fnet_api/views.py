@@ -755,9 +755,17 @@ def get_agents_withdraw_commission(request,username):
     return Response(serializer.data)
 
 # search agent commission based on date
-class SearchAgentsMomoTransactions(generics.ListAPIView):
+class SearchAgentsMomoDepositTransactions(generics.ListAPIView):
     permission_classes = [permissions.AllowAny]
     queryset = MobileMoneyDeposit.objects.all().order_by('-date_deposited')
     serializer_class = MobileMoneyDepositSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['date_deposited','agent__username']
+
+
+class SearchAgentsMomoWithdrawTransactions(generics.ListAPIView):
+    permission_classes = [permissions.AllowAny]
+    queryset = MobileMoneyWithdraw.objects.all().order_by('-date_of_withdrawal')
+    serializer_class = MobileMoneyWithdrawalSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['date_deposited','agent__username']
