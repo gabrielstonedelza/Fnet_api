@@ -760,7 +760,7 @@ class SearchAgentsMomoTransactions(generics.ListAPIView):
     queryset = MobileMoneyDeposit.objects.all().order_by('-date_deposited')
     serializer_class = CustomerSerializer
     filter_backends = [filters.SearchFilter]
-    search_fields = ['date_deposited','date_of_withdrawal','agent_commission']
+    search_fields = ['date_deposited','agent_commission']
 
 # class SearchAgentsMomoTransactions(ObjectMultipleModelAPIView):
 #     querylist = (
