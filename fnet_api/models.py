@@ -117,7 +117,7 @@ class CashAtPayments(models.Model):
     time_paid = models.TimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.amount
+        return self.agent.username
 
 class Customer(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
