@@ -755,17 +755,17 @@ def get_agents_withdraw_commission(request,username):
     return Response(serializer.data)
 
 # search agent commission based on date
-# class SearchAgentTransaction(generics.ListAPIView):
-#     permission_classes = [permissions.AllowAny]
-#     queryset = MobileMoneyDeposit.objects.all().order_by('-date_created')
-#     serializer_class = CustomerSerializer
-#     filter_backends = [filters.SearchFilter]
-#     search_fields = ['name','phone']
+class SearchAgentsMomoTransactions(generics.ListAPIView):
+    permission_classes = [permissions.AllowAny]
+    queryset = MobileMoneyDeposit.objects.all().order_by('-date_deposited')
+    serializer_class = CustomerSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['date_deposited','date_of_withdrawal','agent_commission']
 
-class SearchAgentsMomoTransactions(ObjectMultipleModelAPIView):
-    querylist = (
-        {'queryset': MobileMoneyDeposit.objects.all().order_by('-date_deposited'), 'serializer_class': MobileMoneyDepositSerializer},
-        {'queryset': MobileMoneyWithdraw.objects.all().order_by('-date_of_withdrawal'), 'serializer_class': MobileMoneyWithdrawalSerializer},
-    )
-    filter_backends = (filters.SearchFilter,)
-    search_fields = ('date_deposited','date_of_withdrawal','agent_commission')
+# class SearchAgentsMomoTransactions(ObjectMultipleModelAPIView):
+#     querylist = (
+#         {'queryset': MobileMoneyDeposit.objects.all().order_by('-date_deposited'), 'serializer_class': MobileMoneyDepositSerializer},
+#         {'queryset': MobileMoneyWithdraw.objects.all().order_by('-date_of_withdrawal'), 'serializer_class': MobileMoneyWithdrawalSerializer},
+#     )
+#     filter_backends = (filters.SearchFilter,)
+#     search_fields = ('date_deposited','date_of_withdrawal','agent_commission')

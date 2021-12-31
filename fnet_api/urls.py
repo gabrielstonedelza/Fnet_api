@@ -100,5 +100,5 @@ urlpatterns = [
     path('get_withdraw_commission/',views.get_withdraw_commission),
     path('get_agent_deposit_commission/<str:username>/',views.get_agents_deposit_commission),
     path('get_agent_withdraw_commission/<str:username>/',views.get_agents_withdraw_commission),
-    path('search_agents_momo_transaction/',views.SearchAgentsMomoTransactions)
+    path('search_agents_momo_transaction/',views.SearchAgentsMomoTransactions.as_view())
 ]
