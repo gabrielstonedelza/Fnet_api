@@ -760,7 +760,7 @@ class SearchAgentsMomoDepositTransactions(generics.ListAPIView):
     queryset = MobileMoneyDeposit.objects.all().order_by('-date_deposited')
     serializer_class = MobileMoneyDepositSerializer
     filter_backends = [filters.SearchFilter]
-    search_fields = ['date_deposited','agent__username']
+    search_fields = ['date_deposited','agent__username','customer_phone']
 
 
 class SearchAgentsMomoWithdrawTransactions(generics.ListAPIView):
@@ -768,4 +768,4 @@ class SearchAgentsMomoWithdrawTransactions(generics.ListAPIView):
     queryset = MobileMoneyWithdraw.objects.all().order_by('-date_of_withdrawal')
     serializer_class = MobileMoneyWithdrawalSerializer
     filter_backends = [filters.SearchFilter]
-    search_fields = ['date_deposited','agent__username']
+    search_fields = ['date_deposited','agent__username','customer_phone']
