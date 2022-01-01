@@ -768,4 +768,5 @@ class SearchAgentsMomoWithdrawTransactions(generics.ListAPIView):
     queryset = MobileMoneyWithdraw.objects.all().order_by('-date_of_withdrawal')
     serializer_class = MobileMoneyWithdrawalSerializer
     filter_backends = [filters.SearchFilter]
-    search_fields = ['date_deposited','agent__username','customer_phone']
+    search_fields = ['date_of_withdrawal','agent__username','customer_phone']
+    
