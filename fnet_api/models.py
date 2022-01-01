@@ -194,6 +194,7 @@ class MobileMoneyWithdraw(models.Model):
     id_number = models.CharField(max_length=20)
     amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
     charges = models.DecimalField(max_digits=19, decimal_places=2,default=0.0)
+    cash_out_commission = models.DecimalField(max_digits=19, decimal_places=2, default=0.0)
     agent_commission = models.DecimalField(max_digits=19, decimal_places=2, default=0.0)
     mtn_commission = models.DecimalField(max_digits=19, decimal_places=2, default=0.0)
     date_of_withdrawal = models.DateField(auto_now_add=True)

@@ -214,7 +214,7 @@ class MobileMoneyWithdrawalSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MobileMoneyWithdraw
-        fields = ['id','agent','username','customer_phone','customer_name','network','type','id_type','id_number','amount','charges','agent_commission','mtn_commission','date_of_withdrawal','time_of_withdrawal']
+        fields = ['id','agent','username','customer_phone','customer_name','network','type','id_type','id_number','amount','charges','agent_commission','cash_out_commission','mtn_commission','date_of_withdrawal','time_of_withdrawal']
         read_only_fields = ['agent']
 
     def get_username(self, user):
