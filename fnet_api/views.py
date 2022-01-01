@@ -614,6 +614,16 @@ def approve_customer_request(request, id):
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['GET', 'DELETE'])
+@permission_classes([permissions.AllowAny])
+def delete_customer_request(request, id):
+    try:
+        customer_request = get_object_or_404(CustomerRequestDeposit, id=id)
+        customer_request.delete()
+    except Customer_Request.DoesNotExist:
+        return Http404
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
@@ -769,4 +779,3 @@ class SearchAgentsMomoWithdrawTransactions(generics.ListAPIView):
     serializer_class = MobileMoneyWithdrawalSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['date_of_withdrawal','agent__username','customer_phone']
-    
