@@ -289,3 +289,23 @@ class UserFlags(models.Model):
 
     def __str__(self):
         return self.user.username
+
+class MomoRequest(models.Model):
+    agent = models.ForeignKey(User, on_delete=models.CASCADE)
+    physical = models.DecimalField(max_digits=19, decimal_places=2)
+    mtn_ecash = models.DecimalField(max_digits=19, decimal_places=2)
+    tigoairtel_ecash = models.DecimalField(max_digits=19, decimal_places=2)
+    vodafone_ecash = models.DecimalField(max_digits=19, decimal_places=2)
+    ecash_total = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
+    request_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
+    date_posted = models.DateField(auto_now_add=True)
+    time_posted = models.TimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.agent.username
+
+    def save(self, *args, **kwargs):
+        e_total = self.mtn_ecash + self.tigoairtel_ecash + self.vodafone_ecash
+
+        self.ecash_total = e_total
+        super().save(*args, **kwargs)

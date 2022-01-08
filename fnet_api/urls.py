@@ -103,4 +103,10 @@ urlpatterns = [
     path('get_agent_withdraw_commission/<str:username>/',views.get_agents_withdraw_commission),
     path('search_agents_momo_deposit_transaction/', views.SearchAgentsMomoDepositTransactions.as_view()),
     path('search_agents_momo_withdraw_transaction/', views.SearchAgentsMomoWithdrawTransactions.as_view()),
+
+    path('get_momo_request_admin/',views.get_agent_momo_requests_admin),
+    path('get_agents_momo_request_for_today/',views.get_agents_momo_request_for_today),
+    path('approve_momo_request/<int:id>/',views.approve_momo_request),
+    path('post_momo_request/',views.post_momo_request),
+    path('get_user_momo/',views.get_user_momo),
 ]

@@ -1,10 +1,10 @@
 from django.shortcuts import render, get_object_or_404
-from .serializers import (CustomerSerializer, BankDepositSerializer,CashDepositSerializer,MobileMoneyDepositSerializer,
+from .serializers import (CustomerSerializer, BankDepositSerializer,CashDepositSerializer,MobileMoneyDepositSerializer,MomoRequestSerializer,
                           CustomerWithdrawalSerializer, PaymentsSerializer, AdminAccountsStartedSerializer, \
                           AdminAccountsCompletedSerializer, CustomerAccountsSerializer, CashAtPaymentSerializer, WithdrawSerializer,CustomerDepositRequestSerializer,UserFlagsSerializer,UserMobileMoneyAccountsClosedSerializer,UserMobileMoneyAccountsStartedSerializer,MobileMoneyWithdrawalSerializer)
 
 from .models import (Customer, BankDeposit,CashDeposit,MobileMoneyDeposit, CustomerWithdrawal, Payments,
-                     AdminAccountsStartedWith, AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments, WithdrawReference,CustomerRequestDeposit,UserFlags,UserMobileMoneyAccountsStarted,UserMobileMoneyAccountsClosed,MobileMoneyWithdraw)
+                     AdminAccountsStartedWith, AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments, WithdrawReference,CustomerRequestDeposit,UserFlags,UserMobileMoneyAccountsStarted,UserMobileMoneyAccountsClosed,MobileMoneyWithdraw,MomoRequest)
 from drf_multiple_model.views import ObjectMultipleModelAPIView
 
 from rest_framework.decorators import api_view, permission_classes
@@ -779,3 +779,48 @@ class SearchAgentsMomoWithdrawTransactions(generics.ListAPIView):
     serializer_class = MobileMoneyWithdrawalSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['date_of_withdrawal','agent__username','customer_phone']
+
+
+#
+
+@api_view(['GET', 'PUT'])
+@permission_classes([permissions.AllowAny])
+def approve_momo_request(request, id):
+    agent_request = get_object_or_404(CashDeposit, id=id)
+    serializer = MomoRequestSerializer(agent_request, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_agent_momo_requests_admin(request):
+    all_agents_bank = MomoRequest.objects.filter(request_status="Pending").order_by('-date_posted')
+    serializer = MomoRequestSerializer(all_agents_bank, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_agents_momo_request_for_today(request,username):
+    user = get_object_or_404(User, username=username)
+    all_agents_cash = MomoRequest.objects.filter(agent=user).filter(request_status="Approved").order_by('-date_posted')
+    serializer = MomoRequest(all_agents_cash, many=True)
+    return Response(serializer.data)
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def post_momo_request(request):
+    serializer = MomoRequestSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(agent=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_user_momo(request):
+    momo_request = MomoRequest.objects.filter(agent=request.user).order_by('-date_posted')
+    serializer = MomoRequestSerializer(momo_request,many=True)
+    return Response(serializer.data)

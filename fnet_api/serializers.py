@@ -1,6 +1,6 @@
 from django.db.models import fields
 from rest_framework import serializers
-from .models import (Customer, CustomerWithdrawal, Payments, AdminAccountsStartedWith, CashAtPayments, WithdrawReference, AdminAccountsCompletedWith, CustomerAccounts,CustomerRequestDeposit,UserFlags,CashDeposit,MobileMoneyDeposit,BankDeposit,UserMobileMoneyAccountsStarted,UserMobileMoneyAccountsClosed,MobileMoneyWithdraw)
+from .models import (Customer, CustomerWithdrawal, Payments, AdminAccountsStartedWith, CashAtPayments, WithdrawReference, AdminAccountsCompletedWith, CustomerAccounts,CustomerRequestDeposit,UserFlags,CashDeposit,MobileMoneyDeposit,BankDeposit,UserMobileMoneyAccountsStarted,UserMobileMoneyAccountsClosed,MobileMoneyWithdraw,MomoRequest)
 
 class UserFlagsSerializer(serializers.ModelSerializer):
     username = serializers.SerializerMethodField('get_username')
@@ -191,6 +191,18 @@ class UserMobileMoneyAccountsStartedSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserMobileMoneyAccountsStarted
         fields = ['id','agent','username','physical','mtn_ecash','tigoairtel_ecash','vodafone_ecash','ecash_total','date_posted']
+        read_only_fields = ['agent']
+
+    def get_username(self, user):
+        username = user.agent.username
+        return username
+
+class MomoRequestSerializer(serializers.ModelSerializer):
+    username = serializers.SerializerMethodField('get_username')
+
+    class Meta:
+        model = MomoRequest
+        fields = ['id','agent','username','physical','mtn_ecash','tigoairtel_ecash','vodafone_ecash','ecash_total','request_status','date_posted','time_posted']
         read_only_fields = ['agent']
 
     def get_username(self, user):
