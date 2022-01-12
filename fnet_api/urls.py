@@ -85,11 +85,15 @@ urlpatterns = [
 
     path('approve_cash_deposit/<int:id>/',views.approve_cash_deposit),
     path('approve_bank_deposit/<int:id>/',views.approve_bank_deposit),
+    path('delete_cash_deposit/<int:id>/',views.delete_cash_request),
+    path('delete_bank_deposit/<int:id>/',views.delete_bank_request),
 
     path("cash_detail/<int:pk>/",views.cash_detail),
     path("bank_detail/<int:pk>/",views.bank_detail),
+    path("momo_accounts_started_detail/<int:pk>/",views.momo_accounts_started_detail),
 
     path('update_customers_details/<int:id>/',views.update_customers_details),
+    path('update_momo_accounts/<int:id>/',views.update_momo_accounts),
 
     path('get_momo_deposit_customer/<str:phone>/',views.get_momo_deposit_customer_by_phone),
     path('get_momo_withdraw_customer/<str:phone>/',views.get_momo_withdraw_customer_by_phone),
@@ -103,10 +107,5 @@ urlpatterns = [
     path('get_agent_withdraw_commission/<str:username>/',views.get_agents_withdraw_commission),
     path('search_agents_momo_deposit_transaction/', views.SearchAgentsMomoDepositTransactions.as_view()),
     path('search_agents_momo_withdraw_transaction/', views.SearchAgentsMomoWithdrawTransactions.as_view()),
-
-    path('get_momo_request_admin/',views.get_agent_momo_requests_admin),
-    path('get_agents_momo_request_for_today/',views.get_agents_momo_request_for_today),
-    path('approve_momo_request/<int:id>/',views.approve_momo_request),
-    path('post_momo_request/',views.post_momo_request),
-    path('get_user_momo/',views.get_user_momo),
+    path('search_agents_request/<str:username>/', views.PurchaseList.as_view()),
 ]

@@ -174,6 +174,16 @@ def post_momo_accounts_started(request):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['GET', 'PUT'])
+@permission_classes([permissions.AllowAny])
+def update_momo_accounts(request,id):
+    account = get_object_or_404(UserMobileMoneyAccountsStarted,id=id)
+    serializer = UserMobileMoneyAccountsStartedSerializer(account, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 # post users mobile money accounts closed
 @api_view(['POST'])
@@ -238,7 +248,15 @@ def approve_cash_deposit(request, id):
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
+@api_view(['GET', 'DELETE'])
+@permission_classes([permissions.AllowAny])
+def delete_cash_request(request, id):
+    try:
+        user_request = get_object_or_404(CashDeposit, id=id)
+        user_request.delete()
+    except User_Request.DoesNotExist:
+        return Http404
+    return Response(status=status.HTTP_204_NO_CONTENT)
 
 # approve users bank deposit
 @api_view(['GET', 'PUT'])
@@ -251,7 +269,15 @@ def approve_bank_deposit(request, id):
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
+@api_view(['GET', 'DELETE'])
+@permission_classes([permissions.AllowAny])
+def delete_bank_request(request, id):
+    try:
+        user_request = get_object_or_404(BankDeposit, id=id)
+        user_request.delete()
+    except User_Request.DoesNotExist:
+        return Http404
+    return Response(status=status.HTTP_204_NO_CONTENT)
 
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
@@ -284,6 +310,13 @@ def cash_detail(request, pk):
     serializer = CashDepositSerializer(c_detail, many=False)
     return Response(serializer.data)
 
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def momo_accounts_started_detail(request, pk):
+    momo_started_detail = UserMobileMoneyAccountsStarted.objects.get(pk=pk)
+    serializer = UserMobileMoneyAccountsStartedSerializer(momo_started_detail, many=False)
+    return Response(serializer.data)
 
 # get cash bank detail
 @api_view(['GET'])
@@ -781,46 +814,27 @@ class SearchAgentsMomoWithdrawTransactions(generics.ListAPIView):
     search_fields = ['date_of_withdrawal','agent__username','customer_phone']
 
 
-#
-
-@api_view(['GET', 'PUT'])
-@permission_classes([permissions.AllowAny])
-def approve_momo_request(request, id):
-    agent_request = get_object_or_404(CashDeposit, id=id)
-    serializer = MomoRequestSerializer(agent_request, data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-@api_view(['GET'])
-@permission_classes([permissions.AllowAny])
-def get_agent_momo_requests_admin(request):
-    all_agents_bank = MomoRequest.objects.filter(request_status="Pending").order_by('-date_posted')
-    serializer = MomoRequestSerializer(all_agents_bank, many=True)
-    return Response(serializer.data)
-
-@api_view(['GET'])
-@permission_classes([permissions.AllowAny])
-def get_agents_momo_request_for_today(request,username):
-    user = get_object_or_404(User, username=username)
-    all_agents_cash = MomoRequest.objects.filter(agent=user).filter(request_status="Approved").order_by('-date_posted')
-    serializer = MomoRequest(all_agents_cash, many=True)
-    return Response(serializer.data)
-
-@api_view(['POST'])
-@permission_classes([permissions.IsAuthenticated])
-def post_momo_request(request):
-    serializer = MomoRequestSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save(agent=request.user)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class SearchAgentsCashDepositTransactions(generics.ListAPIView):
+    permission_classes = [permissions.AllowAny]
+    queryset = CashDeposit.objects.all().order_by('-date_requested')
+    serializer_class = CashDepositSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['date_requested','customer']
 
 
-@api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
-def get_user_momo(request):
-    momo_request = MomoRequest.objects.filter(agent=request.user).order_by('-date_posted')
-    serializer = MomoRequestSerializer(momo_request,many=True)
-    return Response(serializer.data)
+class SearchAgentsBankDepositTransactions(generics.ListAPIView):
+    permission_classes = [permissions.AllowAny]
+    queryset = BankDeposit.objects.all().order_by('-date_requested')
+    serializer_class = BankDepositSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['date_requested','customer']
+
+class PurchaseList(generics.ListAPIView):
+    serializer_class = CashDepositSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['date_requested']
+
+    def get_queryset(self,username):
+        user = get_object_or_404(User, username=username)
+
+        return CashDeposit.objects.filter(agent=user)
