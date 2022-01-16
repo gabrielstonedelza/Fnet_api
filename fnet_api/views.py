@@ -547,20 +547,9 @@ def admin_accounts_completed_lists(request):
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
-def user_transaction_requests(request, username):
-    my_date = datetime.today()
-    user = get_object_or_404(User, username=username)
-    all_user_requests = AgentDepositRequests.objects.filter(agent=user).filter(date_requested=f"{my_date.date()}").order_by('-date_requested')
-    serializer = AgentDepositRequestSerializer(all_user_requests, many=True)
-    return Response(serializer.data)
-
-
-@api_view(['GET'])
-@permission_classes([permissions.AllowAny])
 def user_transaction_payments(request, username):
-    my_date = datetime.today()
     user = get_object_or_404(User, username=username)
-    all_user_payments = Payments.objects.filter(agent=user).filter(date_created=f"{my_date.date()}").order_by('-date_created')
+    all_user_payments = Payments.objects.filter(agent=user).filter(payment_status="Approved").order_by('-date_created')
     serializer = PaymentsSerializer(all_user_payments, many=True)
     return Response(serializer.data)
 
@@ -568,7 +557,6 @@ def user_transaction_payments(request, username):
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def user_transaction_withdrawals(request, username):
-    my_date = datetime.today()
     user = get_object_or_404(User, username=username)
     all_user_withdrawals = CustomerWithdrawal.objects.filter(agent=user).order_by('-date_requested')
     serializer = CustomerWithdrawalSerializer(all_user_withdrawals, many=True)
@@ -822,27 +810,3 @@ class SearchAgentsMomoWithdrawTransactions(generics.ListAPIView):
     search_fields = ['date_of_withdrawal','agent__username','customer_phone']
 
 
-class SearchAgentsCashDepositTransactions(generics.ListAPIView):
-    permission_classes = [permissions.AllowAny]
-    queryset = CashDeposit.objects.all().order_by('-date_requested')
-    serializer_class = CashDepositSerializer
-    filter_backends = [filters.SearchFilter]
-    search_fields = ['date_requested','customer']
-
-
-class SearchAgentsBankDepositTransactions(generics.ListAPIView):
-    permission_classes = [permissions.AllowAny]
-    queryset = BankDeposit.objects.all().order_by('-date_requested')
-    serializer_class = BankDepositSerializer
-    filter_backends = [filters.SearchFilter]
-    search_fields = ['date_requested','customer']
-
-class PurchaseList(generics.ListAPIView):
-    serializer_class = CashDepositSerializer
-    filter_backends = [filters.SearchFilter]
-    search_fields = ['date_requested']
-
-    def get_queryset(self,username):
-        user = get_object_or_404(User, username=username)
-
-        return CashDeposit.objects.filter(agent=user)

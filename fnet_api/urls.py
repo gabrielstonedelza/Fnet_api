@@ -27,7 +27,6 @@ urlpatterns = [
     path('admin_accounts_started_lists/', views.admin_accounts_started_lists),
     path('admin_accounts_started_lists/', views.admin_accounts_completed_lists),
     path('user_customers/', views.user_customers),
-    path('user_transaction_requests/<str:username>/', views.user_transaction_requests),
     path('user_transaction_payments/<str:username>/', views.user_transaction_payments),
     path('user_transaction_withdrawals/<str:username>/', views.user_transaction_withdrawals),
 
@@ -108,5 +107,6 @@ urlpatterns = [
     path('get_agent_withdraw_commission/<str:username>/',views.get_agents_withdraw_commission),
     path('search_agents_momo_deposit_transaction/', views.SearchAgentsMomoDepositTransactions.as_view()),
     path('search_agents_momo_withdraw_transaction/', views.SearchAgentsMomoWithdrawTransactions.as_view()),
-    path('search_agents_request/<str:username>/', views.PurchaseList.as_view()),
+  
+
 ]

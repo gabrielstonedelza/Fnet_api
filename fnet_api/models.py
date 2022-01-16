@@ -83,7 +83,7 @@ PAYMENT_OFFICES = (
 )
 
 class CustomerRequestDeposit(models.Model):
-    agent = models.ForeignKey(User, on_delete=models.CASCADE, related_name="customers_agent")
+    agent = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     customer_phone = models.CharField(max_length=20, blank=True)
     customer_name = models.CharField(max_length=100,blank=True)
     amount = models.DecimalField(max_digits=19, decimal_places=2)
