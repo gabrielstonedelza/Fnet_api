@@ -109,8 +109,8 @@ urlpatterns = [
     path('search_agents_momo_withdraw_transaction/', views.SearchAgentsMomoWithdrawTransactions.as_view()),
     path('approve_bank_deposit_paid/<int:id>/', views.approve_bank_deposit_paid),
     path('approve_cash_deposit_paid/<int:id>/', views.approve_cash_deposit_paid),
-    path('get_upaid_cash_deposits_for_today/', views.get_upaid_cash_deposits_for_today),
-    path('get_upaid_bank_deposits_for_today/', views.get_upaid_bank_deposits_for_today),
+    path('get_unpaid_cash_deposits_for_today/', views.get_unpaid_cash_deposits_for_today),
+    path('get_unpaid_bank_deposits_for_today/', views.get_unpaid_bank_deposits_for_today),
 
 
 ]
