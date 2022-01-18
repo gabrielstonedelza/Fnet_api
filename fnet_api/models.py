@@ -82,6 +82,11 @@ PAYMENT_OFFICES = (
     ("PAN AFRICA", "PAN AFRICA"),
 )
 
+REQUEST_PAID_OPTIONS = (
+    ("Not Paid","Not Paid"),
+    ("Paid","Paid"),
+)
+
 class CustomerRequestDeposit(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     customer_phone = models.CharField(max_length=20, blank=True)
@@ -148,7 +153,7 @@ class CashDeposit(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE, related_name="agent_requesting_cash")
     amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
     request_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
-    deposit_paid = models.BooleanField(default=False, blank=True)
+    deposit_paid = models.CharField(choices=REQUEST_PAID_OPTIONS,default="Not Paid", blank=True,max_length=20)
     date_requested = models.DateField(auto_now_add=True)
     time_requested = models.TimeField(auto_now_add=True)
 
@@ -164,7 +169,7 @@ class BankDeposit(models.Model):
     account_name = models.CharField(max_length=100, blank=True, default="")
     amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
     request_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
-    deposit_paid = models.BooleanField(default=False,blank=True)
+    deposit_paid = models.CharField(choices=REQUEST_PAID_OPTIONS,default="Not Paid", blank=True,max_length=20)
     date_requested = models.DateField(auto_now_add=True)
     time_requested = models.TimeField(auto_now_add=True)
 
