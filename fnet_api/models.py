@@ -148,6 +148,7 @@ class CashDeposit(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE, related_name="agent_requesting_cash")
     amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
     request_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
+    deposit_paid = models.BooleanField(default=False, blank=True)
     date_requested = models.DateField(auto_now_add=True)
     time_requested = models.TimeField(auto_now_add=True)
 
@@ -163,6 +164,7 @@ class BankDeposit(models.Model):
     account_name = models.CharField(max_length=100, blank=True, default="")
     amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
     request_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
+    deposit_paid = models.BooleanField(default=False,blank=True)
     date_requested = models.DateField(auto_now_add=True)
     time_requested = models.TimeField(auto_now_add=True)
 
@@ -257,6 +259,7 @@ class Payments(models.Model):
     bank = models.CharField(max_length=50, choices=BANKS, blank=True)
     amount = models.DecimalField(max_digits=19, decimal_places=2)
     transaction_id = models.CharField(max_length=30, blank=True)
+    deposit_to_pay = models.CharField(max_length=50,blank=True,default="0.0")
     payment_action = models.CharField(max_length=50, choices=PAYMENT_ACTIONS, default="Not Closed")
     payment_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
     date_created = models.DateField(auto_now_add=True)

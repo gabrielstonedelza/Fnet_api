@@ -810,3 +810,22 @@ class SearchAgentsMomoWithdrawTransactions(generics.ListAPIView):
     search_fields = ['date_of_withdrawal','agent__username','customer_phone']
 
 
+@api_view(['GET', 'PUT'])
+@permission_classes([permissions.AllowAny])
+def approve_bank_deposit_paid(request, id):
+    bank_deposit = get_object_or_404(BankDeposit, id=id)
+    serializer = BankDepositSerializer(bank_deposit, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'PUT'])
+@permission_classes([permissions.AllowAny])
+def approve_cash_deposit_paid(request, id):
+    cash_deposit = get_object_or_404(CashDeposit, id=id)
+    serializer = CashDepositSerializer(cash_deposit, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

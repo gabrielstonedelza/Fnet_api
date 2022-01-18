@@ -56,7 +56,7 @@ class CashDepositSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CashDeposit
-        fields = ['id', 'guarantor', 'customer', 'agent', 'guarantor_username', 'customer_username', 'agent_username', 'amount', 'request_status', 'date_requested', 'time_requested']
+        fields = ['id', 'guarantor', 'customer', 'agent', 'guarantor_username', 'customer_username', 'deposit_paid', 'agent_username', 'amount', 'request_status', 'date_requested', 'time_requested']
         read_only_fields = ['agent']
 
     def get_guarantor_username(self, user):
@@ -90,7 +90,7 @@ class BankDepositSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BankDeposit
-        fields = ['id', 'guarantor', 'customer', 'agent', 'guarantor_username', 'customer_username', 'agent_username','bank','account_number','account_name','amount', 'request_status', 'date_requested', 'time_requested']
+        fields = ['id', 'guarantor', 'customer', 'agent', 'guarantor_username', 'customer_username','deposit_paid', 'agent_username','bank','account_number','account_name','amount', 'request_status', 'date_requested', 'time_requested']
         read_only_fields = ['agent']
 
     def get_guarantor_username(self, user):
