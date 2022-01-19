@@ -128,7 +128,7 @@ class PaymentsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Payments
         fields = ['id', 'agent', 'agent_username', 'mode_of_payment', 'cash_at_location', 'amount',
-                  'bank', 'transaction_id', 'payment_action',
+                  'bank', 'transaction_id', 'additional_payment', 'payment_action',
                   'payment_status', 
                   'date_created', 'time_created']
         read_only_fields = ['agent']
