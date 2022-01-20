@@ -127,10 +127,7 @@ class PaymentsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MyPayments
-        fields = ['id', 'agent', 'agent_username', 'mode_of_payment', 'cash_at_location', 'amount',
-                  'bank', 'transaction_id', 'additional_payments', 'payment_action',
-                  'payment_status',
-                  'date_created', 'time_created']
+        fields = ['id', 'agent', 'agent_username', 'mode_of_payment1','mode_of_payment2', 'cash_at_location1','cash_at_location2', 'amount1','amount1','bank1','bank2', 'transaction_id1','transaction_id2', 'payment_action','payment_status', 'date_created', 'time_created']
         read_only_fields = ['agent']
 
     def get_agent_username(self, user):
