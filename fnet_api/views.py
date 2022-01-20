@@ -868,3 +868,10 @@ def get_all_momo_deposit_made(request):
     bank_deposits = MobileMoneyDeposit.objects.all().order_by('-date_deposited')
     serializer = MobileMoneyDepositSerializer(bank_deposits,many=True)
     return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_all_momo_withdrawal_made(request):
+    bank_deposits = MobileMoneyWithdraw.objects.all().order_by('-date_of_withdrawal')
+    serializer = MobileMoneyWithdrawalSerializer(bank_deposits,many=True)
+    return Response(serializer.data)
