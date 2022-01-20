@@ -61,8 +61,20 @@ REQUEST_STATUS = (
     ("Pending", "Pending")
 )
 
-MODE_OF_PAYMENT = (
-    ("Select mode of payment", "Select mode of payment"),
+MODE_OF_PAYMENT1 = (
+    ("Select mode of payment1", "Select mode of payment1"),
+    ("Bank Payment", "Bank Payment"),
+    ("Mtn", "Mtn"),
+    ("AirtelTigo", "AirtelTigo"),
+    ("Vodafone", "Vodafone"),
+    ("Momo pay", "Momo pay"),
+    ("Agent to Agent", "Agent to Agent"),
+    ("Cash left @", "Cash left @"),
+)
+
+
+MODE_OF_PAYMENT2 = (
+    ("Select mode of payment2", "Select mode of payment2"),
     ("Bank Payment", "Bank Payment"),
     ("Mtn", "Mtn"),
     ("AirtelTigo", "AirtelTigo"),
@@ -259,8 +271,8 @@ class CustomerWithdrawal(models.Model):
 
 class Payments(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
-    mode_of_payment1 = models.CharField(max_length=30, choices=MODE_OF_PAYMENT, blank=True)
-    mode_of_payment2 = models.CharField(max_length=30, choices=MODE_OF_PAYMENT, blank=True)
+    mode_of_payment1 = models.CharField(max_length=30, choices=MODE_OF_PAYMENT1, blank=True)
+    mode_of_payment2 = models.CharField(max_length=30, choices=MODE_OF_PAYMENT2, blank=True)
     cash_at_location1 = models.CharField(max_length=30, choices=PAYMENT_OFFICES, blank=True, default="")
     cash_at_location2 = models.CharField(max_length=30, choices=PAYMENT_OFFICES, blank=True, default="")
     bank1 = models.CharField(max_length=50, choices=BANKS, blank=True)
