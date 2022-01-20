@@ -300,8 +300,6 @@ class Payments(models.Model):
     bank2 = models.CharField(max_length=50, choices=BANKS2, blank=True)
     amount1 = models.DecimalField(max_digits=19, decimal_places=2,blank=True,default=0.0)
     amount2 = models.DecimalField(max_digits=19, decimal_places=2,blank=True,default=0.0)
-    transaction_id1 = models.CharField(max_length=30, blank=True)
-    transaction_id2 = models.CharField(max_length=30, blank=True)
     reference1 = models.CharField(max_length=100,blank=True,default="")
     reference2 = models.CharField(max_length=100,blank=True,default="")
     payment_action = models.CharField(max_length=50, choices=PAYMENT_ACTIONS, default="Not Closed")
