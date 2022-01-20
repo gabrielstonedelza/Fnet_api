@@ -11,19 +11,8 @@ ID_TYPES = (
     ("Drivers License","Drivers License"),
     ("Voters Id","Voters Id"),
 )
-BANKS1 = (
-    ("Select bank1", "Select bank1"),
-    ("Access Bank", "Access Bank"),
-    ("Cal Bank", "Cal Bank"),
-    ("Fidelity Bank", "Fidelity Bank"),
-    ("Ecobank", "Ecobank"),
-    ("Pan Africa", "Pan Africa"),
-    ("First Bank of Nigeria", "First Bank of Nigeria"),
-    ("SGSSB", "SGSSB")
-)
-
-BANKS2 = (
-    ("Select bank2", "Select bank2"),
+BANKS = (
+    ("Select bank", "Select bank"),
     ("Access Bank", "Access Bank"),
     ("Cal Bank", "Cal Bank"),
     ("Fidelity Bank", "Fidelity Bank"),
@@ -72,8 +61,8 @@ REQUEST_STATUS = (
     ("Pending", "Pending")
 )
 
-MODE_OF_PAYMENT1 = (
-    ("Select mode of payment1", "Select mode of payment1"),
+MODE_OF_PAYMENT = (
+    ("Select mode of payment", "Select mode of payment"),
     ("Bank Payment", "Bank Payment"),
     ("Mtn", "Mtn"),
     ("AirtelTigo", "AirtelTigo"),
@@ -83,30 +72,8 @@ MODE_OF_PAYMENT1 = (
     ("Cash left @", "Cash left @"),
 )
 
-
-MODE_OF_PAYMENT2 = (
-    ("Select mode of payment2", "Select mode of payment2"),
-    ("Bank Payment", "Bank Payment"),
-    ("Mtn", "Mtn"),
-    ("AirtelTigo", "AirtelTigo"),
-    ("Vodafone", "Vodafone"),
-    ("Momo pay", "Momo pay"),
-    ("Agent to Agent", "Agent to Agent"),
-    ("Cash left @", "Cash left @"),
-)
-
-PAYMENT_OFFICES1 = (
-    ("Please select cash at location1", "Please select cash at location1"),
-    ("Cash @ location", "Cash @ location"),
-    ("DVLA", "DVLA"),
-    ("HEAD OFFICE", "HEAD OFFICE"),
-    ("KEJETIA", "KEJETIA"),
-    ("ECOBANK", "ECOBANK"),
-    ("PAN AFRICA", "PAN AFRICA"),
-)
-
-PAYMENT_OFFICES2 = (
-    ("Please select cash at location2", "Please select cash at location2"),
+PAYMENT_OFFICES = (
+    ("Please select cash at location", "Please select cash at location"),
     ("Cash @ location", "Cash @ location"),
     ("DVLA", "DVLA"),
     ("HEAD OFFICE", "HEAD OFFICE"),
@@ -173,7 +140,7 @@ class CustomerAccounts(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
     account_number = models.CharField(max_length=16)
     account_name = models.CharField(max_length=100)
-    bank = models.CharField(max_length=100, choices=BANKS1, default="Access Bank")
+    bank = models.CharField(max_length=100, choices=BANKS, default="Access Bank")
     phone = models.CharField(max_length=15)
     date_added = models.DateTimeField(auto_now_add=True)
 
@@ -197,7 +164,7 @@ class BankDeposit(models.Model):
     guarantor = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     customer = models.CharField(max_length=20, blank=True)
     agent = models.ForeignKey(User, on_delete=models.CASCADE, related_name="agent_requesting_bank")
-    bank = models.CharField(max_length=50, choices=BANKS1, blank=True, default="")
+    bank = models.CharField(max_length=50, choices=BANKS, blank=True, default="")
     account_number = models.TextField(blank=True,max_length=17)
     account_name = models.CharField(max_length=100, blank=True, default="")
     amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
@@ -282,7 +249,7 @@ class UserMobileMoneyAccountsClosed(models.Model):
 class CustomerWithdrawal(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
     customer = models.CharField(max_length=100)
-    bank = models.CharField(max_length=100, choices=BANKS1, default="GT Bank")
+    bank = models.CharField(max_length=100, choices=BANKS, default="GT Bank")
     type = models.CharField(max_length=30,choices=WITHDRAW_TYPES)
     amount = models.DecimalField(max_digits=19, decimal_places=2)
     date_requested = models.DateTimeField(auto_now_add=True)
@@ -292,16 +259,12 @@ class CustomerWithdrawal(models.Model):
 
 class Payments(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
-    mode_of_payment1 = models.CharField(max_length=30, choices=MODE_OF_PAYMENT1, blank=True)
-    mode_of_payment2 = models.CharField(max_length=30, choices=MODE_OF_PAYMENT2, blank=True)
-    cash_at_location1 = models.CharField(max_length=40, choices=PAYMENT_OFFICES1, blank=True, default="")
-    cash_at_location2 = models.CharField(max_length=40, choices=PAYMENT_OFFICES2, blank=True, default="")
-    bank1 = models.CharField(max_length=50, choices=BANKS1, blank=True)
-    bank2 = models.CharField(max_length=50, choices=BANKS2, blank=True)
-    amount1 = models.DecimalField(max_digits=19, decimal_places=2,blank=True,default=0.0)
-    amount2 = models.DecimalField(max_digits=19, decimal_places=2,blank=True,default=0.0)
-    reference1 = models.CharField(max_length=100,blank=True,default="")
-    reference2 = models.CharField(max_length=100,blank=True,default="")
+    mode_of_payment = models.CharField(max_length=30, choices=MODE_OF_PAYMENT, blank=True)
+    cash_at_location = models.CharField(max_length=30, choices=PAYMENT_OFFICES, blank=True,default="")
+    bank = models.CharField(max_length=50, choices=BANKS, blank=True)
+    amount = models.DecimalField(max_digits=19, decimal_places=2)
+    transaction_id = models.CharField(max_length=30, blank=True)
+    additional_payment = models.TextField(blank=True,default="")
     payment_action = models.CharField(max_length=50, choices=PAYMENT_ACTIONS, default="Not Closed")
     payment_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
     date_created = models.DateField(auto_now_add=True)
