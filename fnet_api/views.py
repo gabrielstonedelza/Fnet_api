@@ -846,6 +846,8 @@ def get_unpaid_bank_deposits_for_today(request):
     serializer = BankDepositSerializer(your_cash_requests, many=True)
     return Response(serializer.data)
 
+
+# for local data
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def get_all_bank_deposits(request):
@@ -858,4 +860,11 @@ def get_all_bank_deposits(request):
 def get_all_cash_at_payments(request):
     bank_deposits = CashAtPayments.objects.all().order_by('-date_paid')
     serializer = CashAtPaymentSerializer(bank_deposits,many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_all_momo_deposit_made(request):
+    bank_deposits = MobileMoneyDeposit.objects.all().order_by('-date_deposited')
+    serializer = MobileMoneyDepositSerializer(bank_deposits,many=True)
     return Response(serializer.data)
