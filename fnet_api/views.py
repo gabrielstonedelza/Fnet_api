@@ -852,3 +852,10 @@ def get_all_bank_deposits(request):
     bank_deposits = BankDeposit.objects.all().order_by('-date_requested')
     serializer = BankDepositSerializer(bank_deposits,many=True)
     return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_all_cash_at_payments(request):
+    bank_deposits = CashAtPayments.objects.all().order_by('-date_paid')
+    serializer = CashAtPaymentSerializer(bank_deposits,many=True)
+    return Response(serializer.data)
