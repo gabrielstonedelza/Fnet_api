@@ -889,3 +889,10 @@ def get_all_user_momo_accounts_closed(request):
     bank_deposits = UserMobileMoneyAccountsClosed.objects.all().order_by('-date_posted')
     serializer = UserMobileMoneyAccountsClosedSerializer(bank_deposits,many=True)
     return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_all_users(request):
+    bank_deposits = User.objects.all()
+    serializer = UsersSerializer(bank_deposits,many=True)
+    return Response(serializer.data)

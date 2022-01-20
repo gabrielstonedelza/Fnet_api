@@ -119,6 +119,7 @@ urlpatterns = [
     path("get_all_momo_withdrawal_made/",views.get_all_momo_withdrawal_made),
     path("get_all_user_momo_accounts_started/",views.get_all_user_momo_accounts_started),
     path("get_all_user_momo_accounts_closed/",views.get_all_user_momo_accounts_closed),
+    path("get_all_users/",views.get_all_users),
 
 
 ]
