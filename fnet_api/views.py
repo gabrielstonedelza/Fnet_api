@@ -845,3 +845,10 @@ def get_unpaid_bank_deposits_for_today(request):
     your_cash_requests = BankDeposit.objects.filter(agent=request.user).filter(date_requested=my_date.date()).filter(deposit_paid="Not Paid").filter(request_status="Approved").order_by('-date_requested')
     serializer = BankDepositSerializer(your_cash_requests, many=True)
     return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_all_bank_deposits(request):
+    bank_deposits = BankDeposit.objects.all().order_by('-date_requested')
+    serializer = BankDepositSerializer(bank_deposits,many=True)
+    return Response(serializer.data)

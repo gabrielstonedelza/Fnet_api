@@ -112,5 +112,8 @@ urlpatterns = [
     path('get_unpaid_cash_deposits_for_today/', views.get_unpaid_cash_deposits_for_today),
     path('get_unpaid_bank_deposits_for_today/', views.get_unpaid_bank_deposits_for_today),
 
+#
+    path("get_all_bank_deposits/",views.get_all_bank_deposits)
+
 
 ]
