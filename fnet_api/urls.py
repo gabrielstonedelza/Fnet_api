@@ -25,7 +25,7 @@ urlpatterns = [
     path('admin_accounts_started/', views.admin_accounts_started),
     path('admin_accounts_completed/', views.admin_accounts_completed),
     path('admin_accounts_started_lists/', views.admin_accounts_started_lists),
-    path('admin_accounts_started_lists/', views.admin_accounts_completed_lists),
+    path('admin_accounts_completed_lists/', views.admin_accounts_completed_lists),
     path('user_customers/', views.user_customers),
     path('user_transaction_payments/<str:username>/', views.user_transaction_payments),
     path('user_transaction_withdrawals/<str:username>/', views.user_transaction_withdrawals),
