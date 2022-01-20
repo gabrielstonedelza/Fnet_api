@@ -257,7 +257,7 @@ class CustomerWithdrawal(models.Model):
     def __str__(self):
         return f"Withdrawal made for {self.amount}"
 
-class Payments(models.Model):
+class MyPayments(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     mode_of_payment = models.CharField(max_length=30, choices=MODE_OF_PAYMENT, blank=True)
     cash_at_location = models.CharField(max_length=30, choices=PAYMENT_OFFICES, blank=True,default="")

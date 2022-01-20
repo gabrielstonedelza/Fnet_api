@@ -1,6 +1,6 @@
 from django.db.models import fields
 from rest_framework import serializers
-from .models import (Customer, CustomerWithdrawal, Payments, AdminAccountsStartedWith, CashAtPayments, WithdrawReference, AdminAccountsCompletedWith, CustomerAccounts,CustomerRequestDeposit,UserFlags,CashDeposit,MobileMoneyDeposit,BankDeposit,UserMobileMoneyAccountsStarted,UserMobileMoneyAccountsClosed,MobileMoneyWithdraw,MomoRequest)
+from .models import (Customer, CustomerWithdrawal, MyPayments, AdminAccountsStartedWith, CashAtPayments, WithdrawReference, AdminAccountsCompletedWith, CustomerAccounts, CustomerRequestDeposit, UserFlags, CashDeposit, MobileMoneyDeposit, BankDeposit, UserMobileMoneyAccountsStarted, UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, MomoRequest)
 
 class UserFlagsSerializer(serializers.ModelSerializer):
     username = serializers.SerializerMethodField('get_username')
@@ -126,7 +126,7 @@ class PaymentsSerializer(serializers.ModelSerializer):
     agent_username = serializers.SerializerMethodField('get_agent_username')
 
     class Meta:
-        model = Payments
+        model = MyPayments
         fields = ['id', 'agent', 'agent_username', 'mode_of_payment', 'cash_at_location', 'amount',
                   'bank', 'transaction_id', 'additional_payments', 'payment_action',
                   'payment_status',

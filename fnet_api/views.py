@@ -3,8 +3,8 @@ from .serializers import (CustomerSerializer, BankDepositSerializer,CashDepositS
                           CustomerWithdrawalSerializer, PaymentsSerializer, AdminAccountsStartedSerializer, \
                           AdminAccountsCompletedSerializer, CustomerAccountsSerializer, CashAtPaymentSerializer, WithdrawSerializer,CustomerDepositRequestSerializer,UserFlagsSerializer,UserMobileMoneyAccountsClosedSerializer,UserMobileMoneyAccountsStartedSerializer,MobileMoneyWithdrawalSerializer)
 
-from .models import (Customer, BankDeposit,CashDeposit,MobileMoneyDeposit, CustomerWithdrawal, Payments,
-                     AdminAccountsStartedWith, AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments, WithdrawReference,CustomerRequestDeposit,UserFlags,UserMobileMoneyAccountsStarted,UserMobileMoneyAccountsClosed,MobileMoneyWithdraw,MomoRequest)
+from .models import (Customer, BankDeposit, CashDeposit, MobileMoneyDeposit, CustomerWithdrawal, MyPayments,
+                     AdminAccountsStartedWith, AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments, WithdrawReference, CustomerRequestDeposit, UserFlags, UserMobileMoneyAccountsStarted, UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, MomoRequest)
 from drf_multiple_model.views import ObjectMultipleModelAPIView
 
 from rest_framework.decorators import api_view, permission_classes
@@ -330,7 +330,7 @@ def bank_detail(request, pk):
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def payment_detail(request, pk):
-    dpayment = Payments.objects.get(pk=pk)
+    dpayment = MyPayments.objects.get(pk=pk)
     serializer = PaymentsSerializer(dpayment, many=False)
     return Response(serializer.data)
 
@@ -392,7 +392,7 @@ def customer_withdrawal_summary(request):
 @permission_classes([permissions.IsAuthenticated])
 def payment_summary(request):
     user = get_object_or_404(User, username=request.user.username)
-    my_payments = Payments.objects.filter(agent=user).order_by('-date_created')
+    my_payments = MyPayments.objects.filter(agent=user).order_by('-date_created')
     serializer = PaymentsSerializer(my_payments, many=True)
     return Response(serializer.data)
 
@@ -401,7 +401,7 @@ def payment_summary(request):
 @permission_classes([permissions.AllowAny])
 def get_payments(request):
     my_date = datetime.today()
-    payments = Payments.objects.filter(payment_status="Pending").order_by('-date_created')
+    payments = MyPayments.objects.filter(payment_status="Pending").order_by('-date_created')
     serializer = PaymentsSerializer(payments, many=True)
     return Response(serializer.data)
 
@@ -419,7 +419,7 @@ def make_payments(request):
 @api_view(['GET', 'PUT'])
 @permission_classes([permissions.AllowAny])
 def approve_payment(request, id):
-    payment = get_object_or_404(Payments, id=id)
+    payment = get_object_or_404(MyPayments, id=id)
     serializer = PaymentsSerializer(payment, data=request.data)
     if serializer.is_valid():
         serializer.save()
@@ -549,7 +549,7 @@ def admin_accounts_completed_lists(request):
 @permission_classes([permissions.AllowAny])
 def user_transaction_payments(request, username):
     user = get_object_or_404(User, username=username)
-    all_user_payments = Payments.objects.filter(agent=user).filter(payment_status="Approved").order_by('-date_created')
+    all_user_payments = MyPayments.objects.filter(agent=user).filter(payment_status="Approved").order_by('-date_created')
     serializer = PaymentsSerializer(all_user_payments, many=True)
     return Response(serializer.data)
 
@@ -568,7 +568,7 @@ def user_transaction_withdrawals(request, username):
 @permission_classes([permissions.IsAuthenticated])
 def get_payment_total(request):
     my_date = datetime.today()
-    payment_today = Payments.objects.filter(agent=request.user).filter(date_created=my_date.date()).order_by('-date_created')
+    payment_today = MyPayments.objects.filter(agent=request.user).filter(date_created=my_date.date()).order_by('-date_created')
     serializer = PaymentsSerializer(payment_today,many=True)
     return Response(serializer.data)
 
@@ -576,7 +576,7 @@ def get_payment_total(request):
 @permission_classes([permissions.IsAuthenticated])
 def get_payment_approved_total(request):
     my_date = datetime.today()
-    payment_today = Payments.objects.filter(agent=request.user).filter(payment_status="Approved").filter(date_created=my_date.date()).order_by('-date_created')
+    payment_today = MyPayments.objects.filter(agent=request.user).filter(payment_status="Approved").filter(date_created=my_date.date()).order_by('-date_created')
     serializer = PaymentsSerializer(payment_today,many=True)
     return Response(serializer.data)
 
