@@ -875,3 +875,17 @@ def get_all_momo_withdrawal_made(request):
     bank_deposits = MobileMoneyWithdraw.objects.all().order_by('-date_of_withdrawal')
     serializer = MobileMoneyWithdrawalSerializer(bank_deposits,many=True)
     return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_all_user_momo_accounts_started(request):
+    bank_deposits = UserMobileMoneyAccountsStarted.objects.all().order_by('-date_posted')
+    serializer = UserMobileMoneyAccountsStartedSerializer(bank_deposits,many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_all_user_momo_accounts_closed(request):
+    bank_deposits = UserMobileMoneyAccountsClosed.objects.all().order_by('-date_posted')
+    serializer = UserMobileMoneyAccountsClosedSerializer(bank_deposits,many=True)
+    return Response(serializer.data)
