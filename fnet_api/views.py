@@ -662,9 +662,9 @@ def get_customers_requests(request,phone):
     return Response(serializer.data)
 
 @api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 def get_your_customers_requests(request):
-    your_customers_requests = CustomerRequestDeposit.objects.filter(agent=request.user).filter(request_status="Pending").order_by('-date_requested')
+    your_customers_requests = CustomerRequestDeposit.objects.filter(request_status="Pending").order_by('-date_requested')
     serializer = CustomerDepositRequestSerializer(your_customers_requests, many=True)
     return Response(serializer.data)
 
