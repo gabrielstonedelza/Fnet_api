@@ -91,7 +91,7 @@ class CustomerRequestDeposit(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     customer_phone = models.CharField(max_length=20, blank=True)
     customer_name = models.CharField(max_length=100,blank=True)
-    amount = models.DecimalField(max_digits=19, decimal_places=2)
+    amount = models.DecimalField(max_digits=19, decimal_places=2,blank=True)
     request_option = models.CharField(max_length=100, choices=DEPOSIT_REQUEST_OPTIONS, default="Physical Cash")
     request_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
     date_requested = models.DateField(auto_now_add=True)
