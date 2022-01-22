@@ -265,7 +265,7 @@ class MyPayments(models.Model):
     cash_at_location2 = models.CharField(max_length=30, choices=PAYMENT_OFFICES, blank=True,default="")
     bank1 = models.CharField(max_length=50, choices=BANKS, blank=True)
     bank2 = models.CharField(max_length=50, choices=BANKS, blank=True)
-    amount = models.DecimalField(max_digits=19, decimal_places=2,default=0.0)
+    amount = models.DecimalField(max_digits=19, decimal_places=2,default=0.0,blank=True)
     amount1 = models.DecimalField(max_digits=19, decimal_places=2,default=0.0)
     amount2 = models.DecimalField(max_digits=19, decimal_places=2,default=0.0)
     transaction_id1 = models.CharField(max_length=30, blank=True,default="")
