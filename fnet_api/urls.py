@@ -120,6 +120,7 @@ urlpatterns = [
     path("get_all_user_momo_accounts_started/",views.get_all_user_momo_accounts_started),
     path("get_all_user_momo_accounts_closed/",views.get_all_user_momo_accounts_closed),
     path("get_all_users/",views.get_all_users),
-
-
+    path("get_cash_deposits_all/",views.get_cash_deposits_all),
+    path("get_bank_deposits_all/",views.get_bank_deposits_all),
+    
 ]

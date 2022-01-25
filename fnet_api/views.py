@@ -746,6 +746,20 @@ def get_cash_deposits_for_today(request):
 
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
+def get_cash_deposits_all(request):
+    your_cash_requests = CashDeposit.objects.filter(agent=request.user).order_by('-date_requested')
+    serializer = CashDepositSerializer(your_cash_requests, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_bank_deposits_all(request):
+    your_cash_requests = BankDeposit.objects.filter(agent=request.user).order_by('-date_requested')
+    serializer = BankDepositSerializer(your_cash_requests, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
 def get_bank_deposits_for_today(request):
     my_date = datetime.today()
     your_cash_requests = BankDeposit.objects.filter(agent=request.user).filter(date_requested=my_date.date()).order_by('-date_requested')
