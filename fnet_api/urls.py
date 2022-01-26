@@ -37,7 +37,7 @@ urlpatterns = [
     path('update_accounts/<int:id>/',views.update_accounts),
     path('admin_account_detail/<int:id>/',views.admin_account_detail),
 
-    path("get_payment_total/",views.get_payment_total),
+    path("get_user_payments/", views.get_user_payments),
     path("get_payment_approved_total/",views.get_payment_approved_total),
     path('get_customer_accounts_by_bank/<str:customer_phone>/<str:bank>/',views.get_customer_accounts_by_bank),
 
