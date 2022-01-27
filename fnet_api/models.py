@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
+from decimal import Decimal
 
 import datetime
 
@@ -280,7 +281,7 @@ class MyPayments(models.Model):
 
     def save(self, *args, **kwargs):
         amount_total = self.amount1 + self.amount2
-        self.amount = amount_total
+        self.amount = Decimal(amount_total)
         super().save(*args, **kwargs)
 
 class AdminAccountsStartedWith(models.Model):
