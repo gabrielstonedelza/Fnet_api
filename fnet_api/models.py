@@ -280,7 +280,7 @@ class MyPayments(models.Model):
         return self.payment_status
 
     def save(self, *args, **kwargs):
-        amount_total = self.amount1 + self.amount2
+        amount_total = Decimal(self.amount1) + Decimal(self.amount2)
         self.amount = Decimal(amount_total)
         super().save(*args, **kwargs)
 
