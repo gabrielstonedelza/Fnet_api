@@ -209,17 +209,7 @@ class MobileMoneyWithdrawalSerializer(serializers.ModelSerializer):
         return username
 
 class NotificationSerializer(serializers.ModelSerializer):
-    username = serializers.SerializerMethodField('get_username')
-    username2 = serializers.SerializerMethodField('get_username2')
 
     class Meta:
         model = Notifications
-        fields = ['id','notification_title','notification_message','read','customer','username','username2','user','user2','customer_request_slug','cash_deposit_request_slug','bank_deposit_request_slug','payment_slug','date_created','slug']
-
-    def get_username(self, user):
-        username = user.agent.username
-        return username
-
-    def get_username2(self, user2):
-        username2 = user2.user2.username
-        return username2
+        fields = ['id','notification_title','notification_message','read','customer','user','user2','customer_request_slug','cash_deposit_request_slug','bank_deposit_request_slug','payment_slug','date_created','slug']

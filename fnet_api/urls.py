@@ -123,4 +123,8 @@ urlpatterns = [
     path("get_cash_deposits_all/",views.get_cash_deposits_all),
     path("get_bank_deposits_all/",views.get_bank_deposits_all),
 
+#
+    path('get_user_notifications/',views.get_user_notifications),
+    path("read_notification/<int:id>/",views.read_notification)
+
 ]

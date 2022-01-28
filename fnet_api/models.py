@@ -326,12 +326,12 @@ class AdminAccountsCompletedWith(models.Model):
         return f"{self.user.username} has ended accounts today"
         
 class Notifications(models.Model):
-    notification_title = models.CharField(max_length=200)
-    notification_message = models.TextField()
+    notification_title = models.CharField(max_length=200,blank=True)
+    notification_message = models.TextField(blank=True)
     read = models.BooleanField(default=False)
     customer = models.CharField(max_length=100,blank="",default="")
-    user = models.ForeignKey(User,on_delete=models.CASCADE)
-    user2 = models.ForeignKey(User,on_delete=models.CASCADE,related_name="User_receiving_notification")
+    user = models.ForeignKey(User,on_delete=models.CASCADE,null=True)
+    user2 = models.ForeignKey(User,on_delete=models.CASCADE,related_name="User_receiving_notification",null=True)
     customer_request_slug = models.CharField(max_length=100, blank=True)
     cash_deposit_request_slug = models.CharField(max_length=100, blank=True)
     bank_deposit_request_slug = models.CharField(max_length=100, blank=True)
