@@ -908,7 +908,7 @@ def get_all_users(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_user_notifications(request):
-    notifications = Notifications.objects.filter(user2=request.user).order_by('-date_created')
+    notifications = Notifications.objects.filter(user2=request.user).filter(read="Not Read").order_by('-date_created')
     serializer = NotificationSerializer(notifications,many=True)
     return Response(serializer.data)
 
