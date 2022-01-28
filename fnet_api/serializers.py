@@ -212,4 +212,4 @@ class NotificationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Notifications
-        fields = ['id','item_id','transaction_type','notification_title','notification_message','read','customer','user','user2','customer_request_slug','cash_deposit_request_slug','bank_deposit_request_slug','payment_slug','date_created','slug']
+        fields = ['id','item_id','transaction_type','notification_title','notification_message','notification_trigger','read','customer','user','user2','customer_request_slug','cash_deposit_request_slug','bank_deposit_request_slug','payment_slug','date_created','slug']

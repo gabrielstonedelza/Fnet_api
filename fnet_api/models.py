@@ -94,6 +94,11 @@ NOTIFICATIONS_STATUS = (
     ("Not Read","Not Read"),
 )
 
+NOTIFICATIONS_TRIGGERS = (
+    ("Triggered","Triggered"),
+    ("Not Triggered","Not Triggered"),
+)
+
 class CustomerRequestDeposit(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     customer_phone = models.CharField(max_length=20, blank=True)
@@ -336,6 +341,7 @@ class Notifications(models.Model):
     notification_title = models.CharField(max_length=200,blank=True)
     notification_message = models.TextField(blank=True)
     read = models.CharField(max_length=20,choices=NOTIFICATIONS_STATUS,default="Not Read")
+    notification_trigger = models.CharField(max_length=100,choices=NOTIFICATIONS_TRIGGERS,default="Triggered",blank=True)
     customer = models.CharField(max_length=100,blank=True,default="")
     user = models.ForeignKey(User,on_delete=models.CASCADE,null=True)
     user2 = models.ForeignKey(User,on_delete=models.CASCADE,related_name="User_receiving_notification",null=True)
