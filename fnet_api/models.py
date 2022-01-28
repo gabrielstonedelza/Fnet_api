@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 from decimal import Decimal
+from django.utils.text import slugify
 
 import datetime
 
@@ -97,9 +98,15 @@ class CustomerRequestDeposit(models.Model):
     request_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
     date_requested = models.DateField(auto_now_add=True)
     time_requested = models.TimeField(auto_now_add=True)
+    slug = models.SlugField(max_length=100, allow_unicode=True, default='')
 
     def __str__(self):
         return self.customer_name
+
+    def save(self, *args, **kwargs):
+        value = self.customer_name
+        self.slug = slugify(value, allow_unicode=True)
+        super().save(*args, **kwargs)
 
 class WithdrawReference(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -157,9 +164,15 @@ class CashDeposit(models.Model):
     deposit_paid = models.CharField(choices=REQUEST_PAID_OPTIONS,default="Not Paid", blank=True,max_length=20)
     date_requested = models.DateField(auto_now_add=True)
     time_requested = models.TimeField(auto_now_add=True)
+    slug = models.SlugField(max_length=100, default='')
 
     def __str__(self):
         return f"Cash request made for {self.amount}"
+
+    def save(self, *args, **kwargs):
+        value = self.customer
+        self.slug = slugify(value, allow_unicode=True)
+        super().save(*args, **kwargs)
 
 class BankDeposit(models.Model):
     guarantor = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
@@ -173,9 +186,15 @@ class BankDeposit(models.Model):
     deposit_paid = models.CharField(choices=REQUEST_PAID_OPTIONS,default="Not Paid", blank=True,max_length=20)
     date_requested = models.DateField(auto_now_add=True)
     time_requested = models.TimeField(auto_now_add=True)
+    slug = models.SlugField(max_length=100, default='')
 
     def __str__(self):
         return f"Bank request made for {self.amount}"
+
+    def save(self, *args, **kwargs):
+        value = self.customer
+        self.slug = slugify(value, allow_unicode=True)
+        super().save(*args, **kwargs)
 
 class MobileMoneyDeposit(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE, related_name="agent_requesting")
@@ -275,11 +294,15 @@ class MyPayments(models.Model):
     payment_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
     date_created = models.DateField(auto_now_add=True)
     time_created = models.TimeField(auto_now_add=True)
+    slug = models.SlugField(max_length=100,default='')
 
     def __str__(self):
         return self.payment_status
 
     def save(self, *args, **kwargs):
+        value = self.mode_of_payment1
+        self.slug = slugify(value, allow_unicode=True)
+
         amount_total = Decimal(self.amount1) + Decimal(self.amount2)
         self.amount = Decimal(amount_total)
         super().save(*args, **kwargs)
@@ -301,30 +324,25 @@ class AdminAccountsCompletedWith(models.Model):
 
     def __str__(self):
         return f"{self.user.username} has ended accounts today"
-
-class UserFlags(models.Model):
+        
+class Notifications(models.Model):
+    notification_title = models.CharField(max_length=200)
+    notification_message = models.TextField()
+    read = models.BooleanField(default=False)
+    customer = models.CharField(max_length=100,blank="",default="")
     user = models.ForeignKey(User,on_delete=models.CASCADE)
-    date_added = models.DateField(auto_now_add=True)
+    user2 = models.ForeignKey(User,on_delete=models.CASCADE,related_name="User_receiving_notification")
+    customer_request_slug = models.CharField(max_length=100, blank=True)
+    cash_deposit_request_slug = models.CharField(max_length=100, blank=True)
+    bank_deposit_request_slug = models.CharField(max_length=100, blank=True)
+    payment_slug = models.CharField(max_length=100, blank=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    slug = models.SlugField(max_length=100, default='')
 
     def __str__(self):
-        return self.user.username
-
-class MomoRequest(models.Model):
-    agent = models.ForeignKey(User, on_delete=models.CASCADE)
-    physical = models.DecimalField(max_digits=19, decimal_places=2)
-    mtn_ecash = models.DecimalField(max_digits=19, decimal_places=2)
-    tigoairtel_ecash = models.DecimalField(max_digits=19, decimal_places=2)
-    vodafone_ecash = models.DecimalField(max_digits=19, decimal_places=2)
-    ecash_total = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
-    request_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
-    date_posted = models.DateField(auto_now_add=True)
-    time_posted = models.TimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.agent.username
+        return self.notification_title
 
     def save(self, *args, **kwargs):
-        e_total = self.mtn_ecash + self.tigoairtel_ecash + self.vodafone_ecash
-
-        self.ecash_total = e_total
+        value = self.notification_title
+        self.slug = slugify(value, allow_unicode=True)
         super().save(*args, **kwargs)

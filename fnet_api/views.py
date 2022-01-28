@@ -1,10 +1,10 @@
 from django.shortcuts import render, get_object_or_404
-from .serializers import (CustomerSerializer, BankDepositSerializer,CashDepositSerializer,MobileMoneyDepositSerializer,MomoRequestSerializer,
+from .serializers import (CustomerSerializer, BankDepositSerializer,CashDepositSerializer,MobileMoneyDepositSerializer,
                           CustomerWithdrawalSerializer, PaymentsSerializer, AdminAccountsStartedSerializer, \
-                          AdminAccountsCompletedSerializer, CustomerAccountsSerializer, CashAtPaymentSerializer, WithdrawSerializer,CustomerDepositRequestSerializer,UserFlagsSerializer,UserMobileMoneyAccountsClosedSerializer,UserMobileMoneyAccountsStartedSerializer,MobileMoneyWithdrawalSerializer)
+                          AdminAccountsCompletedSerializer, CustomerAccountsSerializer, CashAtPaymentSerializer, WithdrawSerializer,CustomerDepositRequestSerializer,NotificationSerializer,UserMobileMoneyAccountsClosedSerializer,UserMobileMoneyAccountsStartedSerializer,MobileMoneyWithdrawalSerializer)
 
 from .models import (Customer, BankDeposit, CashDeposit, MobileMoneyDeposit, CustomerWithdrawal, MyPayments,
-                     AdminAccountsStartedWith, AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments, WithdrawReference, CustomerRequestDeposit, UserFlags, UserMobileMoneyAccountsStarted, UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, MomoRequest)
+                     AdminAccountsStartedWith, AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments, WithdrawReference, CustomerRequestDeposit, UserMobileMoneyAccountsStarted, UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, Notifications)
 from drf_multiple_model.views import ObjectMultipleModelAPIView
 
 from rest_framework.decorators import api_view, permission_classes

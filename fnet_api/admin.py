@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import (Customer, CustomerWithdrawal, MyPayments, AdminAccountsStartedWith,
-                     AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments, WithdrawReference, CustomerRequestDeposit, UserFlags, CashDeposit, BankDeposit, MobileMoneyDeposit, MobileMoneyWithdraw, UserMobileMoneyAccountsStarted, UserMobileMoneyAccountsClosed, MomoRequest)
+                     AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments, WithdrawReference, CustomerRequestDeposit, Notifications, CashDeposit, BankDeposit, MobileMoneyDeposit, MobileMoneyWithdraw, UserMobileMoneyAccountsStarted, UserMobileMoneyAccountsClosed)
 
 admin.site.register(Customer)
 admin.site.register(CashDeposit)
@@ -16,8 +16,7 @@ admin.site.register(CustomerAccounts)
 admin.site.register(CashAtPayments)
 admin.site.register(WithdrawReference)
 admin.site.register(CustomerRequestDeposit)
-admin.site.register(UserFlags)
+admin.site.register(Notifications)
 admin.site.register(UserMobileMoneyAccountsStarted)
 admin.site.register(UserMobileMoneyAccountsClosed)
-admin.site.register(MomoRequest)
 
