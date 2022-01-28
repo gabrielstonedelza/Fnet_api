@@ -332,6 +332,7 @@ class AdminAccountsCompletedWith(models.Model):
         
 class Notifications(models.Model):
     item_id = models.CharField(max_length=100,blank=True,default="")
+    transaction_type = models.CharField(max_length=100,blank=True,default="")
     notification_title = models.CharField(max_length=200,blank=True)
     notification_message = models.TextField(blank=True)
     read = models.CharField(max_length=20,choices=NOTIFICATIONS_STATUS,default="Not Read")
