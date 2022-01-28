@@ -89,6 +89,11 @@ REQUEST_PAID_OPTIONS = (
     ("Paid","Paid"),
 )
 
+NOTIFICATIONS_STATUS = (
+    ("Read","Read"),
+    ("Not Read","Not Read"),
+)
+
 class CustomerRequestDeposit(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     customer_phone = models.CharField(max_length=20, blank=True)
@@ -328,7 +333,7 @@ class AdminAccountsCompletedWith(models.Model):
 class Notifications(models.Model):
     notification_title = models.CharField(max_length=200,blank=True)
     notification_message = models.TextField(blank=True)
-    read = models.BooleanField(default=False)
+    read = models.CharField(max_length=20,choices=NOTIFICATIONS_STATUS,default="Not Read")
     customer = models.CharField(max_length=100,blank="",default="")
     user = models.ForeignKey(User,on_delete=models.CASCADE,null=True)
     user2 = models.ForeignKey(User,on_delete=models.CASCADE,related_name="User_receiving_notification",null=True)
