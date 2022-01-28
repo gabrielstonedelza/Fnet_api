@@ -331,6 +331,7 @@ class AdminAccountsCompletedWith(models.Model):
         return f"{self.user.username} has ended accounts today"
         
 class Notifications(models.Model):
+    item_id = models.CharField(max_length=100,blank=True,default="")
     notification_title = models.CharField(max_length=200,blank=True)
     notification_message = models.TextField(blank=True)
     read = models.CharField(max_length=20,choices=NOTIFICATIONS_STATUS,default="Not Read")

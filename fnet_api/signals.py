@@ -13,7 +13,7 @@ def create_customer_request(sender,created,instance,**kwargs):
     message = f"{instance.customer_phone} just made a request of {instance.amount}"
 
     if created:
-        Notifications.objects.create(user=instance.agent,notification_title=title,notification_message=message,customer=instance.customer_phone,user2=instance.agent,customer_request_slug=instance.slug)
+        Notifications.objects.create(user=instance.agent,item_id=instance.id,notification_title=title,notification_message=message,customer=instance.customer_phone,user2=instance.agent,customer_request_slug=instance.slug)
 
 @receiver(post_save,sender=CashDeposit)
 def create_cash_request(sender,created,instance,**kwargs):
@@ -21,7 +21,7 @@ def create_cash_request(sender,created,instance,**kwargs):
     message = f"{instance.agent.username} just made a cash deposit of {instance.amount}"
 
     if created:
-        Notifications.objects.create(user=instance.agent,notification_title=title,notification_message=message,user2=instance.guarantor,cash_deposit_request_slug=instance.slug)
+        Notifications.objects.create(user=instance.agent,item_id=instance.id,notification_title=title,notification_message=message,user2=instance.guarantor,cash_deposit_request_slug=instance.slug)
 
 
 @receiver(post_save, sender=BankDeposit)
@@ -30,7 +30,7 @@ def create_bank_request(sender, created, instance, **kwargs):
     message = f"{instance.agent.username} just made a bank deposit of {instance.amount}"
 
     if created:
-        Notifications.objects.create(user=instance.agent, notification_title=title, notification_message=message,
+        Notifications.objects.create(user=instance.agent,item_id=instance.id ,notification_title=title, notification_message=message,
                                      user2=instance.guarantor, cash_deposit_request_slug=instance.slug)
 
 @receiver(post_save,sender=MyPayments)
@@ -40,5 +40,5 @@ def create_payment(sender,created,instance,**kwargs):
     admin_user = User.objects.get(id=1)
 
     if created:
-        Notifications.objects.create(user=instance.agent, notification_title=title, notification_message=message,
+        Notifications.objects.create(user=instance.agent,item_id=instance.id, notification_title=title, notification_message=message,
                                      user2=admin_user, payment_slug=instance.slug)
