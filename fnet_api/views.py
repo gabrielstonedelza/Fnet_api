@@ -682,6 +682,15 @@ def get_customer_request_summary(request,phone):
     serializer = CustomerDepositRequestSerializer(request_summary,many=True)
     return Response(serializer.data)
 
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_customer_transaction_summary(request,phone):
+    transaction_summary = BankDeposit.objects.filter(customer=phone).order_by('-date_requested')
+    serializer = BankDepositSerializer(transaction_summary,many=True)
+    return Response(serializer.data)
+
+
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def customer_request_detail(request, pk):
@@ -922,7 +931,7 @@ def get_user_notifications(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_triggered_notifications(request):
-    notifications = Notifications.objects.filter(user2=request.user).filter(notification_trigger="Triggered").order_by('-date_created')
+    notifications = Notifications.objects.filter(user2=request.user).filter(notification_trigger="Triggered").filter(read="Not Read").order_by('-date_created')
     serializer = NotificationSerializer(notifications,many=True)
     return Response(serializer.data)
 
