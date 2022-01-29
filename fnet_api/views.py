@@ -690,6 +690,13 @@ def get_customer_transaction_summary(request,phone):
     serializer = BankDepositSerializer(transaction_summary,many=True)
     return Response(serializer.data)
 
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_customer_accounts(request,phone):
+    customer_accounts = CustomerAccounts.objects.filter(phone=phone).order_by('-date_added')
+    serializer = CustomerAccountsSerializer(customer_accounts,many=True)
+    return Response(serializer.data)
+
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
