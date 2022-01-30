@@ -179,7 +179,7 @@ class CashDeposit(models.Model):
     slug = models.SlugField(max_length=100, default='')
 
     def __str__(self):
-        return f"Cash request made for {self.amount}"
+        return f"Cash request made for {self.amount} by {self.agent.username}"
 
     def save(self, *args, **kwargs):
         value = self.customer
@@ -201,7 +201,7 @@ class BankDeposit(models.Model):
     slug = models.SlugField(max_length=100, default='')
 
     def __str__(self):
-        return f"Bank request made for {self.amount}"
+        return f"Bank request made for {self.amount} by {self.agent.username}"
 
     def save(self, *args, **kwargs):
         value = self.customer
@@ -287,7 +287,7 @@ class CustomerWithdrawal(models.Model):
     date_requested = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Withdrawal made for {self.amount}"
+        return f"Withdrawal made for {self.amount} by {self.agent.username}"
 
 class MyPayments(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
