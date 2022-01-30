@@ -72,6 +72,8 @@ MODE_OF_PAYMENT = (
     ("Momo pay", "Momo pay"),
     ("Agent to Agent", "Agent to Agent"),
     ("Cash left @", "Cash left @"),
+    ("Own Accounts", "Own Accounts"),
+    ("Company Accounts", "Company Accounts"),
 )
 
 PAYMENT_OFFICES = (
