@@ -129,6 +129,8 @@ urlpatterns = [
     path('get_triggered_notifications/',views.get_triggered_notifications),
     path("read_notification/<int:id>/",views.read_notification),
     path("get_customer_transaction_summary/<str:phone>/",views.get_customer_transaction_summary),
-    path("get_customer_accounts/<str:phone>/",views.get_customer_accounts)
+    path("get_customer_accounts/<str:phone>/",views.get_customer_accounts),
+    path('get_agents_bank_total_by_date/',views.get_agents_bank_total_by_date),
+    path('get_agents_cash_total_by_date/',views.get_agents_cash_total_by_date),
 
 ]

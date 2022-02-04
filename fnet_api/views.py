@@ -951,3 +951,17 @@ def read_notification(request, id):
         serializer.save()
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_agents_bank_total_by_date(request):
+    all_agents_bank = BankDeposit.objects.filter(agent=request.user).filter(request_status="Approved").order_by('-date_requested')
+    serializer = BankDepositSerializer(all_agents_bank, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_agents_cash_total_by_date(request):
+    all_agents_cash = CashDeposit.objects.filter(agent=request.user).filter(request_status="Approved").order_by('-date_requested')
+    serializer = BankDepositSerializer(all_agents_cash, many=True)
+    return Response(serializer.data)
