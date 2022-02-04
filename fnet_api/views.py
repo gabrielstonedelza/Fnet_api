@@ -753,7 +753,7 @@ def get_all_momo_withdraw_customers(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_cash_deposits_for_today(request):
-    your_cash_requests = CashDeposit.objects.filter(agent=request.user).order_by('-date_requested')
+    your_cash_requests = CashDeposit.objects.filter(agent=request.user).filter(deposit_paid="Not Paid").order_by('-date_requested')
     serializer = CashDepositSerializer(your_cash_requests, many=True)
     return Response(serializer.data)
 
@@ -774,7 +774,7 @@ def get_bank_deposits_all(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_bank_deposits_for_today(request):
-    your_cash_requests = BankDeposit.objects.filter(agent=request.user).order_by('-date_requested')
+    your_cash_requests = BankDeposit.objects.filter(agent=request.user).filter(deposit_paid="Not Paid").order_by('-date_requested')
     serializer = BankDepositSerializer(your_cash_requests, many=True)
     return Response(serializer.data)
 
