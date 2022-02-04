@@ -132,5 +132,6 @@ urlpatterns = [
     path("get_customer_accounts/<str:phone>/",views.get_customer_accounts),
     path('get_agents_bank_total_by_date/',views.get_agents_bank_total_by_date),
     path('get_agents_cash_total_by_date/',views.get_agents_cash_total_by_date),
+    path('user_total_payments/',views.user_total_payments),
 
 ]

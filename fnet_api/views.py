@@ -774,7 +774,7 @@ def get_bank_deposits_all(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_bank_deposits_for_today(request):
-    your_cash_requests = BankDeposit.objects.filter(agent=request.user).filter(deposit_paid="Not Paid").order_by('-date_requested')
+    your_cash_requests = BankDeposit.objects.filter(agent=request.user).filter(deposit_paid="Paid").order_by('-date_requested')
     serializer = BankDepositSerializer(your_cash_requests, many=True)
     return Response(serializer.data)
 
@@ -964,4 +964,11 @@ def get_agents_bank_total_by_date(request):
 def get_agents_cash_total_by_date(request):
     all_agents_cash = CashDeposit.objects.filter(agent=request.user).filter(request_status="Approved").order_by('-date_requested')
     serializer = BankDepositSerializer(all_agents_cash, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def user_total_payments(request):
+    all_user_payments = MyPayments.objects.filter(agent=request.user).filter(payment_status="Approved").order_by('-date_created')
+    serializer = PaymentsSerializer(all_user_payments, many=True)
     return Response(serializer.data)
