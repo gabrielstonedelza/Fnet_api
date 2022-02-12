@@ -22,6 +22,7 @@ BANKS = (
     ("Pan Africa", "Pan Africa"),
     ("First Bank of Nigeria", "First Bank of Nigeria"),
     ("SGSSB", "SGSSB"),
+    ("Atwima Rural Bank", "Atwima Rural Bank"),
     ("Omnibsic Bank", "Omnibsic Bank"),
     ("Stanbic Bank", "Stanbic Bank"),
     ("Absa Bank", "Absa Bank"),
