@@ -8,10 +8,10 @@ import datetime
 
 User = settings.AUTH_USER_MODEL
 ID_TYPES = (
-    ("Ghana Card","Ghana Card"),
-    ("Passport","Passport"),
-    ("Drivers License","Drivers License"),
-    ("Voters Id","Voters Id"),
+    ("Ghana Card", "Ghana Card"),
+    ("Passport", "Passport"),
+    ("Drivers License", "Drivers License"),
+    ("Voters Id", "Voters Id"),
 )
 BANKS = (
     ("Select bank", "Select bank"),
@@ -21,7 +21,11 @@ BANKS = (
     ("Ecobank", "Ecobank"),
     ("Pan Africa", "Pan Africa"),
     ("First Bank of Nigeria", "First Bank of Nigeria"),
-    ("SGSSB", "SGSSB")
+    ("SGSSB", "SGSSB"),
+    ("Omnibsic Bank", "Omnibsic Bank"),
+    ("Stanbic Bank", "Stanbic Bank"),
+    ("Absa Bank", "Absa Bank"),
+    ("Universal Merchant Bank", "Universal Merchant Bank"),
 )
 PAYMENT_ACTIONS = (
     ("Select payment action", "Select payment action"),
@@ -29,33 +33,33 @@ PAYMENT_ACTIONS = (
     ("Close Payment", "Close Payment"),
 )
 
-NETWORKS =(
-    ("Select Network","Select Network"),
-    ("Mtn","Mtn"),
-    ("AirtelTigo","AirtelTigo"),
-    ("Vodafone","Vodafone"),
+NETWORKS = (
+    ("Select Network", "Select Network"),
+    ("Mtn", "Mtn"),
+    ("AirtelTigo", "AirtelTigo"),
+    ("Vodafone", "Vodafone"),
 )
 
 DEPOSIT_REQUEST_OPTIONS = (
-    ("Cash","Cash"),
-    ("Mobile Money","Money Money"),
-    ("Bank","Bank"),
+    ("Cash", "Cash"),
+    ("Mobile Money", "Money Money"),
+    ("Bank", "Bank"),
 )
 
 MOBILE_MONEY_DEPOSIT_TYPE = (
-    ("Regular","Regular"),
-    ("Direct","Direct"),
-    ("Agent to Agent","Agent to Agent"),
+    ("Regular", "Regular"),
+    ("Direct", "Direct"),
+    ("Agent to Agent", "Agent to Agent"),
 )
 MOBILE_MONEY_ACTION = (
-    ("Deposit","Deposit"),
-    ("Withdraw","Withdraw"),
+    ("Deposit", "Deposit"),
+    ("Withdraw", "Withdraw"),
 )
 
 WITHDRAW_TYPES = (
-    ("MomoPay","MomoPay"),
-    ("Cash Out","Cash Out"),
-    ("Agent to Agent","Agent to Agent"),
+    ("MomoPay", "MomoPay"),
+    ("Cash Out", "Cash Out"),
+    ("Agent to Agent", "Agent to Agent"),
 )
 
 REQUEST_STATUS = (
@@ -87,25 +91,26 @@ PAYMENT_OFFICES = (
 )
 
 REQUEST_PAID_OPTIONS = (
-    ("Not Paid","Not Paid"),
-    ("Paid","Paid"),
+    ("Not Paid", "Not Paid"),
+    ("Paid", "Paid"),
 )
 
 NOTIFICATIONS_STATUS = (
-    ("Read","Read"),
-    ("Not Read","Not Read"),
+    ("Read", "Read"),
+    ("Not Read", "Not Read"),
 )
 
 NOTIFICATIONS_TRIGGERS = (
-    ("Triggered","Triggered"),
-    ("Not Triggered","Not Triggered"),
+    ("Triggered", "Triggered"),
+    ("Not Triggered", "Not Triggered"),
 )
+
 
 class CustomerRequestDeposit(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     customer_phone = models.CharField(max_length=20, blank=True)
-    customer_name = models.CharField(max_length=100,blank=True)
-    amount = models.DecimalField(max_digits=19, decimal_places=2,blank=True)
+    customer_name = models.CharField(max_length=100, blank=True)
+    amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
     request_option = models.CharField(max_length=100, choices=DEPOSIT_REQUEST_OPTIONS, default="Physical Cash")
     request_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
     date_requested = models.DateField(auto_now_add=True)
@@ -120,6 +125,7 @@ class CustomerRequestDeposit(models.Model):
         self.slug = slugify(value, allow_unicode=True)
         super().save(*args, **kwargs)
 
+
 class WithdrawReference(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=19, decimal_places=2)
@@ -130,6 +136,7 @@ class WithdrawReference(models.Model):
 
     def __str__(self):
         return self.reference_id
+
 
 class CashAtPayments(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -144,17 +151,19 @@ class CashAtPayments(models.Model):
     def __str__(self):
         return self.agent.username
 
+
 class Customer(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=150,blank=True)
-    location = models.CharField(max_length=100,blank=True)
-    digital_address = models.CharField(max_length=25,blank=True)
-    phone = models.CharField(max_length=15, unique=True,blank=True)
-    date_of_birth = models.CharField(max_length=15,blank=True)
+    name = models.CharField(max_length=150, blank=True)
+    location = models.CharField(max_length=100, blank=True)
+    digital_address = models.CharField(max_length=25, blank=True)
+    phone = models.CharField(max_length=15, unique=True, blank=True)
+    date_of_birth = models.CharField(max_length=15, blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name
+
 
 class CustomerAccounts(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -167,13 +176,14 @@ class CustomerAccounts(models.Model):
     def __str__(self):
         return self.phone
 
+
 class CashDeposit(models.Model):
     guarantor = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     customer = models.CharField(max_length=20, blank=True)
     agent = models.ForeignKey(User, on_delete=models.CASCADE, related_name="agent_requesting_cash")
     amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
     request_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
-    deposit_paid = models.CharField(choices=REQUEST_PAID_OPTIONS,default="Not Paid", blank=True,max_length=20)
+    deposit_paid = models.CharField(choices=REQUEST_PAID_OPTIONS, default="Not Paid", blank=True, max_length=20)
     date_requested = models.DateField(auto_now_add=True)
     time_requested = models.TimeField(auto_now_add=True)
     slug = models.SlugField(max_length=100, default='')
@@ -186,16 +196,17 @@ class CashDeposit(models.Model):
         self.slug = slugify(value, allow_unicode=True)
         super().save(*args, **kwargs)
 
+
 class BankDeposit(models.Model):
     guarantor = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     customer = models.CharField(max_length=20, blank=True)
     agent = models.ForeignKey(User, on_delete=models.CASCADE, related_name="agent_requesting_bank")
     bank = models.CharField(max_length=50, choices=BANKS, blank=True, default="")
-    account_number = models.TextField(blank=True,max_length=17)
+    account_number = models.TextField(blank=True, max_length=17)
     account_name = models.CharField(max_length=100, blank=True, default="")
     amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
     request_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
-    deposit_paid = models.CharField(choices=REQUEST_PAID_OPTIONS,default="Not Paid", blank=True,max_length=20)
+    deposit_paid = models.CharField(choices=REQUEST_PAID_OPTIONS, default="Not Paid", blank=True, max_length=20)
     date_requested = models.DateField(auto_now_add=True)
     time_requested = models.TimeField(auto_now_add=True)
     slug = models.SlugField(max_length=100, default='')
@@ -208,40 +219,42 @@ class BankDeposit(models.Model):
         self.slug = slugify(value, allow_unicode=True)
         super().save(*args, **kwargs)
 
+
 class MobileMoneyDeposit(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE, related_name="agent_requesting")
     customer_phone = models.CharField(max_length=30, blank=True)
     customer_name = models.CharField(max_length=30, blank=True)
     network = models.CharField(max_length=20, choices=NETWORKS, blank=True, default="Select Network")
-    type = models.CharField(max_length=20,blank=True,choices=MOBILE_MONEY_DEPOSIT_TYPE)
+    type = models.CharField(max_length=20, blank=True, choices=MOBILE_MONEY_DEPOSIT_TYPE)
     amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
-    charges = models.DecimalField(max_digits=19, decimal_places=2,default=0.0)
-    agent_commission = models.DecimalField(max_digits=19, decimal_places=2,default=0.0)
+    charges = models.DecimalField(max_digits=19, decimal_places=2, default=0.0)
+    agent_commission = models.DecimalField(max_digits=19, decimal_places=2, default=0.0)
     date_deposited = models.DateField(auto_now_add=True)
     time_deposited = models.TimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Mobile money request made for {self.amount}"
 
+
 class MobileMoneyWithdraw(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
     customer_phone = models.CharField(max_length=30, blank=True)
     customer_name = models.CharField(max_length=30, blank=True)
     network = models.CharField(max_length=20, choices=NETWORKS, blank=True, default="Select Network")
-    type = models.CharField(max_length=30, choices=WITHDRAW_TYPES,blank=True,default="")
+    type = models.CharField(max_length=30, choices=WITHDRAW_TYPES, blank=True, default="")
     id_type = models.CharField(max_length=30, choices=ID_TYPES)
     id_number = models.CharField(max_length=20)
     amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
-    charges = models.DecimalField(max_digits=19, decimal_places=2,default=0.0)
+    charges = models.DecimalField(max_digits=19, decimal_places=2, default=0.0)
     cash_out_commission = models.DecimalField(max_digits=19, decimal_places=2, default=0.0)
     agent_commission = models.DecimalField(max_digits=19, decimal_places=2, default=0.0)
     mtn_commission = models.DecimalField(max_digits=19, decimal_places=2, default=0.0)
     date_of_withdrawal = models.DateField(auto_now_add=True)
     time_of_withdrawal = models.TimeField(auto_now_add=True)
 
-
     def __str__(self):
         return f"Withdrawal made for {self.amount}"
+
 
 class UserMobileMoneyAccountsStarted(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -261,6 +274,7 @@ class UserMobileMoneyAccountsStarted(models.Model):
         self.ecash_total = e_total
         super().save(*args, **kwargs)
 
+
 class UserMobileMoneyAccountsClosed(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
     physical = models.DecimalField(max_digits=19, decimal_places=2)
@@ -278,38 +292,42 @@ class UserMobileMoneyAccountsClosed(models.Model):
         self.ecash_total = e_total
         super().save(*args, **kwargs)
 
+
 class CustomerWithdrawal(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
     customer = models.CharField(max_length=100)
     bank = models.CharField(max_length=100, choices=BANKS, default="GT Bank")
-    type = models.CharField(max_length=30,choices=WITHDRAW_TYPES)
+    type = models.CharField(max_length=30, choices=WITHDRAW_TYPES)
     amount = models.DecimalField(max_digits=19, decimal_places=2)
     date_requested = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Withdrawal made for {self.amount} by {self.agent.username}"
 
+
 class MyPayments(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
     mode_of_payment1 = models.CharField(max_length=30, choices=MODE_OF_PAYMENT, blank=True)
     mode_of_payment2 = models.CharField(max_length=30, choices=MODE_OF_PAYMENT, blank=True)
-    cash_at_location1 = models.CharField(max_length=30, choices=PAYMENT_OFFICES, blank=True,default="")
-    cash_at_location2 = models.CharField(max_length=30, choices=PAYMENT_OFFICES, blank=True,default="")
+    cash_at_location1 = models.CharField(max_length=30, choices=PAYMENT_OFFICES, blank=True, default="")
+    cash_at_location2 = models.CharField(max_length=30, choices=PAYMENT_OFFICES, blank=True, default="")
     bank1 = models.CharField(max_length=50, choices=BANKS, blank=True)
     bank2 = models.CharField(max_length=50, choices=BANKS, blank=True)
-    amount = models.DecimalField(max_digits=19, decimal_places=2,default=0.0,blank=True)
-    amount1 = models.DecimalField(max_digits=19, decimal_places=2,default=0.0)
-    amount2 = models.DecimalField(max_digits=19, decimal_places=2,default=0.0)
-    transaction_id1 = models.CharField(max_length=30, blank=True,default="")
-    transaction_id2 = models.CharField(max_length=30, blank=True,default="")
+    amount = models.DecimalField(max_digits=19, decimal_places=2, default=0.0, blank=True)
+    amount1 = models.DecimalField(max_digits=19, decimal_places=2, default=0.0)
+    amount2 = models.DecimalField(max_digits=19, decimal_places=2, default=0.0)
+    transaction_id1 = models.CharField(max_length=30, blank=True, default="")
+    transaction_id2 = models.CharField(max_length=30, blank=True, default="")
     payment_action = models.CharField(max_length=50, choices=PAYMENT_ACTIONS, default="Not Closed")
     payment_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
     date_created = models.DateField(auto_now_add=True)
     time_created = models.TimeField(auto_now_add=True)
-    slug = models.SlugField(max_length=100,default='')
+    slug = models.SlugField(max_length=100, default='')
 
     def __str__(self):
-        return self.payment_status
+        if self.payment_status == "Pending":
+            return f"{self.agent.username}'s payment is pending"
+        return f"{self.agent.username}'s payment is approved"
 
     def save(self, *args, **kwargs):
         value = self.mode_of_payment1
@@ -318,6 +336,7 @@ class MyPayments(models.Model):
         amount_total = Decimal(self.amount1) + Decimal(self.amount2)
         self.amount = Decimal(amount_total)
         super().save(*args, **kwargs)
+
 
 class AdminAccountsStartedWith(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
@@ -328,6 +347,7 @@ class AdminAccountsStartedWith(models.Model):
     def __str__(self):
         return f"{self.user.username} has started accounts today"
 
+
 class AdminAccountsCompletedWith(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     physical_cash = models.DecimalField(max_digits=19, decimal_places=2)
@@ -336,17 +356,19 @@ class AdminAccountsCompletedWith(models.Model):
 
     def __str__(self):
         return f"{self.user.username} has ended accounts today"
-        
+
+
 class Notifications(models.Model):
-    item_id = models.CharField(max_length=100,blank=True,default="")
-    transaction_type = models.CharField(max_length=100,blank=True,default="")
-    notification_title = models.CharField(max_length=200,blank=True)
+    item_id = models.CharField(max_length=100, blank=True, default="")
+    transaction_type = models.CharField(max_length=100, blank=True, default="")
+    notification_title = models.CharField(max_length=200, blank=True)
     notification_message = models.TextField(blank=True)
-    read = models.CharField(max_length=20,choices=NOTIFICATIONS_STATUS,default="Not Read")
-    notification_trigger = models.CharField(max_length=100,choices=NOTIFICATIONS_TRIGGERS,default="Triggered",blank=True)
-    customer = models.CharField(max_length=100,blank=True,default="")
-    user = models.ForeignKey(User,on_delete=models.CASCADE,null=True)
-    user2 = models.ForeignKey(User,on_delete=models.CASCADE,related_name="User_receiving_notification",null=True)
+    read = models.CharField(max_length=20, choices=NOTIFICATIONS_STATUS, default="Not Read")
+    notification_trigger = models.CharField(max_length=100, choices=NOTIFICATIONS_TRIGGERS, default="Triggered",
+                                            blank=True)
+    customer = models.CharField(max_length=100, blank=True, default="")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    user2 = models.ForeignKey(User, on_delete=models.CASCADE, related_name="User_receiving_notification", null=True)
     customer_request_slug = models.CharField(max_length=100, blank=True)
     cash_deposit_request_slug = models.CharField(max_length=100, blank=True)
     bank_deposit_request_slug = models.CharField(max_length=100, blank=True)
