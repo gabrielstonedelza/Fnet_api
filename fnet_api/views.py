@@ -1,10 +1,16 @@
 from django.shortcuts import render, get_object_or_404
-from .serializers import (CustomerSerializer, BankDepositSerializer,CashDepositSerializer,MobileMoneyDepositSerializer,
+from .serializers import (CustomerSerializer, BankDepositSerializer, ExpenseRequestSerializer,
+                          MobileMoneyDepositSerializer,
                           CustomerWithdrawalSerializer, PaymentsSerializer, AdminAccountsStartedSerializer, \
-                          AdminAccountsCompletedSerializer, CustomerAccountsSerializer, CashAtPaymentSerializer, WithdrawSerializer,CustomerDepositRequestSerializer,NotificationSerializer,UserMobileMoneyAccountsClosedSerializer,UserMobileMoneyAccountsStartedSerializer,MobileMoneyWithdrawalSerializer)
+                          AdminAccountsCompletedSerializer, CustomerAccountsSerializer, CashAtPaymentSerializer,
+                          WithdrawSerializer, CustomerDepositRequestSerializer, NotificationSerializer,
+                          UserMobileMoneyAccountsClosedSerializer, UserMobileMoneyAccountsStartedSerializer,
+                          MobileMoneyWithdrawalSerializer)
 
-from .models import (Customer, BankDeposit, CashDeposit, MobileMoneyDeposit, CustomerWithdrawal, MyPayments,
-                     AdminAccountsStartedWith, AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments, WithdrawReference, CustomerRequestDeposit, UserMobileMoneyAccountsStarted, UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, Notifications)
+from .models import (Customer, BankDeposit, ExpensesRequest, MobileMoneyDeposit, CustomerWithdrawal, MyPayments,
+                     AdminAccountsStartedWith, AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments,
+                     WithdrawReference, CustomerRequestDeposit, UserMobileMoneyAccountsStarted,
+                     UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, Notifications)
 from drf_multiple_model.views import ObjectMultipleModelAPIView
 
 from rest_framework.decorators import api_view, permission_classes
@@ -17,13 +23,15 @@ from datetime import datetime, date, time
 
 from fnet_api import serializers
 
+
 # get all pending deposits for admin
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
-def get_agent_cash_requests_admin(request):
-    all_agents_cash = CashDeposit.objects.filter(request_status="Pending").order_by('-date_requested')
-    serializer = CashDepositSerializer(all_agents_cash, many=True)
+def get_agent_expense_requests_admin(request):
+    all_agents_expenses = ExpensesRequest.objects.filter(request_status="Pending").order_by('-date_requested')
+    serializer = ExpenseRequestSerializer(all_agents_expenses, many=True)
     return Response(serializer.data)
+
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
@@ -36,26 +44,30 @@ def get_agent_bank_requests_admin(request):
 # get users deposits for the day for admin
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
-def get_agents_cash_for_today(request,username):
+def get_agents_expenses_for_today(request, username):
     user = get_object_or_404(User, username=username)
-    all_agents_cash = CashDeposit.objects.filter(agent=user).filter(request_status="Approved").order_by('-date_requested')
-    serializer = CashDepositSerializer(all_agents_cash, many=True)
+    all_agents_expenses = ExpensesRequest.objects.filter(agent=user).filter(request_status="Approved").order_by(
+        '-date_requested')
+    serializer = ExpenseRequestSerializer(all_agents_expenses, many=True)
     return Response(serializer.data)
+
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
-def get_agents_bank_for_today(request,username):
+def get_agents_bank_for_today(request, username):
     user = get_object_or_404(User, username=username)
-    all_agents_bank = BankDeposit.objects.filter(agent=user).filter(request_status="Approved").order_by('-date_requested')
+    all_agents_bank = BankDeposit.objects.filter(agent=user).filter(request_status="Approved").order_by(
+        '-date_requested')
     serializer = BankDepositSerializer(all_agents_bank, many=True)
     return Response(serializer.data)
+
 
 # get mobile money transactions for user
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_user_mm_deposits(request):
     momo_deposits = MobileMoneyDeposit.objects.filter(agent=request.user).order_by('-date_deposited')
-    serializer = MobileMoneyDepositSerializer(momo_deposits,many=True)
+    serializer = MobileMoneyDepositSerializer(momo_deposits, many=True)
     return Response(serializer.data)
 
 
@@ -63,22 +75,24 @@ def get_user_mm_deposits(request):
 @permission_classes([permissions.IsAuthenticated])
 def get_user_mm_withdrawal(request):
     momo_deposits = MobileMoneyWithdraw.objects.filter(agent=request.user).order_by('-date_of_withdrawal')
-    serializer = MobileMoneyWithdrawalSerializer(momo_deposits,many=True)
+    serializer = MobileMoneyWithdrawalSerializer(momo_deposits, many=True)
     return Response(serializer.data)
+
 
 # get mobile money transaction for admin
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
-def get_agents_mobile_money_withdraws(request,username):
+def get_agents_mobile_money_withdraws(request, username):
     user = get_object_or_404(User, username=username)
     momo_deposits = MobileMoneyWithdraw.objects.filter(agent=user).order_by(
         '-date_of_withdrawal')
     serializer = MobileMoneyWithdrawalSerializer(momo_deposits, many=True)
     return Response(serializer.data)
 
+
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
-def get_agents_mobile_money_deposits(request,username):
+def get_agents_mobile_money_deposits(request, username):
     user = get_object_or_404(User, username=username)
     momo_deposits = MobileMoneyDeposit.objects.filter(agent=user).order_by(
         '-date_deposited')
@@ -91,21 +105,22 @@ def get_agents_mobile_money_deposits(request,username):
 @permission_classes([permissions.IsAuthenticated])
 def get_user_mobile_money_accounts_started(request):
     momo_started = UserMobileMoneyAccountsStarted.objects.filter(agent=request.user).order_by('-date_posted')
-    serializer = UserMobileMoneyAccountsStartedSerializer(momo_started,many=True)
+    serializer = UserMobileMoneyAccountsStartedSerializer(momo_started, many=True)
     return Response(serializer.data)
+
 
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_user_mobile_money_accounts_closed(request):
     momo_started = UserMobileMoneyAccountsClosed.objects.filter(agent=request.user).order_by('-date_posted')
-    serializer = UserMobileMoneyAccountsClosedSerializer(momo_started,many=True)
+    serializer = UserMobileMoneyAccountsClosedSerializer(momo_started, many=True)
     return Response(serializer.data)
 
 
 # get users mobile money accounts for admin
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
-def get_agents_mobile_money_accounts_started(request,username):
+def get_agents_mobile_money_accounts_started(request, username):
     user = get_object_or_404(User, username=username)
     momo_accounts_started = UserMobileMoneyAccountsStarted.objects.filter(agent=user).order_by(
         '-date_posted')
@@ -115,7 +130,7 @@ def get_agents_mobile_money_accounts_started(request,username):
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
-def get_agents_mobile_money_accounts_closed(request,username):
+def get_agents_mobile_money_accounts_closed(request, username):
     user = get_object_or_404(User, username=username)
     momo_accounts_started = UserMobileMoneyAccountsClosed.objects.filter(agent=user).order_by(
         '-date_posted')
@@ -126,8 +141,8 @@ def get_agents_mobile_money_accounts_closed(request,username):
 # post users cash deposit
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
-def post_cash_deposit(request):
-    serializer = CashDepositSerializer(data=request.data)
+def post_expenses_request(request):
+    serializer = ExpenseRequestSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save(agent=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -143,6 +158,7 @@ def post_bank_deposit(request):
         serializer.save(agent=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 # post users mobile money deposit
 @api_view(['POST'])
@@ -164,6 +180,7 @@ def post_momo_withdraw(request):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 # post users mobile money accounts started
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
@@ -174,10 +191,11 @@ def post_momo_accounts_started(request):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(['GET', 'PUT'])
 @permission_classes([permissions.AllowAny])
-def update_momo_accounts(request,id):
-    account = get_object_or_404(UserMobileMoneyAccountsStarted,id=id)
+def update_momo_accounts(request, id):
+    account = get_object_or_404(UserMobileMoneyAccountsStarted, id=id)
     serializer = UserMobileMoneyAccountsStartedSerializer(account, data=request.data)
     if serializer.is_valid():
         serializer.save()
@@ -207,7 +225,6 @@ def register_customer_account(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def get_customer_accounts(request):
@@ -215,48 +232,53 @@ def get_customer_accounts(request):
     serializer = CustomerAccountsSerializer(customer_accounts, many=True)
     return Response(serializer.data)
 
+
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
-def get_customer_accounts_by_bank(request,customer_phone,bank):
+def get_customer_accounts_by_bank(request, customer_phone, bank):
     customer_accounts = CustomerAccounts.objects.filter(phone=customer_phone).filter(bank=bank).order_by('-date_added')
     serializer = CustomerAccountsSerializer(customer_accounts, many=True)
     return Response(serializer.data)
 
-@api_view(['GET'])
-@permission_classes([permissions.AllowAny])
-def customer_account_detail(request,id):
-    c_detail = CustomerAccounts.objects.filter(id=id).order_by('-date_added')
-    serializer = CustomerAccountsSerializer(c_detail,many=True)
-    return Response(serializer.data)
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
-def get_customer_account(request,phone):
+def customer_account_detail(request, id):
+    c_detail = CustomerAccounts.objects.filter(id=id).order_by('-date_added')
+    serializer = CustomerAccountsSerializer(c_detail, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_customer_account(request, phone):
     c_detail = CustomerAccounts.objects.filter(phone=phone).order_by('-date_added')
-    serializer = CustomerAccountsSerializer(c_detail,many=True)
+    serializer = CustomerAccountsSerializer(c_detail, many=True)
     return Response(serializer.data)
 
 
 # approve users cash deposit
 @api_view(['GET', 'PUT'])
 @permission_classes([permissions.AllowAny])
-def approve_cash_deposit(request, id):
-    agent_request = get_object_or_404(CashDeposit, id=id)
-    serializer = CashDepositSerializer(agent_request, data=request.data)
+def approve_expense_request(request, id):
+    agent_request = get_object_or_404(ExpensesRequest, id=id)
+    serializer = ExpenseRequestSerializer(agent_request, data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(['GET', 'DELETE'])
 @permission_classes([permissions.AllowAny])
-def delete_cash_request(request, id):
+def delete_expense_request(request, id):
     try:
-        user_request = get_object_or_404(CashDeposit, id=id)
+        user_request = get_object_or_404(ExpensesRequest, id=id)
         user_request.delete()
     except User_Request.DoesNotExist:
         return Http404
     return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 # approve users bank deposit
 @api_view(['GET', 'PUT'])
@@ -269,6 +291,7 @@ def approve_bank_deposit(request, id):
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(['GET', 'DELETE'])
 @permission_classes([permissions.AllowAny])
 def delete_bank_request(request, id):
@@ -278,6 +301,7 @@ def delete_bank_request(request, id):
     except User_Request.DoesNotExist:
         return Http404
     return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
@@ -289,11 +313,10 @@ def register_customer(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
 @api_view(['GET', 'PUT'])
 @permission_classes([permissions.AllowAny])
-def update_accounts(request,id):
-    account = get_object_or_404(AdminAccountsStartedWith,id=id)
+def update_accounts(request, id):
+    account = get_object_or_404(AdminAccountsStartedWith, id=id)
     serializer = AdminAccountsStartedSerializer(account, data=request.data)
     if serializer.is_valid():
         serializer.save()
@@ -301,13 +324,12 @@ def update_accounts(request,id):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
 # get cash deposit detail
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
-def cash_detail(request, pk):
-    c_detail = CashDeposit.objects.get(pk=pk)
-    serializer = CashDepositSerializer(c_detail, many=False)
+def expense_detail(request, pk):
+    c_detail = ExpensesRequest.objects.get(pk=pk)
+    serializer = ExpenseRequestSerializer(c_detail, many=False)
     return Response(serializer.data)
 
 
@@ -317,6 +339,7 @@ def momo_accounts_started_detail(request, pk):
     momo_started_detail = UserMobileMoneyAccountsStarted.objects.get(pk=pk)
     serializer = UserMobileMoneyAccountsStartedSerializer(momo_started_detail, many=False)
     return Response(serializer.data)
+
 
 # get cash bank detail
 @api_view(['GET'])
@@ -378,7 +401,6 @@ def agent_customers_summary(request):
     return Response(serializer.data)
 
 
-
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def customer_withdrawal_summary(request):
@@ -427,12 +449,24 @@ def approve_payment(request, id):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@api_view(['GET', 'DELETE'])
+@permission_classes([permissions.AllowAny])
+def delete_payment(request, id):
+    try:
+        user_payment = get_object_or_404(MyPayments, id=id)
+        user_payment.delete()
+    except User_Payment.DoesNotExist:
+        return Http404
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
+
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_customer(request, name):
     customer = Customer.objects.filter(name=name)
     serializer = CustomerSerializer(customer, many=True)
     return Response(serializer.data)
+
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
@@ -449,12 +483,14 @@ def get_momo_deposit_customer_by_phone(request, phone):
     serializer = MobileMoneyDepositSerializer(customer, many=True)
     return Response(serializer.data)
 
+
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def get_momo_withdraw_customer_by_phone(request, phone):
     customer = MobileMoneyWithdraw.objects.filter(customer_phone=phone)
     serializer = MobileMoneyWithdrawalSerializer(customer, many=True)
     return Response(serializer.data)
+
 
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
@@ -473,6 +509,7 @@ def get_user_customers(request, username):
     serializer = CustomerSerializer(u_customers, many=True)
     return Response(serializer.data)
 
+
 class GetAllUserCustomers(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = CustomerSerializer
@@ -489,7 +526,8 @@ class GetAllCustomers(generics.ListAPIView):
     queryset = Customer.objects.all().order_by('-date_created')
     serializer_class = CustomerSerializer
     filter_backends = [filters.SearchFilter]
-    search_fields = ['name','phone']
+    search_fields = ['name', 'phone']
+
 
 class GetAllAgents(generics.ListAPIView):
     permission_classes = [permissions.AllowAny]
@@ -497,6 +535,7 @@ class GetAllAgents(generics.ListAPIView):
     serializer_class = UsersSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['username']
+
 
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])
@@ -508,11 +547,12 @@ def admin_accounts_started(request):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
-def admin_account_detail(request,id):
+def admin_account_detail(request, id):
     account = get_object_or_404(AdminAccountsStartedWith, id=id)
-    serializer = AdminAccountsStartedSerializer(account,many=False)
+    serializer = AdminAccountsStartedSerializer(account, many=False)
     return Response(serializer.data)
 
 
@@ -549,7 +589,8 @@ def admin_accounts_completed_lists(request):
 @permission_classes([permissions.AllowAny])
 def user_transaction_payments(request, username):
     user = get_object_or_404(User, username=username)
-    all_user_payments = MyPayments.objects.filter(agent=user).filter(payment_status="Approved").order_by('-date_created')
+    all_user_payments = MyPayments.objects.filter(agent=user).filter(payment_status="Approved").order_by(
+        '-date_created')
     serializer = PaymentsSerializer(all_user_payments, many=True)
     return Response(serializer.data)
 
@@ -563,20 +604,22 @@ def user_transaction_withdrawals(request, username):
     return Response(serializer.data)
 
 
-
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_user_payments(request):
     payment_today = MyPayments.objects.filter(agent=request.user).order_by('-date_created')
-    serializer = PaymentsSerializer(payment_today,many=True)
+    serializer = PaymentsSerializer(payment_today, many=True)
     return Response(serializer.data)
+
 
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_payment_approved_total(request):
-    payment_today = MyPayments.objects.filter(agent=request.user).filter(payment_status="Approved").order_by('-date_created')
-    serializer = PaymentsSerializer(payment_today,many=True)
+    payment_today = MyPayments.objects.filter(agent=request.user).filter(payment_status="Approved").order_by(
+        '-date_created')
+    serializer = PaymentsSerializer(payment_today, many=True)
     return Response(serializer.data)
+
 
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
@@ -587,6 +630,7 @@ def make_bank_payment(request):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
 def add_withdraw_reference(request):
@@ -596,6 +640,7 @@ def add_withdraw_reference(request):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_user_bank_payments(request):
@@ -603,12 +648,14 @@ def get_user_bank_payments(request):
     serializer = CashAtPaymentSerializer(bank_payments, many=True)
     return Response(serializer.data)
 
+
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_user_withdraw_reference(request):
     withdraw_reference = WithdrawReference.objects.filter(agent=request.user).order_by('-date_withdrew')
-    serializer = WithdrawSerializer(withdraw_reference,many=True)
+    serializer = WithdrawSerializer(withdraw_reference, many=True)
     return Response(serializer.data)
+
 
 @api_view(['GET', 'DELETE'])
 @permission_classes([permissions.AllowAny])
@@ -619,6 +666,7 @@ def user_delete(request, pk):
     except User.DoesNotExist:
         return Http404
     return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 @api_view(['GET', 'DELETE'])
 @permission_classes([permissions.AllowAny])
@@ -641,6 +689,7 @@ def approve_customer_request(request, id):
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(['GET', 'DELETE'])
 @permission_classes([permissions.AllowAny])
 def delete_customer_request(request, id):
@@ -654,17 +703,20 @@ def delete_customer_request(request, id):
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
-def get_customers_requests(request,phone):
+def get_customers_requests(request, phone):
     all_customer_requests = CustomerRequestDeposit.objects.filter(customer_phone=phone).order_by('-date_requested')
     serializer = CustomerDepositRequestSerializer(all_customer_requests, many=True)
     return Response(serializer.data)
 
+
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def get_your_customers_requests(request):
-    your_customers_requests = CustomerRequestDeposit.objects.filter(request_status="Pending").order_by('-date_requested')
+    your_customers_requests = CustomerRequestDeposit.objects.filter(request_status="Pending").order_by(
+        '-date_requested')
     serializer = CustomerDepositRequestSerializer(your_customers_requests, many=True)
     return Response(serializer.data)
+
 
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])
@@ -675,26 +727,28 @@ def customer_deposit_request(request):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
-def get_customer_request_summary(request,phone):
+def get_customer_request_summary(request, phone):
     request_summary = CustomerRequestDeposit.objects.filter(customer_phone=phone).order_by('-date_requested')
-    serializer = CustomerDepositRequestSerializer(request_summary,many=True)
+    serializer = CustomerDepositRequestSerializer(request_summary, many=True)
     return Response(serializer.data)
 
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
-def get_customer_transaction_summary(request,phone):
+def get_customer_transaction_summary(request, phone):
     transaction_summary = BankDeposit.objects.filter(customer=phone).order_by('-date_requested')
-    serializer = BankDepositSerializer(transaction_summary,many=True)
+    serializer = BankDepositSerializer(transaction_summary, many=True)
     return Response(serializer.data)
+
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
-def get_customer_accounts(request,phone):
+def get_customer_accounts(request, phone):
     customer_accounts = CustomerAccounts.objects.filter(phone=phone).order_by('-date_added')
-    serializer = CustomerAccountsSerializer(customer_accounts,many=True)
+    serializer = CustomerAccountsSerializer(customer_accounts, many=True)
     return Response(serializer.data)
 
 
@@ -705,6 +759,7 @@ def customer_request_detail(request, pk):
     serializer = CustomerDepositRequestSerializer(c_request, many=False)
     return Response(serializer.data)
 
+
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])
 def add_flag(request):
@@ -714,11 +769,12 @@ def add_flag(request):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])
 def get_flags(request):
     flags = UserFlags.objects.all().order_by('-date_added')
-    serializer = UserFlagsSerializer(flags,many=True)
+    serializer = UserFlagsSerializer(flags, many=True)
     return Response(serializer.data)
 
 
@@ -733,57 +789,66 @@ def update_customers_details(request, id):
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 # get all momo deposit users
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def get_all_momo_deposit_customers(request):
     momo_customers = MobileMoneyDeposit.objects.all().order_by('-date_deposited')
-    serializer = MobileMoneyDepositSerializer(momo_customers,many=True)
+    serializer = MobileMoneyDepositSerializer(momo_customers, many=True)
     return Response(serializer.data)
+
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def get_all_momo_withdraw_customers(request):
     momo_customers = MobileMoneyWithdraw.objects.all().order_by('-date_of_withdrawal')
-    serializer = MobileMoneyWithdrawalSerializer(momo_customers,many=True)
+    serializer = MobileMoneyWithdrawalSerializer(momo_customers, many=True)
     return Response(serializer.data)
 
 
 # get cash and bank request for the day
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
-def get_cash_deposits_for_today(request):
-    your_cash_requests = CashDeposit.objects.filter(agent=request.user).filter(deposit_paid="Not Paid").order_by('-date_requested')
-    serializer = CashDepositSerializer(your_cash_requests, many=True)
+def get_expense_request_for_today(request):
+    your_expense_requests = ExpensesRequest.objects.filter(agent=request.user).filter(deposit_paid="Not Paid").order_by(
+        '-date_requested')
+    serializer = ExpenseRequestSerializer(your_expense_requests, many=True)
     return Response(serializer.data)
+
 
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
-def get_cash_deposits_all(request):
-    your_cash_requests = CashDeposit.objects.filter(agent=request.user).order_by('-date_requested')
-    serializer = CashDepositSerializer(your_cash_requests, many=True)
+def get_expenses_request_all(request):
+    your_expense_requests = ExpensesRequest.objects.filter(agent=request.user).order_by('-date_requested')
+    serializer = ExpenseRequestSerializer(your_expense_requests, many=True)
     return Response(serializer.data)
+
 
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_bank_deposits_all(request):
-    your_cash_requests = BankDeposit.objects.filter(agent=request.user).order_by('-date_requested')
-    serializer = BankDepositSerializer(your_cash_requests, many=True)
+    your_bank_requests = BankDeposit.objects.filter(agent=request.user).order_by('-date_requested')
+    serializer = BankDepositSerializer(your_bank_requests, many=True)
     return Response(serializer.data)
+
 
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_bank_deposits_for_today(request):
-    your_cash_requests = BankDeposit.objects.filter(agent=request.user).filter(deposit_paid="Paid").order_by('-date_requested')
-    serializer = BankDepositSerializer(your_cash_requests, many=True)
+    your_bank_requests = BankDeposit.objects.filter(agent=request.user).filter(deposit_paid="Paid").order_by(
+        '-date_requested')
+    serializer = BankDepositSerializer(your_bank_requests, many=True)
     return Response(serializer.data)
+
 
 # get uses commission
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_deposit_commission(request):
     my_date = datetime.today()
-    your_commission = MobileMoneyDeposit.objects.filter(agent=request.user).filter(date_deposited=my_date.date()).order_by(
+    your_commission = MobileMoneyDeposit.objects.filter(agent=request.user).filter(
+        date_deposited=my_date.date()).order_by(
         '-date_deposited')
     serializer = MobileMoneyDepositSerializer(your_commission, many=True)
     return Response(serializer.data)
@@ -793,14 +858,16 @@ def get_deposit_commission(request):
 @permission_classes([permissions.IsAuthenticated])
 def get_withdraw_commission(request):
     my_date = datetime.today()
-    your_commission = MobileMoneyWithdraw.objects.filter(agent=request.user).filter(date_of_withdrawal=my_date.date()).order_by(
+    your_commission = MobileMoneyWithdraw.objects.filter(agent=request.user).filter(
+        date_of_withdrawal=my_date.date()).order_by(
         '-date_of_withdrawal')
     serializer = MobileMoneyWithdrawalSerializer(your_commission, many=True)
     return Response(serializer.data)
 
+
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
-def get_agents_deposit_commission(request,username):
+def get_agents_deposit_commission(request, username):
     user = get_object_or_404(User, username=username)
     my_date = datetime.today()
     your_commission = MobileMoneyDeposit.objects.filter(agent=user).filter(
@@ -808,9 +875,10 @@ def get_agents_deposit_commission(request,username):
     serializer = MobileMoneyDepositSerializer(your_commission, many=True)
     return Response(serializer.data)
 
+
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
-def get_agents_withdraw_commission(request,username):
+def get_agents_withdraw_commission(request, username):
     user = get_object_or_404(User, username=username)
     my_date = datetime.today()
     your_commission = MobileMoneyWithdraw.objects.filter(agent=user).filter(
@@ -819,13 +887,14 @@ def get_agents_withdraw_commission(request,username):
     serializer = MobileMoneyWithdrawalSerializer(your_commission, many=True)
     return Response(serializer.data)
 
+
 # search agent commission based on date
 class SearchAgentsMomoDepositTransactions(generics.ListAPIView):
     permission_classes = [permissions.AllowAny]
     queryset = MobileMoneyDeposit.objects.all().order_by('-date_deposited')
     serializer_class = MobileMoneyDepositSerializer
     filter_backends = [filters.SearchFilter]
-    search_fields = ['date_deposited','agent__username','customer_phone']
+    search_fields = ['date_deposited', 'agent__username', 'customer_phone']
 
 
 class SearchAgentsMomoWithdrawTransactions(generics.ListAPIView):
@@ -833,7 +902,7 @@ class SearchAgentsMomoWithdrawTransactions(generics.ListAPIView):
     queryset = MobileMoneyWithdraw.objects.all().order_by('-date_of_withdrawal')
     serializer_class = MobileMoneyWithdrawalSerializer
     filter_backends = [filters.SearchFilter]
-    search_fields = ['date_of_withdrawal','agent__username','customer_phone']
+    search_fields = ['date_of_withdrawal', 'agent__username', 'customer_phone']
 
 
 @api_view(['GET', 'PUT'])
@@ -846,28 +915,33 @@ def approve_bank_deposit_paid(request, id):
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(['GET', 'PUT'])
 @permission_classes([permissions.AllowAny])
-def approve_cash_deposit_paid(request, id):
-    cash_deposit = get_object_or_404(CashDeposit, id=id)
-    serializer = CashDepositSerializer(cash_deposit, data=request.data)
+def approve_expense_request_paid(request, id):
+    expense_request = get_object_or_404(ExpensesRequest, id=id)
+    serializer = ExpenseRequestSerializer(expense_request, data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
-def get_unpaid_cash_deposits_for_today(request):
-    your_cash_requests = CashDeposit.objects.filter(agent=request.user).filter(deposit_paid="Not Paid").filter(request_status="Approved").order_by('-date_requested')
-    serializer = CashDepositSerializer(your_cash_requests, many=True)
+def get_unpaid_expense_request_for_today(request):
+    your_expense_requests = ExpensesRequest.objects.filter(agent=request.user).filter(deposit_paid="Not Paid").filter(
+        request_status="Approved").order_by('-date_requested')
+    serializer = ExpenseRequestSerializer(your_expense_requests, many=True)
     return Response(serializer.data)
+
 
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_unpaid_bank_deposits_for_today(request):
-    your_cash_requests = BankDeposit.objects.filter(agent=request.user).filter(deposit_paid="Not Paid").filter(request_status="Approved").order_by('-date_requested')
-    serializer = BankDepositSerializer(your_cash_requests, many=True)
+    your_bank_requests = BankDeposit.objects.filter(agent=request.user).filter(deposit_paid="Not Paid").filter(
+        request_status="Approved").order_by('-date_requested')
+    serializer = BankDepositSerializer(your_bank_requests, many=True)
     return Response(serializer.data)
 
 
@@ -876,71 +950,82 @@ def get_unpaid_bank_deposits_for_today(request):
 @permission_classes([permissions.AllowAny])
 def get_all_bank_deposits(request):
     bank_deposits = BankDeposit.objects.all().order_by('-date_requested')
-    serializer = BankDepositSerializer(bank_deposits,many=True)
+    serializer = BankDepositSerializer(bank_deposits, many=True)
     return Response(serializer.data)
+
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def get_all_cash_at_payments(request):
     bank_deposits = CashAtPayments.objects.all().order_by('-date_paid')
-    serializer = CashAtPaymentSerializer(bank_deposits,many=True)
+    serializer = CashAtPaymentSerializer(bank_deposits, many=True)
     return Response(serializer.data)
+
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def get_all_momo_deposit_made(request):
     bank_deposits = MobileMoneyDeposit.objects.all().order_by('-date_deposited')
-    serializer = MobileMoneyDepositSerializer(bank_deposits,many=True)
+    serializer = MobileMoneyDepositSerializer(bank_deposits, many=True)
     return Response(serializer.data)
+
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def get_all_momo_withdrawal_made(request):
     bank_deposits = MobileMoneyWithdraw.objects.all().order_by('-date_of_withdrawal')
-    serializer = MobileMoneyWithdrawalSerializer(bank_deposits,many=True)
+    serializer = MobileMoneyWithdrawalSerializer(bank_deposits, many=True)
     return Response(serializer.data)
+
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def get_all_user_momo_accounts_started(request):
     bank_deposits = UserMobileMoneyAccountsStarted.objects.all().order_by('-date_posted')
-    serializer = UserMobileMoneyAccountsStartedSerializer(bank_deposits,many=True)
+    serializer = UserMobileMoneyAccountsStartedSerializer(bank_deposits, many=True)
     return Response(serializer.data)
+
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def get_all_user_momo_accounts_closed(request):
     bank_deposits = UserMobileMoneyAccountsClosed.objects.all().order_by('-date_posted')
-    serializer = UserMobileMoneyAccountsClosedSerializer(bank_deposits,many=True)
+    serializer = UserMobileMoneyAccountsClosedSerializer(bank_deposits, many=True)
     return Response(serializer.data)
+
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def get_all_users(request):
     bank_deposits = User.objects.all()
-    serializer = UsersSerializer(bank_deposits,many=True)
+    serializer = UsersSerializer(bank_deposits, many=True)
     return Response(serializer.data)
+
 
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_all_user_notifications(request):
     notifications = Notifications.objects.filter(user2=request.user).order_by('-date_created')
-    serializer = NotificationSerializer(notifications,many=True)
+    serializer = NotificationSerializer(notifications, many=True)
     return Response(serializer.data)
+
 
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_user_notifications(request):
     notifications = Notifications.objects.filter(user2=request.user).filter(read="Not Read").order_by('-date_created')
-    serializer = NotificationSerializer(notifications,many=True)
+    serializer = NotificationSerializer(notifications, many=True)
     return Response(serializer.data)
+
 
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_triggered_notifications(request):
-    notifications = Notifications.objects.filter(user2=request.user).filter(notification_trigger="Triggered").filter(read="Not Read").order_by('-date_created')
-    serializer = NotificationSerializer(notifications,many=True)
+    notifications = Notifications.objects.filter(user2=request.user).filter(notification_trigger="Triggered").filter(
+        read="Not Read").order_by('-date_created')
+    serializer = NotificationSerializer(notifications, many=True)
     return Response(serializer.data)
+
 
 @api_view(['GET', 'PUT'])
 @permission_classes([permissions.IsAuthenticated])
@@ -952,23 +1037,29 @@ def read_notification(request, id):
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
-def get_agents_bank_total_by_date(request):
-    all_agents_bank = BankDeposit.objects.filter(agent=request.user).filter(request_status="Approved").order_by('-date_requested')
-    serializer = BankDepositSerializer(all_agents_bank, many=True)
-    return Response(serializer.data)
 
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
-def get_agents_cash_total_by_date(request):
-    all_agents_cash = CashDeposit.objects.filter(agent=request.user).filter(request_status="Approved").order_by('-date_requested')
-    serializer = BankDepositSerializer(all_agents_cash, many=True)
+def get_agents_bank_total_by_date(request):
+    all_agents_bank = BankDeposit.objects.filter(agent=request.user).filter(request_status="Approved").order_by(
+        '-date_requested')
+    serializer = BankDepositSerializer(all_agents_bank, many=True)
     return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_agents_expense_request_total_by_date(request):
+    all_agents_expenses = ExpensesRequest.objects.filter(agent=request.user).filter(request_status="Approved").order_by(
+        '-date_requested')
+    serializer = BankDepositSerializer(all_agents_expenses, many=True)
+    return Response(serializer.data)
+
 
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def user_total_payments(request):
-    all_user_payments = MyPayments.objects.filter(agent=request.user).filter(payment_status="Approved").order_by('-date_created')
+    all_user_payments = MyPayments.objects.filter(agent=request.user).filter(payment_status="Approved").order_by(
+        '-date_created')
     serializer = PaymentsSerializer(all_user_payments, many=True)
     return Response(serializer.data)

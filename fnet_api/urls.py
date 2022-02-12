@@ -3,7 +3,7 @@ from . import views
 
 urlpatterns = [
     path('admin_user/', views.get_admin),
-    path('request_detail/<int:pk>/', views.cash_detail),
+    path('request_detail/<int:pk>/', views.expense_detail),
 
     path('register_customer/', views.register_customer),
     path('customer_withdrawal/', views.customer_withdrawal),
@@ -17,6 +17,7 @@ urlpatterns = [
     path('payments/', views.get_payments),
     path('make_payments/', views.make_payments),
     path('approve_payments/<int:id>/', views.approve_payment),
+    path('delete_payment/<int:id>/', views.delete_payment),
     path('payment_summary/', views.payment_summary),
     path('get_agent/<str:username>/', views.get_agent),
     path('payment_detail/<int:pk>/', views.payment_detail),
@@ -62,9 +63,9 @@ urlpatterns = [
     path('get_flags/', views.get_flags),
 
     #     newly added get request
-    path('get_agent_cash_request_admin/', views.get_agent_cash_requests_admin),
+    path('get_agent_cash_request_admin/', views.get_agent_expense_requests_admin),
     path('get_agent_bank_request_admin/', views.get_agent_bank_requests_admin),
-    path('get_agent_cash_total_today_admin/<str:username>/', views.get_agents_cash_for_today),
+    path('get_agent_cash_total_today_admin/<str:username>/', views.get_agents_expenses_for_today),
     path('get_agent_bank_total_today_admin/<str:username>/', views.get_agents_bank_for_today),
     path('get_user_momo_deposits/', views.get_user_mm_deposits),
     path('get_user_momo_withdraws/', views.get_user_mm_withdrawal),
@@ -76,19 +77,19 @@ urlpatterns = [
     path("get_agent_momo_accounts_started/<str:username>/", views.get_agents_mobile_money_accounts_started),
 
     #     newly added post requests
-    path('post_cash_deposit/', views.post_cash_deposit),
+    path('post_cash_deposit/', views.post_expenses_request),
     path('post_bank_deposit/', views.post_bank_deposit),
     path('post_momo_deposit/', views.post_momo_deposit),
     path('post_momo_withdraw/', views.post_momo_withdraw),
     path('post_momo_accounts_started/', views.post_momo_accounts_started),
     path('post_momo_accounts_closed/', views.post_momo_accounts_closed),
 
-    path('approve_cash_deposit/<int:id>/', views.approve_cash_deposit),
+    path('approve_cash_deposit/<int:id>/', views.approve_expense_request),
     path('approve_bank_deposit/<int:id>/', views.approve_bank_deposit),
-    path('delete_cash_deposit/<int:id>/', views.delete_cash_request),
+    path('delete_cash_deposit/<int:id>/', views.delete_expense_request),
     path('delete_bank_deposit/<int:id>/', views.delete_bank_request),
 
-    path("cash_detail/<int:pk>/", views.cash_detail),
+    path("cash_detail/<int:pk>/", views.expense_detail),
     path("bank_detail/<int:pk>/", views.bank_detail),
     path("momo_accounts_started_detail/<int:pk>/", views.momo_accounts_started_detail),
 
@@ -99,7 +100,7 @@ urlpatterns = [
     path('get_momo_withdraw_customer/<str:phone>/', views.get_momo_withdraw_customer_by_phone),
     path('get_all_momo_deposit_customers/', views.get_all_momo_deposit_customers),
     path('get_all_momo_withdrawal_customers/', views.get_all_momo_withdraw_customers),
-    path('get_cash_total_today/', views.get_cash_deposits_for_today),
+    path('get_cash_total_today/', views.get_expense_request_for_today),
     path('get_bank_total_today/', views.get_bank_deposits_for_today),
     path('get_deposit_commission/', views.get_deposit_commission),
     path('get_withdraw_commission/', views.get_withdraw_commission),
@@ -108,8 +109,8 @@ urlpatterns = [
     path('search_agents_momo_deposit_transaction/', views.SearchAgentsMomoDepositTransactions.as_view()),
     path('search_agents_momo_withdraw_transaction/', views.SearchAgentsMomoWithdrawTransactions.as_view()),
     path('approve_bank_deposit_paid/<int:id>/', views.approve_bank_deposit_paid),
-    path('approve_cash_deposit_paid/<int:id>/', views.approve_cash_deposit_paid),
-    path('get_unpaid_cash_deposits_for_today/', views.get_unpaid_cash_deposits_for_today),
+    path('approve_cash_deposit_paid/<int:id>/', views.approve_expense_request_paid),
+    path('get_unpaid_cash_deposits_for_today/', views.get_unpaid_expense_request_for_today),
     path('get_unpaid_bank_deposits_for_today/', views.get_unpaid_bank_deposits_for_today),
 
     #
@@ -120,7 +121,7 @@ urlpatterns = [
     path("get_all_user_momo_accounts_started/", views.get_all_user_momo_accounts_started),
     path("get_all_user_momo_accounts_closed/", views.get_all_user_momo_accounts_closed),
     path("get_all_users/", views.get_all_users),
-    path("get_cash_deposits_all/", views.get_cash_deposits_all),
+    path("get_cash_deposits_all/", views.get_expenses_request_all),
     path("get_bank_deposits_all/", views.get_bank_deposits_all),
 
     #
@@ -131,7 +132,7 @@ urlpatterns = [
     path("get_customer_transaction_summary/<str:phone>/", views.get_customer_transaction_summary),
     path("get_customer_accounts/<str:phone>/", views.get_customer_accounts),
     path('get_agents_bank_total_by_date/', views.get_agents_bank_total_by_date),
-    path('get_agents_cash_total_by_date/', views.get_agents_cash_total_by_date),
+    path('get_agents_cash_total_by_date/', views.get_agents_expense_request_total_by_date),
     path('user_total_payments/', views.user_total_payments),
 
 ]

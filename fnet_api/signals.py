@@ -1,6 +1,6 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from .models import CustomerRequestDeposit, CashDeposit,BankDeposit,MyPayments,Notifications
+from .models import CustomerRequestDeposit, ExpensesRequest,BankDeposit,MyPayments,Notifications
 from django.conf import settings
 
 User = settings.AUTH_USER_MODEL
@@ -16,7 +16,7 @@ def create_customer_request(sender,created,instance,**kwargs):
     if created:
         Notifications.objects.create(user=instance.agent,transaction_type=transaction_type,item_id=instance.id,notification_title=title,notification_message=message,customer=instance.customer_phone,user2=instance.agent,customer_request_slug=instance.slug)
 
-@receiver(post_save,sender=CashDeposit)
+@receiver(post_save, sender=ExpensesRequest)
 def create_cash_request(sender,created,instance,**kwargs):
     title = f"New Cash Deposit from {instance.agent.username}"
     message = f"{instance.agent.username} just made a cash deposit of {instance.amount}"
