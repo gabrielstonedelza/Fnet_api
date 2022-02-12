@@ -135,5 +135,6 @@ urlpatterns = [
     path('get_agents_bank_total_by_date/', views.get_agents_bank_total_by_date),
     path('get_agents_cash_total_by_date/', views.get_agents_expense_request_total_by_date),
     path('user_total_payments/', views.user_total_payments),
+    path('get_all_users_expenses_total/', views.get_all_users_expenses_total),
 
 ]

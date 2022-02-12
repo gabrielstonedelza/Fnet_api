@@ -988,6 +988,14 @@ def get_all_momo_withdrawal_made(request):
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
+def get_all_users_expenses_total(request):
+    all_expenses = ExpensesRequest.objects.all().order_by('-date_requested')
+    serializer = ExpenseRequestSerializer(all_expenses, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
 def get_all_user_momo_accounts_started(request):
     bank_deposits = UserMobileMoneyAccountsStarted.objects.all().order_by('-date_posted')
     serializer = UserMobileMoneyAccountsStartedSerializer(bank_deposits, many=True)
