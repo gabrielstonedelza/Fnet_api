@@ -754,6 +754,14 @@ def get_customer_accounts(request, phone):
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
+def get_momo_withdraw_user(request, phone):
+    user = MobileMoneyWithdraw.objects.filter(phone=phone).order_by('-date_of_withdrawal')
+    serializer = MobileMoneyWithdrawalSerializer(user, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
 def customer_request_detail(request, pk):
     c_request = CustomerRequestDeposit.objects.get(pk=pk)
     serializer = CustomerDepositRequestSerializer(c_request, many=False)
@@ -973,8 +981,8 @@ def get_all_momo_deposit_made(request):
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def get_all_momo_withdrawal_made(request):
-    bank_deposits = MobileMoneyWithdraw.objects.all().order_by('-date_of_withdrawal')
-    serializer = MobileMoneyWithdrawalSerializer(bank_deposits, many=True)
+    all_momo_withdrawal = MobileMoneyWithdraw.objects.all().order_by('-date_of_withdrawal')
+    serializer = MobileMoneyWithdrawalSerializer(all_momo_withdrawal, many=True)
     return Response(serializer.data)
 
 
