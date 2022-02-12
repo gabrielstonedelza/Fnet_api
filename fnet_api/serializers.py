@@ -53,7 +53,7 @@ class ExpenseRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = ExpensesRequest
         fields = ['id', 'guarantor', 'agent', 'guarantor_username', 'deposit_paid',
-                  'agent_username', 'amount', 'reason', 'request_status', 'date_requested', 'time_requested', 'slug']
+                  'agent_username', 'amount', 'reason', 'request_status', 'date_requested', 'time_requested']
         read_only_fields = ['agent']
 
     def get_guarantor_username(self, user):

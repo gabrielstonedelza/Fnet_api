@@ -186,15 +186,9 @@ class ExpensesRequest(models.Model):
     deposit_paid = models.CharField(choices=REQUEST_PAID_OPTIONS, default="Not Paid", blank=True, max_length=20)
     date_requested = models.DateField(auto_now_add=True)
     time_requested = models.TimeField(auto_now_add=True)
-    slug = models.SlugField(max_length=100, default='')
 
     def __str__(self):
         return f"Expense request made for {self.amount} by {self.agent.username}"
-
-    def save(self, *args, **kwargs):
-        value = self.customer
-        self.slug = slugify(value, allow_unicode=True)
-        super().save(*args, **kwargs)
 
 
 class BankDeposit(models.Model):
