@@ -495,7 +495,7 @@ def get_momo_withdraw_customer_by_phone(request, phone):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def user_customers(request):
-    user = get_object_or_404(User, user=request.user)
+    user = get_object_or_404(User, id=request.user.id)
     u_customers = Customer.objects.filter(agent=user).order_by('-date_created')
     serializer = CustomerSerializer(u_customers, many=True)
     return Response(serializer.data)
