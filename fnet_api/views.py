@@ -844,7 +844,7 @@ def get_bank_deposits_all(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_bank_deposits_for_today(request):
-    your_bank_requests = BankDeposit.objects.filter(agent=request.user).filter(deposit_paid="Paid").order_by(
+    your_bank_requests = BankDeposit.objects.filter(agent=request.user).order_by(
         '-date_requested')
     serializer = BankDepositSerializer(your_bank_requests, many=True)
     return Response(serializer.data)
