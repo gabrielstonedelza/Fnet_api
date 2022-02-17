@@ -313,7 +313,7 @@ class MyPayments(models.Model):
     amount2 = models.DecimalField(max_digits=19, decimal_places=2, default=0.0)
     transaction_id1 = models.CharField(max_length=30, blank=True, default="")
     transaction_id2 = models.CharField(max_length=30, blank=True, default="")
-    payment_action = models.CharField(max_length=50, choices=PAYMENT_ACTIONS)
+    payment_action = models.CharField(max_length=50, choices=PAYMENT_ACTIONS, default="Close Payment")
     payment_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
     date_created = models.DateField(auto_now_add=True)
     time_created = models.TimeField(auto_now_add=True)
