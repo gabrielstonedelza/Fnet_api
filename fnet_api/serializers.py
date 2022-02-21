@@ -11,7 +11,7 @@ class CustomerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Customer
-        fields = ['id', 'agent', 'username', 'name', 'location', 'digital_address', 'depositor_name', 'id_type',
+        fields = ['id', 'agent', 'username', 'name', 'location', 'digital_address', 'id_type',
                   'id_number', 'phone',
                   'date_of_birth', 'date_created']
         read_only_fields = ['agent']
@@ -88,7 +88,8 @@ class BankDepositSerializer(serializers.ModelSerializer):
     class Meta:
         model = BankDeposit
         fields = ['id', 'guarantor', 'customer', 'agent', 'guarantor_username', 'customer_username', 'deposit_paid',
-                  'agent_username', 'bank', 'account_number', 'account_name', 'amount', 'request_status',
+                  'agent_username', 'bank', 'account_number', 'account_name', 'amount', 'depositor_name',
+                  'request_status',
                   'date_requested', 'time_requested', 'slug']
         read_only_fields = ['agent']
 
