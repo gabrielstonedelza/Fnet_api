@@ -8,6 +8,7 @@ import datetime
 
 User = settings.AUTH_USER_MODEL
 ID_TYPES = (
+    ("Select Id Type","Select Id Type"),
     ("Ghana Card", "Ghana Card"),
     ("Passport", "Passport"),
     ("Drivers License", "Drivers License"),
