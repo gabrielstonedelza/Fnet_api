@@ -1095,3 +1095,11 @@ def get_all_customer_requests(request):
     customer_request = CustomerRequestDeposit.objects.all().order_by('-date_requested')
     serializer = CustomerDepositRequestSerializer(customer_request, many=True)
     return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_all_user_payments(request):
+    user_payments = MyPayments.objects.all().order_by('-date_created')
+    serializer = PaymentsSerializer(user_payments, many=True)
+    return Response(serializer.data)
