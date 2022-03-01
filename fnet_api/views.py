@@ -1119,3 +1119,11 @@ def all_user_accounts_started(request):
     user_accounts = UserMobileMoneyAccountsStarted.objects.all().order_by('-date_posted')
     serializer = UserMobileMoneyAccountsStartedSerializer(user_accounts, many=True)
     return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def all_user_accounts_closed(request):
+    user_accounts = UserMobileMoneyAccountsClosed.objects.all().order_by('-date_posted')
+    serializer = UserMobileMoneyAccountsClosedSerializer(user_accounts, many=True)
+    return Response(serializer.data)
