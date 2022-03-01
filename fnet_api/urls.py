@@ -141,5 +141,6 @@ urlpatterns = [
     path('get_all_customer_accounts/', views.get_all_customer_accounts),
     path('get_all_customer_requests/', views.get_all_customer_requests),
     path('get_all_user_payments/', views.get_all_user_payments),
+    path('notifications/', views.notifications),
 
 ]

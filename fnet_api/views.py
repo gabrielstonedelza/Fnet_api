@@ -1103,3 +1103,11 @@ def get_all_user_payments(request):
     user_payments = MyPayments.objects.all().order_by('-date_created')
     serializer = PaymentsSerializer(user_payments, many=True)
     return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def notifications(request):
+    notifications_alerts = Notifications.objects.all().order_by('-date_created')
+    serializer = NotificationSerializer(notifications_alerts, many=True)
+    return Response(serializer.data)
