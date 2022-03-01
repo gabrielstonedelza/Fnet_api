@@ -137,4 +137,7 @@ urlpatterns = [
     path('user_total_payments/', views.user_total_payments),
     path('get_all_users_expenses_total/', views.get_all_users_expenses_total),
 
+    #
+    path('get_all_customer_accounts/', views.get_all_customer_accounts)
+
 ]

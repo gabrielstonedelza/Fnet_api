@@ -1079,3 +1079,11 @@ def user_total_payments(request):
         '-date_created')
     serializer = PaymentsSerializer(all_user_payments, many=True)
     return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_all_customer_accounts(request):
+    customer_accounts = CustomerAccounts.objects.all().order_by('-date_added')
+    serializer = CustomerAccountsSerializer(customer_accounts, many=True)
+    return Response(serializer.data)
