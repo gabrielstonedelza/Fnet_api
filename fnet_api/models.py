@@ -8,11 +8,12 @@ import datetime
 
 User = settings.AUTH_USER_MODEL
 ID_TYPES = (
-    ("Select Id Type","Select Id Type"),
+    ("Select Id Type", "Select Id Type"),
     ("Ghana Card", "Ghana Card"),
     ("Passport", "Passport"),
     ("Drivers License", "Drivers License"),
     ("Voters Id", "Voters Id"),
+    ("ATM", "ATM"),
 )
 BANKS = (
     ("Select bank", "Select bank"),
@@ -159,7 +160,7 @@ class Customer(models.Model):
     name = models.CharField(max_length=150, blank=True)
     location = models.CharField(max_length=100, blank=True)
     digital_address = models.CharField(max_length=25, blank=True)
-    id_type = models.CharField(max_length=50,choices=ID_TYPES, blank=True, default="Passport")
+    id_type = models.CharField(max_length=50, choices=ID_TYPES, blank=True, default="Passport")
     id_number = models.CharField(max_length=50, blank=True, default="")
     phone = models.CharField(max_length=15, unique=True, blank=True)
     date_of_birth = models.CharField(max_length=15, blank=True)
@@ -296,8 +297,10 @@ class CustomerWithdrawal(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
     customer = models.CharField(max_length=100)
     bank = models.CharField(max_length=100, choices=BANKS, default="GT Bank")
-    type = models.CharField(max_length=30, choices=WITHDRAW_TYPES)
+    type = models.CharField(max_length=30, choices=WITHDRAW_TYPES, default="Cash Out")
+    id_type = models.CharField(max_length=20, choices=ID_TYPES, default="Passport")
     amount = models.DecimalField(max_digits=19, decimal_places=2)
+
     date_requested = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
