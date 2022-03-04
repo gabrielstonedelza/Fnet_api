@@ -297,7 +297,6 @@ class CustomerWithdrawal(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
     customer = models.CharField(max_length=100)
     bank = models.CharField(max_length=100, choices=BANKS, default="GT Bank")
-    type = models.CharField(max_length=30, choices=WITHDRAW_TYPES, default="Cash Out")
     id_type = models.CharField(max_length=20, choices=ID_TYPES, default="Passport")
     amount = models.DecimalField(max_digits=19, decimal_places=2)
 
