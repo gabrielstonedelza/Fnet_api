@@ -112,7 +112,7 @@ class CustomerWithdrawalSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomerWithdrawal
-        fields = ['id', 'agent', 'customer', 'customer_username', 'agent_username', 'bank', 'amount', 'id_type',
+        fields = ['id', 'agent', 'customer', 'customer_username', 'agent_username', 'bank', 'amount', 'id_number', 'id_type',
                   'date_requested']
         read_only_fields = ['agent']
 

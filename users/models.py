@@ -5,6 +5,7 @@ from PIL import Image
 
 DeUser = settings.AUTH_USER_MODEL
 
+
 class User(AbstractUser):
     email = models.EmailField(unique=True, max_length=255)
     phone = models.CharField(max_length=15, unique=True, help_text="please format should be +233")
