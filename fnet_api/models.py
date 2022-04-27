@@ -225,6 +225,8 @@ class MobileMoneyDeposit(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE, related_name="agent_requesting")
     customer_phone = models.CharField(max_length=30, blank=True)
     customer_name = models.CharField(max_length=30, blank=True)
+    depositor_name = models.CharField(max_length=30, blank=True,default="")
+    depositor_number = models.CharField(max_length=30, blank=True,default="")
     network = models.CharField(max_length=20, choices=NETWORKS, blank=True, default="Select Network")
     type = models.CharField(max_length=20, blank=True, choices=MOBILE_MONEY_DEPOSIT_TYPE)
     amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)

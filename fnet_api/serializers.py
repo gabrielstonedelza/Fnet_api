@@ -71,7 +71,7 @@ class MobileMoneyDepositSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MobileMoneyDeposit
-        fields = ['id', 'agent', 'customer_phone', 'customer_name', 'username', 'network', 'type', 'amount', 'charges',
+        fields = ['id', 'agent', 'customer_phone', 'customer_name', 'username', 'network', 'type', 'amount', 'charges','depositor_name','depositor_number',
                   'agent_commission', 'date_deposited', 'time_deposited']
         read_only_fields = ['agent']
 
