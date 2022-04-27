@@ -40,7 +40,8 @@ class CustomerDepositRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomerRequestDeposit
         fields = ['id', 'customer_phone', 'agent', 'customer_name', 'agent_username',
-                  'amount', 'request_option', 'request_status', 'date_requested', 'time_requested', 'slug']
+                  'amount', 'request_option', 'request_status', 'date_requested', 'deposited_month', 'deposited_year',
+                  'time_requested', 'slug']
 
     def get_agent_username(self, user):
         agent_username = user.agent.username
@@ -71,7 +72,8 @@ class MobileMoneyDepositSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MobileMoneyDeposit
-        fields = ['id', 'agent', 'customer_phone', 'customer_name', 'username', 'network', 'type', 'amount', 'charges','depositor_name','depositor_number',
+        fields = ['id', 'agent', 'customer_phone', 'customer_name', 'username', 'network', 'type', 'amount', 'charges',
+                  'depositor_name', 'depositor_number',
                   'agent_commission', 'date_deposited', 'time_deposited']
         read_only_fields = ['agent']
 
@@ -112,7 +114,8 @@ class CustomerWithdrawalSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomerWithdrawal
-        fields = ['id', 'agent', 'customer', 'customer_username', 'agent_username', 'bank', 'amount', 'id_number', 'id_type',
+        fields = ['id', 'agent', 'customer', 'customer_username', 'agent_username', 'bank', 'amount', 'id_number',
+                  'id_type',
                   'date_requested']
         read_only_fields = ['agent']
 

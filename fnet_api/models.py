@@ -4,7 +4,7 @@ from django.utils import timezone
 from decimal import Decimal
 from django.utils.text import slugify
 
-import datetime
+from datetime import datetime, date, time
 
 User = settings.AUTH_USER_MODEL
 ID_TYPES = (
@@ -209,13 +209,19 @@ class BankDeposit(models.Model):
     request_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
     deposit_paid = models.CharField(choices=REQUEST_PAID_OPTIONS, default="Not Paid", blank=True, max_length=20)
     date_requested = models.DateField(auto_now_add=True)
+    deposited_month = models.CharField(max_length=10, blank=True, default="")
+    deposited_year = models.CharField(max_length=10, blank=True, default="")
     time_requested = models.TimeField(auto_now_add=True)
     slug = models.SlugField(max_length=100, default='')
 
     def __str__(self):
-        return f"Bank request made for {self.amount} by {self.agent.username}"
+        return str(self.date_requested)
 
     def save(self, *args, **kwargs):
+        my_date = datetime.today()
+        de_date = my_date.date()
+        self.deposited_month = de_date.month
+        self.deposited_year = de_date.year
         value = self.customer
         self.slug = slugify(value, allow_unicode=True)
         super().save(*args, **kwargs)
@@ -225,8 +231,8 @@ class MobileMoneyDeposit(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE, related_name="agent_requesting")
     customer_phone = models.CharField(max_length=30, blank=True)
     customer_name = models.CharField(max_length=30, blank=True)
-    depositor_name = models.CharField(max_length=30, blank=True,default="")
-    depositor_number = models.CharField(max_length=30, blank=True,default="")
+    depositor_name = models.CharField(max_length=30, blank=True, default="")
+    depositor_number = models.CharField(max_length=30, blank=True, default="")
     network = models.CharField(max_length=20, choices=NETWORKS, blank=True, default="Select Network")
     type = models.CharField(max_length=20, blank=True, choices=MOBILE_MONEY_DEPOSIT_TYPE)
     amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
@@ -301,7 +307,7 @@ class CustomerWithdrawal(models.Model):
     customer = models.CharField(max_length=100)
     bank = models.CharField(max_length=100, choices=BANKS, default="GT Bank")
     id_type = models.CharField(max_length=20, choices=ID_TYPES)
-    id_number = models.CharField(max_length=20,default="0")
+    id_number = models.CharField(max_length=20, default="0")
     amount = models.DecimalField(max_digits=19, decimal_places=2)
 
     date_requested = models.DateTimeField(auto_now_add=True)
