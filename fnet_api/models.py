@@ -13,7 +13,8 @@ ID_TYPES = (
     ("Passport", "Passport"),
     ("Drivers License", "Drivers License"),
     ("Voters Id", "Voters Id"),
-    ("ATM", "ATM"),
+    ("Cheque", "Cheque"),
+    ("Atm Phone", "Atm Phone"),
 )
 BANKS = (
     ("Select bank", "Select bank"),
