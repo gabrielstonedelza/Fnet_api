@@ -13,8 +13,12 @@ ID_TYPES = (
     ("Passport", "Passport"),
     ("Drivers License", "Drivers License"),
     ("Voters Id", "Voters Id"),
+)
+BANK_REDRAW_ID_TYPES = (
+    ("Select Id Type", "Select Id Type"),
     ("Cheque", "Cheque"),
-    ("Atm Phone", "Atm Phone"),
+    ("Atm", "Atm"),
+    ("Phone", "Phone"),
 )
 BANKS = (
     ("Select bank", "Select bank"),
@@ -306,7 +310,7 @@ class CustomerWithdrawal(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
     customer = models.CharField(max_length=100)
     bank = models.CharField(max_length=100, choices=BANKS, default="GT Bank")
-    id_type = models.CharField(max_length=20, choices=ID_TYPES)
+    id_type = models.CharField(max_length=20, choices=BANK_REDRAW_ID_TYPES)
     id_number = models.CharField(max_length=20, default="0")
     amount = models.DecimalField(max_digits=19, decimal_places=2)
 
