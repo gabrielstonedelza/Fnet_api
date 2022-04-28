@@ -15,7 +15,7 @@ ID_TYPES = (
     ("Voters Id", "Voters Id"),
 )
 BANK_REDRAW_ID_TYPES = (
-    ("Select Id Type", "Select Id Type"),
+    ("Select Withdrawal Type", "Select Withdrawal Type"),
     ("Cheque", "Cheque"),
     ("Atm", "Atm"),
     ("Phone", "Phone"),
@@ -68,6 +68,9 @@ WITHDRAW_TYPES = (
     ("MomoPay", "MomoPay"),
     ("Cash Out", "Cash Out"),
     ("Agent to Agent", "Agent to Agent"),
+)
+BANK_WITHDRAW_TYPES = (
+
 )
 
 REQUEST_STATUS = (
@@ -310,7 +313,8 @@ class CustomerWithdrawal(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
     customer = models.CharField(max_length=100)
     bank = models.CharField(max_length=100, choices=BANKS, default="GT Bank")
-    id_type = models.CharField(max_length=20, choices=BANK_REDRAW_ID_TYPES)
+    withdrawal_type = models.CharField(max_length=120, choices=BANK_REDRAW_ID_TYPES,default="Cheque")
+    id_type = models.CharField(max_length=20, choices=ID_TYPES)
     id_number = models.CharField(max_length=20, default="0")
     amount = models.DecimalField(max_digits=19, decimal_places=2)
 
