@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'fnet_api',
     'users',
+    'bankpayments',
     'djoser',
     'corsheaders',
     'crispy_forms',

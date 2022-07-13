@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import (Customer, CustomerWithdrawal, MyPayments, AdminAccountsStartedWith,
-                     AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments, WithdrawReference, CustomerRequestDeposit, Notifications, ExpensesRequest, BankDeposit, MobileMoneyDeposit, MobileMoneyWithdraw, UserMobileMoneyAccountsStarted, UserMobileMoneyAccountsClosed,PaymentAtBank)
+                     AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments, WithdrawReference, CustomerRequestDeposit, Notifications, ExpensesRequest, BankDeposit, MobileMoneyDeposit, MobileMoneyWithdraw, UserMobileMoneyAccountsStarted, UserMobileMoneyAccountsClosed)
 
 admin.site.register(Customer)
 admin.site.register(ExpensesRequest)
@@ -19,5 +19,5 @@ admin.site.register(CustomerRequestDeposit)
 admin.site.register(Notifications)
 admin.site.register(UserMobileMoneyAccountsStarted)
 admin.site.register(UserMobileMoneyAccountsClosed)
-admin.site.register(PaymentAtBank)
+
 
