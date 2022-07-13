@@ -414,7 +414,7 @@ class PaymentAtBank(models.Model):
     time_added = models.TimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
+
         two_h_cedis_values = self.d_200 * 200
         one_h_cedis_values = self.d_100 * 100
         fifty_cedis_values = self.d_50 * 50
@@ -424,17 +424,12 @@ class PaymentAtBank(models.Model):
         two_cedis_values = self.d_2 * 2
         one_cedi_values = self.d_1 * 1
 
-        value = Decimal(two_h_cedis_values) + Decimal(one_h_cedis_values) + Decimal(fifty_cedis_values) + Decimal(
+        amount_total = Decimal(two_h_cedis_values) + Decimal(one_h_cedis_values) + Decimal(
+            fifty_cedis_values) + Decimal(
             twenty_cedis_values) + Decimal(ten_cedis_values) + Decimal(five_cedis_values) + Decimal(
             two_cedis_values) + Decimal(one_cedi_values)
-        self.total = value
-        print(self.total)
-        print(self.amount)
-        print(value)
-        if not self.amount == self.total:
-            raise ValueError("Your total is not equal to the amount")
-        else:
-            return
+        self.total = Decimal(amount_total)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return str(self.total)

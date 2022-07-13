@@ -144,7 +144,6 @@ urlpatterns = [
     path('notifications/', views.notifications),
     path('all_user_accounts_started/', views.all_user_accounts_started),
     path('all_user_accounts_closed/', views.all_user_accounts_closed),
-
-
-
+    path("post_at_bank/", views.post_at_bank),
+    path("get_all_data_at_bank/", views.get_all_data_at_bank),
 ]
