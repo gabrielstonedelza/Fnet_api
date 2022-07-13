@@ -5,12 +5,12 @@ from .serializers import (CustomerSerializer, BankDepositSerializer, ExpenseRequ
                           AdminAccountsCompletedSerializer, CustomerAccountsSerializer, CashAtPaymentSerializer,
                           WithdrawSerializer, CustomerDepositRequestSerializer, NotificationSerializer,
                           UserMobileMoneyAccountsClosedSerializer, UserMobileMoneyAccountsStartedSerializer,
-                          MobileMoneyWithdrawalSerializer)
+                          MobileMoneyWithdrawalSerializer, PaymentAtBankSerializer)
 
 from .models import (Customer, BankDeposit, ExpensesRequest, MobileMoneyDeposit, CustomerWithdrawal, MyPayments,
                      AdminAccountsStartedWith, AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments,
                      WithdrawReference, CustomerRequestDeposit, UserMobileMoneyAccountsStarted,
-                     UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, Notifications)
+                     UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, Notifications, PaymentAtBank)
 from drf_multiple_model.views import ObjectMultipleModelAPIView
 
 from rest_framework.decorators import api_view, permission_classes
@@ -22,6 +22,24 @@ from rest_framework import filters
 from datetime import datetime, date, time
 
 from fnet_api import serializers
+
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def post_at_bank(request):
+    serializer = PaymentAtBankSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(agent=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_all_data_at_bank(request):
+    all_agents_bank_payment = PaymentAtBank.objects.all().order_by('-date_added')
+    serializer = PaymentAtBankSerializer(all_agents_bank_payment, many=True)
+    return Response(serializer.data)
 
 
 # get all pending deposits for admin
