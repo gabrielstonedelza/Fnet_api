@@ -1,7 +1,7 @@
 from django.db.models import fields
 from rest_framework import serializers
 from .models import (Customer, CustomerWithdrawal, MyPayments, AdminAccountsStartedWith, CashAtPayments,
-                     WithdrawReference, AdminAccountsCompletedWith, CustomerAccounts, CustomerRequestDeposit,
+                     AdminAccountsCompletedWith, CustomerAccounts, CustomerRequestDeposit,
                      ExpensesRequest, MobileMoneyDeposit, BankDeposit, UserMobileMoneyAccountsStarted,
                      UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, Notifications)
 
@@ -176,20 +176,6 @@ class CashAtPaymentSerializer(serializers.ModelSerializer):
         model = CashAtPayments
         fields = ['id', 'agent', 'username', 'location', 'amount', 'left_with', 'left_with_phone', 'reference_id',
                   'date_paid', 'time_paid']
-        read_only_fields = ['agent']
-
-    def get_username(self, mm_user):
-        username = mm_user.agent.username
-        return username
-
-
-class WithdrawSerializer(serializers.ModelSerializer):
-    username = serializers.SerializerMethodField('get_username')
-
-    class Meta:
-        model = WithdrawReference
-        fields = ['id', 'agent', 'username', 'teller_name', 'teller_phone', 'amount', 'total', 'd_200', 'd_100', 'd_50',
-                  'd_20', 'd_10', 'd_5', 'd_2', 'd_1', 'date_added', 'time_added']
         read_only_fields = ['agent']
 
     def get_username(self, mm_user):
