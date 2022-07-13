@@ -143,14 +143,46 @@ class CustomerRequestDeposit(models.Model):
 
 class WithdrawReference(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=19, decimal_places=2)
-    customer_phone = models.CharField(max_length=20)
-    reference_id = models.CharField(max_length=50)
-    date_withdrew = models.DateField(auto_now_add=True)
-    time_withdrew = models.TimeField(auto_now_add=True)
+    teller_name = models.CharField(max_length=100, default='')
+    teller_phone = models.CharField(max_length=100, default='')
+    amount = models.DecimalField(decimal_places=2, max_digits=19, default=0.0)
+    total = models.DecimalField(decimal_places=2, max_digits=19, default=0.0)
+    d_200 = models.IntegerField(default=0, blank=True)
+    d_100 = models.IntegerField(default=0, blank=True)
+    d_50 = models.IntegerField(default=0, blank=True)
+    d_20 = models.IntegerField(default=0, blank=True)
+    d_10 = models.IntegerField(default=0, blank=True)
+    d_5 = models.IntegerField(default=0, blank=True)
+    d_2 = models.IntegerField(default=0, blank=True)
+    d_1 = models.IntegerField(default=0, blank=True)
+    date_added = models.DateField(auto_now_add=True,)
+    time_added = models.TimeField(auto_now_add=True,)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        two_h_cedis_values = self.d_200 * 200
+        one_h_cedis_values = self.d_100 * 100
+        fifty_cedis_values = self.d_50 * 50
+        twenty_cedis_values = self.d_20 * 20
+        ten_cedis_values = self.d_10 * 10
+        five_cedis_values = self.d_5 * 5
+        two_cedis_values = self.d_2 * 2
+        one_cedi_values = self.d_1 * 1
+
+        value = Decimal(two_h_cedis_values) + Decimal(one_h_cedis_values) + Decimal(fifty_cedis_values) + Decimal(
+            twenty_cedis_values) + Decimal(ten_cedis_values) + Decimal(five_cedis_values) + Decimal(
+            two_cedis_values) + Decimal(one_cedi_values)
+        self.total = value
+        print(self.total)
+        print(self.amount)
+        print(value)
+        if not self.amount == self.total:
+            raise ValueError("Your total is not equal to the amount")
+        else:
+            return
 
     def __str__(self):
-        return self.reference_id
+        return str(self.total)
 
 
 class CashAtPayments(models.Model):

@@ -188,8 +188,8 @@ class WithdrawSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = WithdrawReference
-        fields = ['id', 'agent', 'username', 'amount', 'reference_id', 'customer_phone', 'date_withdrew',
-                  'time_withdrew']
+        fields = ['id', 'agent', 'username', 'teller_name', 'teller_phone', 'amount', 'total', 'd_200', 'd_100', 'd_50',
+                  'd_20', 'd_10', 'd_5', 'd_2', 'd_1', 'date_added', 'time_added']
         read_only_fields = ['agent']
 
     def get_username(self, mm_user):
