@@ -147,4 +147,5 @@ urlpatterns = [
     path("post_at_bank/", views.post_at_bank),
     path("get_all_data_at_bank/", views.get_all_data_at_bank),
     path("get_all_my_data_at_bank/", views.get_all_my_data_at_bank),
+    path("bank_payment_detail/<int:pk>/", views.bank_payment_detail),
 ]
