@@ -43,7 +43,7 @@ def get_all_data_at_bank(request):
 
 
 @api_view(['GET'])
-@permission_classes([permissions.AllowAny])
+@permission_classes([permissions.IsAuthenticated])
 def bank_payment_detail(request, pk):
     de_bank_payment = PaymentAtBank.objects.get(pk=pk)
     serializer = PaymentAtBankSerializer(de_bank_payment, many=False)
