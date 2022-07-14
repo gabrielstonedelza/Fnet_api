@@ -35,10 +35,18 @@ def post_at_bank(request):
 
 
 @api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 def get_all_data_at_bank(request):
     all_agents_bank_payment = PaymentAtBank.objects.all().order_by('-date_added')
     serializer = PaymentAtBankSerializer(all_agents_bank_payment, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_all_my_data_at_bank(request):
+    all_my_bank_payment = PaymentAtBank.objects.filter(agent=request.user).order_by('-date_added')
+    serializer = PaymentAtBankSerializer(all_my_bank_payment, many=True)
     return Response(serializer.data)
 
 
