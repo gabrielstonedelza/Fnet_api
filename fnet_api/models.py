@@ -214,7 +214,7 @@ class BankDeposit(models.Model):
     slug = models.SlugField(max_length=100, default='')
 
     def __str__(self):
-        return str(self.date_requested)
+        return str(self.request_status)
 
     def save(self, *args, **kwargs):
         my_date = datetime.today()
