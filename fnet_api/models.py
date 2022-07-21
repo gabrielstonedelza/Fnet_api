@@ -35,9 +35,6 @@ BANKS = (
     ("Stanbic Bank", "Stanbic Bank"),
     ("Absa Bank", "Absa Bank"),
     ("Universal Merchant Bank", "Universal Merchant Bank"),
-    ("Mtn", "Mtn"),
-    ("Vodafone", "Vodafone"),
-    ("Tigoairtel", "Tigoairtel"),
 )
 PAYMENT_ACTIONS = (
     ("Select payment action", "Select payment action"),

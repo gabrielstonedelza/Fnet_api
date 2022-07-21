@@ -24,6 +24,14 @@ from datetime import datetime, date, time
 from fnet_api import serializers
 
 
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def customers_account_detail(request, pk):
+    account_detail = CustomerAccounts.objects.get(pk=pk)
+    serializer = CustomerAccountsSerializer(account_detail, many=False)
+    return Response(serializer.data)
+
+
 class GetAllCustomersAccounts(generics.ListAPIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = CustomerAccountsSerializer
