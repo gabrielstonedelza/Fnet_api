@@ -24,6 +24,37 @@ from datetime import datetime, date, time
 from fnet_api import serializers
 
 
+class GetAllCustomersAccounts(generics.ListAPIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = CustomerAccountsSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['account_name', 'phone', 'account_number']
+
+    def get_queryset(self):
+        agent = self.request.user
+        return CustomerAccounts.objects.filter(agent=agent)
+
+
+# not to be used now
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_all_customers_accounts(request, number):
+    customers_accounts = CustomerAccounts.objects.filter(phone=number).order_by('-date_added')
+    serializer = CustomerAccountsSerializer(customers_accounts, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET', 'DELETE'])
+@permission_classes([permissions.AllowAny])
+def delete_customer_accounts(request, pk):
+    try:
+        customer_account = CustomerAccounts.objects.get(pk=pk)
+        customer_account.delete()
+    except Customer.DoesNotExist:
+        return Http404
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
+
 @api_view(['GET', 'PUT'])
 @permission_classes([permissions.AllowAny])
 def update_customers_accounts_details(request, id):
