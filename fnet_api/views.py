@@ -24,6 +24,17 @@ from datetime import datetime, date, time
 from fnet_api import serializers
 
 
+@api_view(['GET', 'PUT'])
+@permission_classes([permissions.AllowAny])
+def update_customers_accounts_details(request, id):
+    customer = get_object_or_404(CustomerAccounts, id=id)
+    serializer = CustomerAccountsSerializer(customer, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
 def post_at_bank(request):

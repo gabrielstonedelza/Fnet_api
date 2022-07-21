@@ -94,6 +94,7 @@ urlpatterns = [
     path("momo_accounts_started_detail/<int:pk>/", views.momo_accounts_started_detail),
 
     path('update_customers_details/<int:id>/', views.update_customers_details),
+    path('update_customers_accounts_details/<int:id>/', views.update_customers_accounts_details),
     path('update_momo_accounts/<int:id>/', views.update_momo_accounts),
 
     path('get_momo_deposit_customer/<str:phone>/', views.get_momo_deposit_customer_by_phone),
