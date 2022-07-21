@@ -34,7 +34,7 @@ def customers_account_detail(request, pk):
 
 class GetAllCustomersAccounts(generics.ListAPIView):
     permission_classes = [permissions.AllowAny]
-    queryset = CustomerAccounts.objects.all().order_by('-date_created')
+    queryset = CustomerAccounts.objects.all().order_by('-date_added')
     serializer_class = CustomerAccountsSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['account_name', 'phone', 'account_number']
