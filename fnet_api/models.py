@@ -169,10 +169,10 @@ class Customer(models.Model):
 
 class CustomerAccounts(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
-    account_number = models.CharField(max_length=16)
-    account_name = models.CharField(max_length=100)
+    account_number = models.CharField(max_length=16, blank=True)
+    account_name = models.CharField(max_length=100, blank=True)
     bank = models.CharField(max_length=100, choices=BANKS, default="Access Bank")
-    phone = models.CharField(max_length=15)
+    phone = models.CharField(max_length=15, blank=True)
     date_added = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -411,7 +411,6 @@ class PaymentAtBank(models.Model):
     time_added = models.TimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
-
         two_h_cedis_values = self.d_200 * 200
         one_h_cedis_values = self.d_100 * 100
         fifty_cedis_values = self.d_50 * 50
