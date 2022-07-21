@@ -38,6 +38,10 @@ class GetAllCustomersAccounts(generics.ListAPIView):
     filter_backends = [filters.SearchFilter]
     search_fields = ['account_name', 'phone', 'account_number']
 
+    def get_queryset(self):
+        agent = self.request.user
+        return CustomerAccounts.objects.filter(agent=agent)
+
 
 # not to be used now
 @api_view(['GET'])
