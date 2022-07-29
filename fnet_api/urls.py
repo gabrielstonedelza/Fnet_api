@@ -158,5 +158,12 @@ urlpatterns = [
     #     OTP
     path("send_otp_to_customer_admin/", views.send_otp_to_customer_admin),
     path("get_admin_otp_notifications/", views.get_admin_otp_notifications),
-    path("get_customer_otp_notifications/<str:phone_number>/", views.get_customer_otp_notifications)
+    path("get_customer_otp_notifications/<str:phone_number>/", views.get_customer_otp_notifications),
+
+    #     customer notifications
+    path("get_all_customer_notifications/<str:phone_number>/", views.get_all_customer_notifications),
+    path("get_customer_notifications/<str:phone_number>/", views.get_customer_notifications),
+    path("get_all_customer_read_user_notifications/<str:phone_number>/", views.get_all_customer_read_user_notifications),
+    path("get_customer_triggered_notifications/<str:phone_number>/", views.get_customer_triggered_notifications),
+    path("read_customer_notification/<int:id>/", views.read_customer_notification),
 ]

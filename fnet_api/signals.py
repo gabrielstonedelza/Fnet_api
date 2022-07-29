@@ -40,7 +40,7 @@ def create_bank_request(sender, created, instance, **kwargs):
     if created:
         Notifications.objects.create(user=instance.agent, item_id=instance.id, transaction_type=transaction_type,
                                      notification_title=title, notification_message=message,
-                                     user2=instance.guarantor, cash_deposit_request_slug=instance.slug)
+                                     user2=instance.guarantor, cash_deposit_request_slug=instance.slug,notification_to_customer=instance.customer)
 
 
 @receiver(post_save, sender=MyPayments)

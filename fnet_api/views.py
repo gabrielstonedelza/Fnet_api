@@ -1246,3 +1246,52 @@ def all_user_accounts_closed(request):
     user_accounts = UserMobileMoneyAccountsClosed.objects.all().order_by('-date_posted')
     serializer = UserMobileMoneyAccountsClosedSerializer(user_accounts, many=True)
     return Response(serializer.data)
+
+
+# customer notifications
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_all_customer_notifications(request, phone_number):
+    customer_notifications = Notifications.objects.filter(notification_to_customer=phone_number).order_by(
+        '-date_created')
+    serializer = NotificationSerializer(customer_notifications, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_customer_notifications(request, phone_number):
+    customer_notifications = Notifications.objects.filter(notification_to_customer=phone_number).filter(
+        read="Not Read").order_by('-date_created')
+    serializer = NotificationSerializer(customer_notifications, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_all_customer_read_user_notifications(request, phone_number):
+    customer_notifications = Notifications.objects.filter(notification_to_customer=phone_number).filter(
+        read="Read").order_by('-date_created')
+    serializer = NotificationSerializer(customer_notifications, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_customer_triggered_notifications(request, phone_number):
+    customer_notifications = Notifications.objects.filter(notification_to_customer=phone).filter(
+        notification_trigger="Triggered").filter(
+        read="Not Read").order_by('-date_created')
+    serializer = NotificationSerializer(customer_notifications, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET', 'PUT'])
+@permission_classes([permissions.AllowAny])
+def read_customer_notification(request, id):
+    notification = get_object_or_404(Notifications, id=id)
+    serializer = NotificationSerializer(notification, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
