@@ -188,6 +188,7 @@ class ExpensesRequest(models.Model):
     deposit_paid = models.CharField(choices=REQUEST_PAID_OPTIONS, default="Not Paid", blank=True, max_length=20)
     date_requested = models.DateField(auto_now_add=True)
     time_requested = models.TimeField(auto_now_add=True)
+    app_version = models.CharField(max_length=5)
 
     def __str__(self):
         return f"Expense request made for {self.amount} by {self.agent.username}"
@@ -209,6 +210,7 @@ class BankDeposit(models.Model):
     deposited_year = models.CharField(max_length=10, blank=True, default="")
     time_requested = models.TimeField(auto_now_add=True)
     slug = models.SlugField(max_length=100, default='')
+    app_version = models.CharField(max_length=5)
 
     def __str__(self):
         return str(self.request_status)
@@ -236,6 +238,7 @@ class MobileMoneyDeposit(models.Model):
     agent_commission = models.DecimalField(max_digits=19, decimal_places=2, default=0.0)
     date_deposited = models.DateField(auto_now_add=True)
     time_deposited = models.TimeField(auto_now_add=True)
+    app_version = models.CharField(max_length=5)
 
     def __str__(self):
         return f"Mobile money request made for {self.amount}"
@@ -256,6 +259,7 @@ class MobileMoneyWithdraw(models.Model):
     mtn_commission = models.DecimalField(max_digits=19, decimal_places=2, default=0.0)
     date_of_withdrawal = models.DateField(auto_now_add=True)
     time_of_withdrawal = models.TimeField(auto_now_add=True)
+    app_version = models.CharField(max_length=5)
 
     def __str__(self):
         return f"Withdrawal made for {self.amount}"
@@ -331,6 +335,7 @@ class MyPayments(models.Model):
     date_created = models.DateField(auto_now_add=True)
     time_created = models.TimeField(auto_now_add=True)
     slug = models.SlugField(max_length=100, default='')
+    app_version = models.CharField(max_length=5)
 
     def __str__(self):
         if self.payment_status == "Pending":
@@ -381,8 +386,10 @@ class Notifications(models.Model):
     cash_deposit_request_slug = models.CharField(max_length=100, blank=True)
     bank_deposit_request_slug = models.CharField(max_length=100, blank=True)
     payment_slug = models.CharField(max_length=100, blank=True)
-    notification_from = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="user_sending_notification")
-    notification_to_guarantor = models.ForeignKey(User, on_delete=models.CASCADE, default=1, null=True,related_name="guarantor_notification")
+    notification_from = models.ForeignKey(User, on_delete=models.CASCADE, null=True,
+                                          related_name="user_sending_notification")
+    notification_to_guarantor = models.ForeignKey(User, on_delete=models.CASCADE, default=1, null=True,
+                                                  related_name="guarantor_notification")
     notification_to_customer = models.CharField(max_length=100, blank=True, default="")
     date_created = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(max_length=100, default='')
@@ -412,6 +419,7 @@ class PaymentAtBank(models.Model):
     d_1 = models.IntegerField(default=0, blank=True)
     date_added = models.DateField(auto_now_add=True)
     time_added = models.TimeField(auto_now_add=True)
+    app_version = models.CharField(max_length=5)
 
     def save(self, *args, **kwargs):
         two_h_cedis_values = self.d_200 * 200
@@ -439,6 +447,7 @@ class OTP(models.Model):
     customer = models.CharField(max_length=20, blank=True)
     agent = models.ForeignKey(User, on_delete=models.CASCADE, related_name="agent_depositing")
     otp = models.CharField(max_length=10)
+    app_version = models.CharField(max_length=5)
     date_sent = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

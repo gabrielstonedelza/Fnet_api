@@ -12,7 +12,7 @@ class PaymentAtBankSerializer(serializers.ModelSerializer):
     class Meta:
         model = PaymentAtBank
         fields = ['id', 'agent', 'username', 'teller_name', 'teller_phone', 'amount', 'total', 'd_200', 'd_100', 'd_50',
-                  'd_20', 'd_10', 'd_5', 'd_2', 'd_1', 'date_added', 'time_added']
+                  'd_20', 'd_10', 'd_5', 'd_2', 'd_1', 'date_added', 'time_added','app_version']
         read_only_fields = ['agent']
 
     def get_username(self, user):
@@ -69,7 +69,7 @@ class ExpenseRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = ExpensesRequest
         fields = ['id', 'guarantor', 'agent', 'guarantor_username', 'deposit_paid',
-                  'agent_username', 'amount', 'reason', 'request_status', 'date_requested', 'time_requested']
+                  'agent_username', 'amount', 'reason', 'request_status', 'date_requested', 'time_requested','app_version']
         read_only_fields = ['agent']
 
     def get_guarantor_username(self, user):
@@ -88,7 +88,7 @@ class MobileMoneyDepositSerializer(serializers.ModelSerializer):
         model = MobileMoneyDeposit
         fields = ['id', 'agent', 'customer_phone', 'customer_name', 'username', 'network', 'type', 'amount', 'charges',
                   'depositor_name', 'depositor_number',
-                  'agent_commission', 'date_deposited', 'time_deposited']
+                  'agent_commission', 'date_deposited', 'time_deposited', 'app_version']
         read_only_fields = ['agent']
 
     def get_username(self, user):
@@ -106,7 +106,7 @@ class BankDepositSerializer(serializers.ModelSerializer):
         fields = ['id', 'guarantor', 'customer', 'agent', 'guarantor_username', 'customer_username', 'deposit_paid',
                   'agent_username', 'bank', 'account_number', 'account_name', 'amount', 'depositor_name',
                   'request_status',
-                  'date_requested', 'time_requested', 'slug']
+                  'date_requested', 'time_requested', 'slug', 'app_version']
         read_only_fields = ['agent']
 
     def get_guarantor_username(self, user):
@@ -149,7 +149,7 @@ class PaymentsSerializer(serializers.ModelSerializer):
         model = MyPayments
         fields = ['id', 'agent', 'agent_username', 'mode_of_payment1', 'mode_of_payment2', 'cash_at_location1',
                   'cash_at_location2', 'amount', 'amount1', 'amount2', 'bank1', 'bank2', 'transaction_id1',
-                  'transaction_id2', 'payment_action', 'payment_status', 'date_created', 'time_created', 'slug']
+                  'transaction_id2', 'payment_action', 'payment_status', 'date_created', 'time_created', 'slug','app_version']
         read_only_fields = ['agent']
 
     def get_agent_username(self, user):
@@ -232,7 +232,7 @@ class MobileMoneyWithdrawalSerializer(serializers.ModelSerializer):
         model = MobileMoneyWithdraw
         fields = ['id', 'agent', 'username', 'customer_phone', 'customer_name', 'network', 'type', 'id_type',
                   'id_number', 'amount', 'charges', 'agent_commission', 'cash_out_commission', 'mtn_commission',
-                  'date_of_withdrawal', 'time_of_withdrawal']
+                  'date_of_withdrawal', 'time_of_withdrawal','app_version']
         read_only_fields = ['agent']
 
     def get_username(self, user):
@@ -254,7 +254,7 @@ class OTPSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = OTP
-        fields = ['id', 'guarantor', 'username', 'customer', 'agent', 'otp']
+        fields = ['id', 'guarantor', 'username', 'customer', 'agent', 'otp', 'app_version']
         read_only_fields = ['agent']
 
     def get_username(self, user):

@@ -1295,3 +1295,13 @@ def read_customer_notification(request, id):
         serializer.save()
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# requests
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_customers_bank_deposits(request, phone_number):
+    all_customer_deposits = BankDeposit.objects.filter(customer=phone_number).filter(request_status="Approved").order_by(
+        '-date_requested')
+    serializer = BankDepositSerializer(all_customer_deposits, many=True)
+    return Response(serializer.data)
