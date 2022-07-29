@@ -3,7 +3,7 @@ from rest_framework import serializers
 from .models import (Customer, CustomerWithdrawal, MyPayments, AdminAccountsStartedWith, CashAtPayments,
                      AdminAccountsCompletedWith, CustomerAccounts, CustomerRequestDeposit,
                      ExpensesRequest, MobileMoneyDeposit, BankDeposit, UserMobileMoneyAccountsStarted,
-                     UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, Notifications, PaymentAtBank)
+                     UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, Notifications, PaymentAtBank, OTP)
 
 
 class PaymentAtBankSerializer(serializers.ModelSerializer):
@@ -245,4 +245,18 @@ class NotificationSerializer(serializers.ModelSerializer):
         model = Notifications
         fields = ['id', 'item_id', 'transaction_type', 'notification_title', 'notification_message',
                   'notification_trigger', 'read', 'customer', 'user', 'user2', 'customer_request_slug',
-                  'cash_deposit_request_slug', 'bank_deposit_request_slug', 'payment_slug', 'date_created', 'slug']
+                  'cash_deposit_request_slug', 'bank_deposit_request_slug', 'payment_slug', 'date_created', 'slug',
+                  'notification_from', 'notification_to_guarantor', 'notification_to_customer']
+
+
+class OTPSerializer(serializers.ModelSerializer):
+    username = serializers.SerializerMethodField('get_username')
+
+    class Meta:
+        model = OTP
+        fields = ['id', 'guarantor', 'username', 'customer', 'agent', 'otp']
+        read_only_fields = ['agent']
+
+    def get_username(self, user):
+        username = user.agent.username
+        return username

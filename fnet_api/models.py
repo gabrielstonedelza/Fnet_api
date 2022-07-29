@@ -381,6 +381,9 @@ class Notifications(models.Model):
     cash_deposit_request_slug = models.CharField(max_length=100, blank=True)
     bank_deposit_request_slug = models.CharField(max_length=100, blank=True)
     payment_slug = models.CharField(max_length=100, blank=True)
+    notification_from = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="user_sending_notification")
+    notification_to_guarantor = models.ForeignKey(User, on_delete=models.CASCADE, default=1, null=True,related_name="guarantor_notification")
+    notification_to_customer = models.CharField(max_length=100, blank=True, default="")
     date_created = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(max_length=100, default='')
 
@@ -429,3 +432,14 @@ class PaymentAtBank(models.Model):
 
     def __str__(self):
         return str(self.total)
+
+
+class OTP(models.Model):
+    guarantor = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    customer = models.CharField(max_length=20, blank=True)
+    agent = models.ForeignKey(User, on_delete=models.CASCADE, related_name="agent_depositing")
+    otp = models.CharField(max_length=10)
+    date_sent = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.customer

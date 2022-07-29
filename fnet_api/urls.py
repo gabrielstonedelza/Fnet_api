@@ -153,4 +153,9 @@ urlpatterns = [
     path("get_all_data_at_bank/", views.get_all_data_at_bank),
     path("get_all_my_data_at_bank/", views.get_all_my_data_at_bank),
     path("bank_payment_detail/<int:pk>/", views.bank_payment_detail),
+
+    #     OTP
+    path("send_otp_to_customer_admin/", views.send_otp_to_customer_admin),
+    path("get_admin_otp_notifications/", views.get_admin_otp_notifications),
+    path("get_customer_otp_notifications/<str:phone_number>/", views.get_customer_otp_notifications)
 ]

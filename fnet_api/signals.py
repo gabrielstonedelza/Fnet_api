@@ -1,6 +1,6 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from .models import CustomerRequestDeposit, ExpensesRequest, BankDeposit, MyPayments, Notifications
+from .models import CustomerRequestDeposit, ExpensesRequest, BankDeposit, MyPayments, Notifications, OTP
 from django.conf import settings
 
 User = settings.AUTH_USER_MODEL
@@ -54,3 +54,17 @@ def create_payment(sender, created, instance, **kwargs):
         Notifications.objects.create(user=instance.agent, item_id=instance.id, transaction_type=transaction_type,
                                      notification_title=title, notification_message=message,
                                      user2=admin_user, payment_slug=instance.slug)
+
+
+@receiver(post_save, sender=OTP)
+def send_otp_to_customer_admin(sender, created, instance, **kwargs):
+    title = f"OTP for verification"
+    message = f"Your code to confirm deposit with {instance.agent.username}"
+    transaction_type = "OTP"
+
+    if created:
+        Notifications.objects.create(user=instance.agent, item_id=instance.id, transaction_type=transaction_type,
+                                     notification_title=title, notification_message=message,
+                                     notification_from=instance.agent,
+                                     notification_to_guarantor=instance.guarantor,
+                                     notification_to_customer=instance.customer)

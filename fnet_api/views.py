@@ -5,11 +5,11 @@ from .serializers import (CustomerSerializer, BankDepositSerializer, ExpenseRequ
                           AdminAccountsCompletedSerializer, CustomerAccountsSerializer, CashAtPaymentSerializer,
                           CustomerDepositRequestSerializer, NotificationSerializer,
                           UserMobileMoneyAccountsClosedSerializer, UserMobileMoneyAccountsStartedSerializer,
-                          MobileMoneyWithdrawalSerializer, PaymentAtBankSerializer)
+                          MobileMoneyWithdrawalSerializer, PaymentAtBankSerializer, OTPSerializer)
 
 from .models import (Customer, BankDeposit, ExpensesRequest, MobileMoneyDeposit, CustomerWithdrawal, MyPayments,
                      AdminAccountsStartedWith, AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments,
-                     CustomerRequestDeposit, UserMobileMoneyAccountsStarted,
+                     CustomerRequestDeposit, UserMobileMoneyAccountsStarted, OTP,
                      UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, Notifications, PaymentAtBank)
 from drf_multiple_model.views import ObjectMultipleModelAPIView
 
@@ -29,6 +29,32 @@ from fnet_api import serializers
 def customers_account_detail(request, pk):
     account_detail = CustomerAccounts.objects.get(pk=pk)
     serializer = CustomerAccountsSerializer(account_detail, many=False)
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def send_otp_to_customer_admin(request):
+    serializer = OTPSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(agent=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_admin_otp_notifications(request):
+    otp_notifications = Notifications.objects.filter(notification_to_guarantor=1).order_by('-date_created')
+    serializer = NotificationSerializer(otp_notifications, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_customer_otp_notifications(request, phone_number):
+    otp_notifications = Notifications.objects.filter(notification_to_customer=phone_number).order_by('-date_created')
+    serializer = NotificationSerializer(otp_notifications, many=True)
     return Response(serializer.data)
 
 
