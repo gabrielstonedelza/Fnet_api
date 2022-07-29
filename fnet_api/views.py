@@ -1147,6 +1147,14 @@ def get_user_notifications(request):
 
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
+def get_all_read_user_notifications(request):
+    notifications = Notifications.objects.filter(user2=request.user).filter(read="Read").order_by('-date_created')
+    serializer = NotificationSerializer(notifications, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
 def get_triggered_notifications(request):
     notifications = Notifications.objects.filter(user2=request.user).filter(notification_trigger="Triggered").filter(
         read="Not Read").order_by('-date_created')

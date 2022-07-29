@@ -132,6 +132,7 @@ urlpatterns = [
     #
     path('get_user_notifications/', views.get_user_notifications),
     path('get_all_user_notifications/', views.get_all_user_notifications),
+    path('get_all_read_user_notifications/', views.get_all_read_user_notifications),
     path('get_triggered_notifications/', views.get_triggered_notifications),
     path("read_notification/<int:id>/", views.read_notification),
     path("get_customer_transaction_summary/<str:phone>/", views.get_customer_transaction_summary),
