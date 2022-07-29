@@ -59,7 +59,7 @@ def create_payment(sender, created, instance, **kwargs):
 @receiver(post_save, sender=OTP)
 def send_otp_to_customer_admin(sender, created, instance, **kwargs):
     title = f"OTP for verification"
-    message = f"Your code to confirm deposit with {instance.agent.username}"
+    message = f"Your code to confirm deposit with {instance.agent.username} is {instance.otp}"
     transaction_type = "OTP"
 
     if created:
