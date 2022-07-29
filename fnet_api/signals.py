@@ -66,5 +66,5 @@ def send_otp_to_customer_admin(sender, created, instance, **kwargs):
         Notifications.objects.create(user=instance.agent, item_id=instance.id, transaction_type=transaction_type,
                                      notification_title=title, notification_message=message,
                                      notification_from=instance.agent,
-                                     notification_to_guarantor=instance.guarantor,
+                                     notification_to_guarantor=instance.guarantor, user2=instance.guarantor,
                                      notification_to_customer=instance.customer)
