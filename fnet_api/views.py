@@ -1312,10 +1312,10 @@ def get_customers_bank_deposits(request, phone_number):
 
 # customer bank payments
 @permission_classes([permissions.AllowAny])
-def post_customer_at_bank(request, customer):
+def post_customer_at_bank(request):
     serializer = CustomerPaymentAtBankSerializer(data=request.data)
     if serializer.is_valid():
-        serializer.save(customer=customer)
+        serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
