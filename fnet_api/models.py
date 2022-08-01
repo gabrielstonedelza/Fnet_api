@@ -393,6 +393,7 @@ class Notifications(models.Model):
     notification_to_guarantor = models.ForeignKey(User, on_delete=models.CASCADE, default=1, null=True,
                                                   related_name="guarantor_notification")
     notification_to_customer = models.CharField(max_length=100, blank=True, default="")
+    notification_from_customer = models.CharField(max_length=100, blank=True, default="")
     date_created = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(max_length=100, default='')
 
