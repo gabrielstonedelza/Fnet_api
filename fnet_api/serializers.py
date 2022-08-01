@@ -268,6 +268,6 @@ class OTPSerializer(serializers.ModelSerializer):
 class CustomerPaymentAtBankSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomerPaymentAtBank
-        fields = ['id', 'customer', 'username', 'teller_name', 'amount', 'total', 'd_200', 'd_100', 'd_50',
-                  'd_20', 'd_10', 'd_5', 'd_2', 'd_1', 'date_added', 'time_added', 'app_version']
+        fields = ['id', 'customer', 'agent_name', 'amount', 'total', 'd_200', 'd_100', 'd_50',
+                  'd_20', 'd_10', 'd_5', 'd_2', 'd_1', 'date_added', 'time_added',]
         read_only_fields = ['customer']
