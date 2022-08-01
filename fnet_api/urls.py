@@ -173,4 +173,12 @@ urlpatterns = [
     path('get_all_customer_data_at_bank/<str:customer>/', views.get_all_customer_data_at_bank),
     path('customer_bank_payment_detail/<int:pk>/', views.customer_bank_payment_detail),
     path('get_all_customers_data_at_bank/', views.get_all_customers_data_at_bank),
+
+    #     admin notifications
+    path("get_customer_bank_payment_notifications/", views.get_customer_bank_payment_notifications),
+    path("get_customer_otp_notifications/", views.get_customer_otp_notifications),
+    path("get_user_payments_notifications/", views.get_user_payments_notifications),
+    path("get_user_bank_requests_notifications/", views.get_user_bank_requests_notifications),
+    path("get_user_expenses_requests_notifications/", views.get_user_expenses_requests_notifications),
+    path("get_customer_requests_notifications/", views.get_customer_requests_notifications),
 ]
