@@ -163,7 +163,14 @@ urlpatterns = [
     #     customer notifications
     path("get_all_customer_notifications/<str:phone_number>/", views.get_all_customer_notifications),
     path("get_customer_notifications/<str:phone_number>/", views.get_customer_notifications),
-    path("get_all_customer_read_user_notifications/<str:phone_number>/", views.get_all_customer_read_user_notifications),
+    path("get_all_customer_read_user_notifications/<str:phone_number>/",
+         views.get_all_customer_read_user_notifications),
     path("get_customer_triggered_notifications/<str:phone_number>/", views.get_customer_triggered_notifications),
     path("read_customer_notification/<int:id>/", views.read_customer_notification),
+
+    #     customer payment at bank
+    path('post_customer_at_bank/', views.post_customer_at_bank),
+    path('get_all_customer_data_at_bank/<str:customer>/', views.get_all_customer_data_at_bank),
+    path('bank_payment_detail/<int:pk>/', views.bank_payment_detail),
+    path('get_all_customers_data_at_bank/', views.get_all_customers_data_at_bank),
 ]

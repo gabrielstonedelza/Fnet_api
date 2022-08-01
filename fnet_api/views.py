@@ -5,12 +5,14 @@ from .serializers import (CustomerSerializer, BankDepositSerializer, ExpenseRequ
                           AdminAccountsCompletedSerializer, CustomerAccountsSerializer, CashAtPaymentSerializer,
                           CustomerDepositRequestSerializer, NotificationSerializer,
                           UserMobileMoneyAccountsClosedSerializer, UserMobileMoneyAccountsStartedSerializer,
-                          MobileMoneyWithdrawalSerializer, PaymentAtBankSerializer, OTPSerializer)
+                          MobileMoneyWithdrawalSerializer, PaymentAtBankSerializer, OTPSerializer,
+                          CustomerPaymentAtBankSerializer)
 
 from .models import (Customer, BankDeposit, ExpensesRequest, MobileMoneyDeposit, CustomerWithdrawal, MyPayments,
                      AdminAccountsStartedWith, AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments,
                      CustomerRequestDeposit, UserMobileMoneyAccountsStarted, OTP,
-                     UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, Notifications, PaymentAtBank)
+                     UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, Notifications, PaymentAtBank,
+                     CustomerPaymentAtBank)
 from drf_multiple_model.views import ObjectMultipleModelAPIView
 
 from rest_framework.decorators import api_view, permission_classes
@@ -1301,7 +1303,42 @@ def read_customer_notification(request, id):
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def get_customers_bank_deposits(request, phone_number):
-    all_customer_deposits = BankDeposit.objects.filter(customer=phone_number).filter(request_status="Approved").order_by(
+    all_customer_deposits = BankDeposit.objects.filter(customer=phone_number).filter(
+        request_status="Approved").order_by(
         '-date_requested')
     serializer = BankDepositSerializer(all_customer_deposits, many=True)
+    return Response(serializer.data)
+
+
+# customer bank payments
+@permission_classes([permissions.AllowAny])
+def post_customer_at_bank(request, customer):
+    serializer = CustomerPaymentAtBankSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(customer=customer)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_all_customer_data_at_bank(request, customer):
+    all_agents_bank_payment = CustomerPaymentAtBank.objects.filter(customer=customer).order_by('-date_added')
+    serializer = CustomerPaymentAtBankSerializer(all_agents_bank_payment, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def bank_payment_detail(request, pk):
+    de_bank_payment = CustomerPaymentAtBank.objects.get(pk=pk)
+    serializer = CustomerPaymentAtBankSerializer(de_bank_payment, many=False)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_all_customers_data_at_bank(request):
+    all_customer_bank_payment = CustomerPaymentAtBank.objects.all().order_by('-date_added')
+    serializer = CustomerPaymentAtBankSerializer(all_customer_bank_payment, many=True)
     return Response(serializer.data)
