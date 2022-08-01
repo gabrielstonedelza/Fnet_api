@@ -169,7 +169,7 @@ urlpatterns = [
     path("read_customer_notification/<int:id>/", views.read_customer_notification),
 
     #     customer payment at bank
-    path('post_customer_at_bank/', views.post_customer_at_bank),
+    path('post_customer_at_bank/<str:customer>/', views.post_customer_at_bank),
     path('get_all_customer_data_at_bank/<str:customer>/', views.get_all_customer_data_at_bank),
     path('customer_bank_payment_detail/<int:pk>/', views.customer_bank_payment_detail),
     path('get_all_customers_data_at_bank/', views.get_all_customers_data_at_bank),
