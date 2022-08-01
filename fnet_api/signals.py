@@ -77,9 +77,10 @@ def send_otp_to_customer_admin(sender, created, instance, **kwargs):
     title = f"Bank Payment from Customer"
     message = f"{instance.customer} has made a bank payment of {instance.amount}"
     transaction_type = "Customer Bank Payment"
+    admin_user = User.objects.get(id=1)
 
     if created:
         Notifications.objects.create(item_id=instance.id, transaction_type=transaction_type,
                                      notification_title=title, notification_message=message,
-                                     notification_from=instance.customer, user2=instance.guarantor,
+                                     notification_from=instance.customer, user2=admin_user,
                                      )
