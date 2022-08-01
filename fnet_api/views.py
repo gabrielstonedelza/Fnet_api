@@ -1312,6 +1312,7 @@ def get_customers_bank_deposits(request, phone_number):
 
 # customer bank payments
 @permission_classes([permissions.AllowAny])
+@api_view(['POST'])
 def post_customer_at_bank(request):
     serializer = CustomerPaymentAtBankSerializer(data=request.data)
     if serializer.is_valid():
