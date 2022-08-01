@@ -28,7 +28,7 @@ class CustomerSerializer(serializers.ModelSerializer):
         model = Customer
         fields = ['id', 'agent', 'username', 'name', 'location', 'digital_address', 'id_type',
                   'id_number', 'phone',
-                  'date_of_birth', 'date_created']
+                  'date_of_birth', 'date_created', 'get_agents_phone']
         read_only_fields = ['agent']
 
     def get_username(self, user):

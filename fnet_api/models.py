@@ -166,6 +166,9 @@ class Customer(models.Model):
     def __str__(self):
         return self.name
 
+    def get_agents_phone(self):
+        return self.agent.phone
+
 
 class CustomerAccounts(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
