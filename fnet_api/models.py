@@ -213,7 +213,9 @@ class BankDeposit(models.Model):
     app_version = models.CharField(max_length=5)
 
     def __str__(self):
-        return str(self.request_status)
+        if self.request_status == "Pending":
+            return f"{self.agent.username}'s deposit is pending"
+        return f"{self.agent.username}'s deposit is approved, '{self.deposit_paid}'"
 
     def save(self, *args, **kwargs):
         my_date = datetime.today()
