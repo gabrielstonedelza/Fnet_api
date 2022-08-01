@@ -1330,7 +1330,7 @@ def get_all_customer_data_at_bank(request, customer):
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
-def bank_payment_detail(request, pk):
+def customer_bank_payment_detail(request, pk):
     de_bank_payment = CustomerPaymentAtBank.objects.get(pk=pk)
     serializer = CustomerPaymentAtBankSerializer(de_bank_payment, many=False)
     return Response(serializer.data)

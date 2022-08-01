@@ -1,6 +1,7 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from .models import CustomerRequestDeposit, ExpensesRequest, BankDeposit, MyPayments, Notifications, OTP
+from .models import CustomerRequestDeposit, ExpensesRequest, BankDeposit, MyPayments, Notifications, OTP, \
+    CustomerPaymentAtBank
 from django.conf import settings
 
 User = settings.AUTH_USER_MODEL
@@ -40,7 +41,8 @@ def create_bank_request(sender, created, instance, **kwargs):
     if created:
         Notifications.objects.create(user=instance.agent, item_id=instance.id, transaction_type=transaction_type,
                                      notification_title=title, notification_message=message,
-                                     user2=instance.guarantor, cash_deposit_request_slug=instance.slug,notification_to_customer=instance.customer)
+                                     user2=instance.guarantor, cash_deposit_request_slug=instance.slug,
+                                     notification_to_customer=instance.customer)
 
 
 @receiver(post_save, sender=MyPayments)
@@ -68,3 +70,16 @@ def send_otp_to_customer_admin(sender, created, instance, **kwargs):
                                      notification_from=instance.agent,
                                      notification_to_guarantor=instance.guarantor, user2=instance.guarantor,
                                      notification_to_customer=instance.customer)
+
+
+@receiver(post_save, sender=CustomerPaymentAtBank)
+def send_otp_to_customer_admin(sender, created, instance, **kwargs):
+    title = f"Bank Payment from Customer"
+    message = f"{instance.customer} has made a bank payment of {instance.amount}"
+    transaction_type = "Customer Bank Payment"
+
+    if created:
+        Notifications.objects.create(user=instance.agent, item_id=instance.id, transaction_type=transaction_type,
+                                     notification_title=title, notification_message=message,
+                                     notification_from=instance.customer, user2=instance.guarantor,
+                                     )
