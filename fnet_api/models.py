@@ -153,6 +153,7 @@ class CashAtPayments(models.Model):
 
 
 class Customer(models.Model):
+    administrator = models.ForeignKey(User, on_delete=models.CASCADE, default=1,related_name="de_administrator")
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=150, blank=True)
     location = models.CharField(max_length=100, blank=True)
@@ -228,6 +229,14 @@ class BankDeposit(models.Model):
         value = self.customer
         self.slug = slugify(value, allow_unicode=True)
         super().save(*args, **kwargs)
+
+
+class AddedToApprovedDeposits(models.Model):
+    bank_deposit = models.ForeignKey(BankDeposit, on_delete=models.CASCADE)
+    date_approved = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Ghs {self.bank_deposit.amount} was approved for {self.bank_deposit.agent.username}"
 
 
 class MobileMoneyDeposit(models.Model):
@@ -356,6 +365,14 @@ class MyPayments(models.Model):
         super().save(*args, **kwargs)
 
 
+class AddedToApprovedPayment(models.Model):
+    payment = models.ForeignKey(MyPayments, on_delete=models.CASCADE)
+    date_approved = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.payment.amount} was approved"
+
+
 class AdminAccountsStartedWith(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     physical_cash = models.DecimalField(max_digits=19, decimal_places=2)
@@ -387,6 +404,8 @@ class Notifications(models.Model):
     customer = models.CharField(max_length=100, blank=True, default="")
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     user2 = models.ForeignKey(User, on_delete=models.CASCADE, related_name="User_receiving_notification", null=True)
+    notification_to_admin = models.ForeignKey(User, on_delete=models.CASCADE,
+                                              related_name="administrator_notifications", default=1)
     customer_request_slug = models.CharField(max_length=100, blank=True)
     cash_deposit_request_slug = models.CharField(max_length=100, blank=True)
     bank_deposit_request_slug = models.CharField(max_length=100, blank=True)

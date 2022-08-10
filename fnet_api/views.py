@@ -6,13 +6,14 @@ from .serializers import (CustomerSerializer, BankDepositSerializer, ExpenseRequ
                           CustomerDepositRequestSerializer, NotificationSerializer,
                           UserMobileMoneyAccountsClosedSerializer, UserMobileMoneyAccountsStartedSerializer,
                           MobileMoneyWithdrawalSerializer, PaymentAtBankSerializer, OTPSerializer,
-                          CustomerPaymentAtBankSerializer)
+                          CustomerPaymentAtBankSerializer, AddedToApprovedPaymentSerializer,
+                          AddedToApprovedBankDepositsSerializer)
 
 from .models import (Customer, BankDeposit, ExpensesRequest, MobileMoneyDeposit, CustomerWithdrawal, MyPayments,
                      AdminAccountsStartedWith, AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments,
                      CustomerRequestDeposit, UserMobileMoneyAccountsStarted, OTP,
                      UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, Notifications, PaymentAtBank,
-                     CustomerPaymentAtBank)
+                     CustomerPaymentAtBank, AddedToApprovedPayment, AddedToApprovedDeposits)
 from drf_multiple_model.views import ObjectMultipleModelAPIView
 
 from rest_framework.decorators import api_view, permission_classes
@@ -24,6 +25,26 @@ from rest_framework import filters
 from datetime import datetime, date, time
 
 from fnet_api import serializers
+
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def admin_add_to_approved_payment(request):
+    serializer = AddedToApprovedPaymentSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def admin_add_to_approved_bank_deposit(request):
+    serializer = AddedToApprovedBankDepositsSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET'])

@@ -1,11 +1,54 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from .models import CustomerRequestDeposit, ExpensesRequest, BankDeposit, MyPayments, Notifications, OTP, \
-    CustomerPaymentAtBank
+    CustomerPaymentAtBank, Customer, AddedToApprovedDeposits, AddedToApprovedPayment
 from django.conf import settings
 
 User = settings.AUTH_USER_MODEL
 from users.models import User
+
+
+@receiver(post_save, sender=AddedToApprovedPayment)
+def alert_payment_approved(sender, created, instance, **kwargs):
+    title = "Payment approved"
+    transaction_type = "Payment Approved"
+    message = f"Your payment of {instance.payment.amount} was approved successfully."
+
+    if created:
+        Notifications.objects.create(user=instance.payment.agent, transaction_type=transaction_type,
+                                     item_id=instance.id,
+                                     notification_title=title, notification_message=message,
+                                     user2=instance.payment.agent,
+                                     )
+
+
+@receiver(post_save, sender=AddedToApprovedDeposits)
+def alert_bank_deposit_approved(sender, created, instance, **kwargs):
+    title = "Bank Deposit approved"
+    transaction_type = "Bank Deposit Approved"
+    message = f"Your bank deposit of {instance.bank_deposit.amount} was approved successfully."
+
+    if created:
+        Notifications.objects.create(user=instance.bank_deposit.agent, transaction_type=transaction_type,
+                                     item_id=instance.id,
+                                     notification_title=title, notification_message=message,
+                                     user2=instance.bank_deposit.agent,
+                                     )
+
+
+@receiver(post_save, sender=Customer)
+def alert_customer_created(sender, created, instance, **kwargs):
+    title = "A new customer was added to the system"
+    transaction_type = "Customer Created"
+    message = f"A customer with the name of {instance.name} was added to the system"
+
+    if created:
+        Notifications.objects.create(user=instance.agent, transaction_type=transaction_type, item_id=instance.id,
+                                     notification_title=title, notification_message=message,
+                                     customer=instance.customer_phone, user2=instance.agent,
+                                     notification_to_admin=instance.administrator,
+                                     notification_to_customer=instance.customer
+                                     )
 
 
 @receiver(post_save, sender=CustomerRequestDeposit)
@@ -35,7 +78,7 @@ def create_expense_request(sender, created, instance, **kwargs):
 @receiver(post_save, sender=BankDeposit)
 def create_bank_request(sender, created, instance, **kwargs):
     title = f"New Bank Deposit from {instance.agent.username}"
-    message = f"{instance.agent.username} just made a bank deposit of {instance.amount}"
+    message = f"{instance.agent.username} just made a bank deposit of {instance.amount} for {instance.customer}"
     transaction_type = "Bank"
 
     if created:

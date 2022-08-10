@@ -181,4 +181,8 @@ urlpatterns = [
     path("get_user_bank_requests_notifications/", views.get_user_bank_requests_notifications),
     path("get_user_expenses_requests_notifications/", views.get_user_expenses_requests_notifications),
     path("get_customer_requests_notifications/", views.get_customer_requests_notifications),
+
+    #     ADD TO APPROVED
+    path("admin_add_to_approved_payment/", views.admin_add_to_approved_payment),
+    path("admin_add_to_approved_bank_deposit/", views.admin_add_to_approved_bank_deposit),
 ]
