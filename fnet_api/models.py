@@ -24,6 +24,8 @@ BANK_REDRAW_ID_TYPES = (
 BANKS = (
     ("Select bank", "Select bank"),
     ("Access Bank", "Access Bank"),
+    ("Adansi rural bank", "Adansi rural bank"),
+    ("Kwumawuman Bank", "Kwumawuman Bank"),
     ("Cal Bank", "Cal Bank"),
     ("Fidelity Bank", "Fidelity Bank"),
     ("Ecobank", "Ecobank"),
@@ -32,6 +34,7 @@ BANKS = (
     ("SGSSB", "SGSSB"),
     ("Atwima Rural Bank", "Atwima Rural Bank"),
     ("Omnibsic Bank", "Omnibsic Bank"),
+    ("Omini bank", "Omini bank"),
     ("Stanbic Bank", "Stanbic Bank"),
     ("Absa Bank", "Absa Bank"),
     ("Universal Merchant Bank", "Universal Merchant Bank"),
