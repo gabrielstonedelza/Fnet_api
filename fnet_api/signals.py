@@ -33,6 +33,7 @@ def alert_bank_deposit_approved(sender, created, instance, **kwargs):
                                      item_id=instance.id,
                                      notification_title=title, notification_message=message,
                                      user2=instance.bank_deposit.agent,
+                                     notification_to_customer=instance.bank_deposit.customer
                                      )
 
 
