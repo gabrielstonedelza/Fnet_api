@@ -28,7 +28,7 @@ from fnet_api import serializers
 
 
 @api_view(['POST'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 def admin_add_to_approved_payment(request):
     serializer = AddedToApprovedPaymentSerializer(data=request.data)
     if serializer.is_valid():
@@ -38,7 +38,7 @@ def admin_add_to_approved_payment(request):
 
 
 @api_view(['POST'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 def admin_add_to_approved_bank_deposit(request):
     serializer = AddedToApprovedBankDepositsSerializer(data=request.data)
     if serializer.is_valid():
