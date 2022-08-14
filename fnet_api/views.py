@@ -1441,6 +1441,7 @@ class GetCustomersDepositTransactions(generics.ListAPIView):
 #         return BankDeposit.objects.filter(customer=customer).order_by('-date_requested')
 class GetCustomerDepositTransactions(generics.ListAPIView):
     serializer_class = BankDepositSerializer
+    permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
         """
