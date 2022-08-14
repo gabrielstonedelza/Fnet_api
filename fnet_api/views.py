@@ -1429,6 +1429,7 @@ class GetCustomersDepositTransactions(generics.ListAPIView):
     filter_backends = [filters.SearchFilter]
     search_fields = ['customer', 'date_requested', ]
 
+
 # class GetCustomersDepositTransactions(generics.ListAPIView):
 #     permission_classes = [permissions.AllowAny]
 #     serializer_class = BankDepositSerializer
@@ -1438,3 +1439,13 @@ class GetCustomersDepositTransactions(generics.ListAPIView):
 #     def get_queryset(self, customer):
 #         customer = customer
 #         return BankDeposit.objects.filter(customer=customer).order_by('-date_requested')
+class GetCustomerDepositTransactions(generics.ListAPIView):
+    serializer_class = BankDepositSerializer
+
+    def get_queryset(self):
+        """
+        This view should return a list of all the purchases for
+        the user as determined by the username portion of the URL.
+        """
+        customer = self.kwargs['customer']
+        return BankDeposit.objects.filter(customer=customer)
