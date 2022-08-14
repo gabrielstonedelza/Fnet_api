@@ -187,5 +187,5 @@ urlpatterns = [
     path("admin_add_to_approved_bank_deposit/", views.admin_add_to_approved_bank_deposit),
 
     #     getting customers deposit transactions
-    path("get_customers_deposit_transactions/<str:customer>/", views.GetCustomersDepositTransactions.as_view())
+    path("get_customers_deposit_transactions/", views.GetCustomersDepositTransactions.as_view())
 ]
