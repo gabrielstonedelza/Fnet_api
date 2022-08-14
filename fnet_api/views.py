@@ -1434,7 +1434,7 @@ class GetCustomerDepositTransactions(generics.ListAPIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = BankDepositSerializer
     filter_backends = [filters.SearchFilter]
-    search_fields = ['customer', 'date_requested', ]
+    search_fields = ['date_requested', ]
 
     def get_queryset(self):
         customer = self.kwargs['customer']

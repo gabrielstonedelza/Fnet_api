@@ -30,15 +30,39 @@ BANKS = (
     ("Fidelity Bank", "Fidelity Bank"),
     ("Ecobank", "Ecobank"),
     ("Pan Africa", "Pan Africa"),
-    ("First Bank of Nigeria", "First Bank of Nigeria"),
     ("SGSSB", "SGSSB"),
     ("Atwima Rural Bank", "Atwima Rural Bank"),
     ("Omnibsic Bank", "Omnibsic Bank"),
     ("Omini bank", "Omini bank"),
     ("Stanbic Bank", "Stanbic Bank"),
+    ("First Bank of Nigeria", "First Bank of Nigeria"),
+    ("Adehyeman Savings and loans", "Adehyeman Savings and loans",),
+    ("ARB Apex Bank Limited", "ARB Apex Bank Limited",),
     ("Absa Bank", "Absa Bank"),
-    ("Universal Merchant Bank", "Universal Merchant Bank"),
+    ("Agriculture Development bank", "Agriculture Development bank"),
+    ("Bank of Africa", "Bank of Africa"),
+    ("Bank of Ghana", "Bank of Ghana"),
+    ("Consolidated Bank Ghana", "Consolidated Bank Ghana"),
+    ("First Atlantic Bank", "First Atlantic Bank"),
+    ("First National Bank", "First National Bank"),
+    ("G-Money", "G-Money"),
+    ("GCB BanK LTD", "GCB BanK LTD"),
+    ("Ghana Pay", "Ghana Pay"),
+    ("GHL Bank Ltd", "GHL Bank Ltd"),
+    ("GT Bank", "GT Bank"),
+    ("National Investment Bank", "National Investment Bank"),
+    ("Opportunity International Savings And Loans", "Opportunity International Savings And Loans"),
+    ("Prudential Bank", "Prudential Bank"),
+    ("Republic Bank Ltd", "Republic Bank Ltd"),
+    ("Sahel Sahara Bank", "Sahel Sahara Bank"),
+    ("Sinapi Aba Savings and Loans", "Sinapi Aba Savings and Loans"),
+    ("Societe Generale Ghana Ltd", "Societe Generale Ghana Ltd"),
+    ("Standard Chartered", "Standard Chartered"),
+    ("universal Merchant Bank", "universal Merchant Bank"),
+    ("Zenith Bank", "Zenith Bank"),
+
 )
+
 PAYMENT_ACTIONS = (
     ("Select payment action", "Select payment action"),
     ("Not Closed", "Not Closed"),
@@ -156,7 +180,7 @@ class CashAtPayments(models.Model):
 
 
 class Customer(models.Model):
-    administrator = models.ForeignKey(User, on_delete=models.CASCADE, default=1,related_name="de_administrator")
+    administrator = models.ForeignKey(User, on_delete=models.CASCADE, default=1, related_name="de_administrator")
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=150, blank=True)
     location = models.CharField(max_length=100, blank=True)
