@@ -1437,5 +1437,5 @@ class GetCustomersDepositTransactions(generics.ListAPIView):
     search_fields = ['customer', 'date_requested', ]
 
     def get_queryset(self, customer):
-        customer = self.customer
+        customer = customer
         return BankDeposit.objects.filter(customer=customer).order_by('-date_requested')
