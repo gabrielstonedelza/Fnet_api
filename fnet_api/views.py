@@ -1419,3 +1419,12 @@ def get_customer_requests_notifications(request):
         transaction_type="Customer").order_by('-date_created')
     serializer = NotificationSerializer(customer_bank_notifications, many=True)
     return Response(serializer.data)
+
+
+# get customers deposit transactions
+class GetCustomersDepositTransactions(generics.ListAPIView):
+    permission_classes = [permissions.AllowAny]
+    queryset = BankDeposit.objects.all().order_by('-date_requested')
+    serializer_class = BankDepositSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['customer', 'date_requested', ]
