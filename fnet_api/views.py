@@ -1448,4 +1448,4 @@ class GetCustomerDepositTransactions(generics.ListAPIView):
         the user as determined by the username portion of the URL.
         """
         customer = self.kwargs['customer']
-        return BankDeposit.objects.filter(customer=customer)
+        return BankDeposit.objects.filter(customer=customer).order_by('-date_requested')
