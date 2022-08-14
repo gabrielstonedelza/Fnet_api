@@ -1422,9 +1422,20 @@ def get_customer_requests_notifications(request):
 
 
 # get customers deposit transactions
+# class GetCustomersDepositTransactions(generics.ListAPIView):
+#     permission_classes = [permissions.AllowAny]
+#     queryset = BankDeposit.objects.all().order_by('-date_requested')
+#     serializer_class = BankDepositSerializer
+#     filter_backends = [filters.SearchFilter]
+#     search_fields = ['customer', 'date_requested', ]
+
+
 class GetCustomersDepositTransactions(generics.ListAPIView):
     permission_classes = [permissions.AllowAny]
-    queryset = BankDeposit.objects.all().order_by('-date_requested')
     serializer_class = BankDepositSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['customer', 'date_requested', ]
+
+    def get_queryset(self, customer):
+        customer = self.customer
+        return BankDeposit.objects.filter(customer=customer).order_by('-date_requested')
