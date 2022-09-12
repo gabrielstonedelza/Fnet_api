@@ -24,11 +24,12 @@ BANK_REDRAW_ID_TYPES = (
 BANKS = (
     ("Select bank", "Select bank"),
     ("Access Bank", "Access Bank"),
-    ("Adansi rural bank", "Adansi rural bank"),
-    ("Kwumawuman Bank", "Kwumawuman Bank"),
     ("Cal Bank", "Cal Bank"),
     ("Fidelity Bank", "Fidelity Bank"),
     ("Ecobank", "Ecobank"),
+    ("Adansi rural bank", "Adansi rural bank"),
+    ("Kwumawuman Bank", "Kwumawuman Bank"),
+
     ("Pan Africa", "Pan Africa"),
     ("SGSSB", "SGSSB"),
     ("Atwima Rural Bank", "Atwima Rural Bank"),
@@ -83,7 +84,7 @@ DEPOSIT_REQUEST_OPTIONS = (
 )
 
 MOBILE_MONEY_DEPOSIT_TYPE = (
-    ("Regular", "Regular"),
+    ("Leading", "Leading"),
     ("Direct", "Direct"),
     ("Agent to Agent", "Agent to Agent"),
 )
@@ -269,7 +270,7 @@ class AddedToApprovedDeposits(models.Model):
 class MobileMoneyDeposit(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE, related_name="agent_requesting")
     customer_phone = models.CharField(max_length=30, blank=True)
-    customer_name = models.CharField(max_length=30, blank=True)
+    # customer_name = models.CharField(max_length=30, blank=True)
     depositor_name = models.CharField(max_length=30, blank=True, default="")
     depositor_number = models.CharField(max_length=30, blank=True, default="")
     network = models.CharField(max_length=20, choices=NETWORKS, blank=True, default="Select Network")
@@ -288,7 +289,7 @@ class MobileMoneyDeposit(models.Model):
 class MobileMoneyWithdraw(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
     customer_phone = models.CharField(max_length=30, blank=True)
-    customer_name = models.CharField(max_length=30, blank=True)
+    # customer_name = models.CharField(max_length=30, blank=True)
     network = models.CharField(max_length=20, choices=NETWORKS, blank=True, default="Select Network")
     type = models.CharField(max_length=30, choices=WITHDRAW_TYPES, blank=True, default="")
     id_type = models.CharField(max_length=30, choices=ID_TYPES)
