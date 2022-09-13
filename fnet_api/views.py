@@ -192,23 +192,6 @@ def get_agents_bank_for_today(request, username):
     return Response(serializer.data)
 
 
-# get mobile money transactions for user
-@api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
-def get_user_mm_deposits(request):
-    momo_deposits = MobileMoneyDeposit.objects.filter(agent=request.user).order_by('-date_deposited')
-    serializer = MobileMoneyDepositSerializer(momo_deposits, many=True)
-    return Response(serializer.data)
-
-
-@api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
-def get_user_mm_withdrawal(request):
-    momo_deposits = MobileMoneyWithdraw.objects.filter(agent=request.user).order_by('-date_of_withdrawal')
-    serializer = MobileMoneyWithdrawalSerializer(momo_deposits, many=True)
-    return Response(serializer.data)
-
-
 # get mobile money transaction for admin
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
@@ -1044,7 +1027,7 @@ class SearchAgentsMomoWithdrawTransactions(generics.ListAPIView):
     queryset = MobileMoneyWithdraw.objects.all().order_by('-date_of_withdrawal')
     serializer_class = MobileMoneyWithdrawalSerializer
     filter_backends = [filters.SearchFilter]
-    search_fields = ['date_of_withdrawal', 'agent__username',]
+    search_fields = ['date_of_withdrawal', 'agent__username', ]
 
 
 @api_view(['GET', 'PUT'])
@@ -1440,14 +1423,87 @@ class GetCustomerDepositTransactions(generics.ListAPIView):
         customer = self.kwargs['customer']
         return BankDeposit.objects.filter(customer=customer).order_by('-date_requested')
 
-# class GetCustomerDepositTransactions(generics.ListAPIView):
-#     serializer_class = BankDepositSerializer
-#     permission_classes = [permissions.AllowAny]
-#
-#     def get_queryset(self):
-#         """
-#         This view should return a list of all the purchases for
-#         the user as determined by the username portion of the URL.
-#         """
-#         customer = self.kwargs['customer']
-#         return BankDeposit.objects.filter(customer=customer).order_by('-date_requested')
+
+# get users all summaries
+# get mobile money transactions for user
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_user_mm_deposits(request):
+    momo_deposits = MobileMoneyDeposit.objects.filter(agent=request.user).order_by('-date_deposited')
+    serializer = MobileMoneyDepositSerializer(momo_deposits, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_user_mm_withdrawal(request):
+    momo_deposits = MobileMoneyWithdraw.objects.filter(agent=request.user).order_by('-date_of_withdrawal')
+    serializer = MobileMoneyWithdrawalSerializer(momo_deposits, many=True)
+    return Response(serializer.data)
+
+
+# get momo transactions by network
+# deposits
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_user_mtn_deposits_summary(request):
+    momo_deposits = MobileMoneyDeposit.objects.filter(agent=request.user).filter(network="Mtn").order_by(
+        '-date_deposited')
+    serializer = MobileMoneyDepositSerializer(momo_deposits, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_user_tigo_deposits_summary(request):
+    momo_deposits = MobileMoneyDeposit.objects.filter(agent=request.user).filter(network="Tigo").order_by(
+        '-date_deposited')
+    serializer = MobileMoneyDepositSerializer(momo_deposits, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_user_vodafone_deposits_summary(request):
+    momo_deposits = MobileMoneyDeposit.objects.filter(agent=request.user).filter(network="Vodafone").order_by(
+        '-date_deposited')
+    serializer = MobileMoneyDepositSerializer(momo_deposits, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_user_momo_agent_to_agent_summary(request):
+    momo_deposits = MobileMoneyDeposit.objects.filter(agent=request.user).filter(type="Agent to Agent").order_by(
+        '-date_deposited')
+    serializer = MobileMoneyDepositSerializer(momo_deposits, many=True)
+    return Response(serializer.data)
+
+
+# get momo transactions by network
+# withdraws
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_user_mtn_withdrawal(request):
+    mtn_withdraw = MobileMoneyWithdraw.objects.filter(agent=request.user).filter(network="Mtn").order_by(
+        '-date_of_withdrawal')
+    serializer = MobileMoneyWithdrawalSerializer(mtn_withdraw, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_user_tigo_withdrawal(request):
+    tigo_withdraw = MobileMoneyWithdraw.objects.filter(agent=request.user).filter(network="Tigo").order_by(
+        '-date_of_withdrawal')
+    serializer = MobileMoneyWithdrawalSerializer(tigo_withdraw, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_user_vodafone_withdrawal(request):
+    vodafone_withdraw = MobileMoneyWithdraw.objects.filter(agent=request.user).filter(network="Vodafone").order_by(
+        '-date_of_withdrawal')
+    serializer = MobileMoneyWithdrawalSerializer(vodafone_withdraw, many=True)
+    return Response(serializer.data)

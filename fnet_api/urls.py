@@ -188,5 +188,14 @@ urlpatterns = [
 
     #     getting customers deposit transactions
     path("get_customers_deposit_transactions/", views.GetCustomersDepositTransactions.as_view()),
-    path("GetCustomerDepositTransactions/<str:customer>/", views.GetCustomerDepositTransactions.as_view())
+    path("GetCustomerDepositTransactions/<str:customer>/", views.GetCustomerDepositTransactions.as_view()),
+
+    # momo deposits and withdraw summary
+    path("get_user_mtn_deposits_summary/", views.get_user_mtn_deposits_summary),
+    path("get_user_tigo_deposits_summary/", views.get_user_tigo_deposits_summary),
+    path("get_user_vodafone_deposits_summary/", views.get_user_vodafone_deposits_summary),
+    path("get_user_momo_agent_to_agent_summary/", views.get_user_momo_agent_to_agent_summary),
+    path("get_user_mtn_withdrawal/", views.get_user_mtn_withdrawal),
+    path("get_user_tigo_withdrawal/", views.get_user_tigo_withdrawal),
+    path("get_user_vodafone_withdrawal/", views.get_user_vodafone_withdrawal),
 ]

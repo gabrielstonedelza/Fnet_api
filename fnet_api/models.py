@@ -73,6 +73,7 @@ PAYMENT_ACTIONS = (
 NETWORKS = (
     ("Select Network", "Select Network"),
     ("Mtn", "Mtn"),
+    ("Tigo", "Tigo"),
     ("AirtelTigo", "AirtelTigo"),
     ("Vodafone", "Vodafone"),
 )
