@@ -1355,7 +1355,7 @@ def get_all_customers_data_at_bank(request):
 @permission_classes([permissions.IsAuthenticated])
 def get_customer_bank_payment_notifications(request):
     customer_bank_notifications = Notifications.objects.filter(user2=request.user).filter(
-        transaction_type="Customer Bank Payment").order_by('-date_created')
+        transaction_type="Customer Bank Payment").filter(read="Not Read").order_by('-date_created')
     serializer = NotificationSerializer(customer_bank_notifications, many=True)
     return Response(serializer.data)
 
@@ -1364,7 +1364,7 @@ def get_customer_bank_payment_notifications(request):
 @permission_classes([permissions.IsAuthenticated])
 def get_customer_otp_notifications(request):
     customer_bank_notifications = Notifications.objects.filter(user2=request.user).filter(
-        transaction_type="OTP").order_by('-date_created')
+        transaction_type="OTP").filter(read="Not Read").order_by('-date_created')
     serializer = NotificationSerializer(customer_bank_notifications, many=True)
     return Response(serializer.data)
 
@@ -1373,7 +1373,7 @@ def get_customer_otp_notifications(request):
 @permission_classes([permissions.IsAuthenticated])
 def get_user_payments_notifications(request):
     customer_bank_notifications = Notifications.objects.filter(user2=request.user).filter(
-        transaction_type="Payment").order_by('-date_created')
+        transaction_type="Payment").filter(read="Not Read").order_by('-date_created')
     serializer = NotificationSerializer(customer_bank_notifications, many=True)
     return Response(serializer.data)
 
@@ -1382,7 +1382,7 @@ def get_user_payments_notifications(request):
 @permission_classes([permissions.IsAuthenticated])
 def get_user_bank_requests_notifications(request):
     customer_bank_notifications = Notifications.objects.filter(user2=request.user).filter(
-        transaction_type="Bank").order_by('-date_created')
+        transaction_type="Bank").filter(read="Not Read").order_by('-date_created')
     serializer = NotificationSerializer(customer_bank_notifications, many=True)
     return Response(serializer.data)
 
@@ -1391,7 +1391,7 @@ def get_user_bank_requests_notifications(request):
 @permission_classes([permissions.IsAuthenticated])
 def get_user_expenses_requests_notifications(request):
     customer_bank_notifications = Notifications.objects.filter(user2=request.user).filter(
-        transaction_type="Cash").order_by('-date_created')
+        transaction_type="Cash").filter(read="Not Read").order_by('-date_created')
     serializer = NotificationSerializer(customer_bank_notifications, many=True)
     return Response(serializer.data)
 
@@ -1400,7 +1400,7 @@ def get_user_expenses_requests_notifications(request):
 @permission_classes([permissions.IsAuthenticated])
 def get_customer_requests_notifications(request):
     customer_bank_notifications = Notifications.objects.filter(user2=request.user).filter(
-        transaction_type="Customer").order_by('-date_created')
+        transaction_type="Customer").filter(read="Not Read").order_by('-date_created')
     serializer = NotificationSerializer(customer_bank_notifications, many=True)
     return Response(serializer.data)
 
