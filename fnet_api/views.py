@@ -3,6 +3,7 @@ from .serializers import (CustomerSerializer, BankDepositSerializer, ExpenseRequ
                           MobileMoneyDepositSerializer,
                           CustomerWithdrawalSerializer, PaymentsSerializer, AdminAccountsStartedSerializer, \
                           AdminAccountsCompletedSerializer, CustomerAccountsSerializer, CashAtPaymentSerializer,
+                          ReportsSerializer,
                           CustomerDepositRequestSerializer, NotificationSerializer,
                           UserMobileMoneyAccountsClosedSerializer, UserMobileMoneyAccountsStartedSerializer,
                           MobileMoneyWithdrawalSerializer, PaymentAtBankSerializer, OTPSerializer,
@@ -13,7 +14,7 @@ from .models import (Customer, BankDeposit, ExpensesRequest, MobileMoneyDeposit,
                      AdminAccountsStartedWith, AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments,
                      CustomerRequestDeposit, UserMobileMoneyAccountsStarted, OTP,
                      UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, Notifications, PaymentAtBank,
-                     CustomerPaymentAtBank, AddedToApprovedPayment, AddedToApprovedDeposits)
+                     CustomerPaymentAtBank, AddedToApprovedPayment, AddedToApprovedDeposits, Reports)
 from drf_multiple_model.views import ObjectMultipleModelAPIView
 
 from rest_framework.decorators import api_view, permission_classes
@@ -1506,4 +1507,31 @@ def get_user_vodafone_withdrawal(request):
     vodafone_withdraw = MobileMoneyWithdraw.objects.filter(agent=request.user).filter(network="Vodafone").order_by(
         '-date_of_withdrawal')
     serializer = MobileMoneyWithdrawalSerializer(vodafone_withdraw, many=True)
+    return Response(serializer.data)
+
+
+# reports by users and admin
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def add_report(request):
+    serializer = ReportsSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(user=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def report_detail(request, id):
+    report = get_object_or_404(Reports, id=id)
+    serializer = ReportsSerializer(report, many=False)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_all_reports(request):
+    reports = Reports.objects.all().order_by('-date_reported')
+    serializer = ReportsSerializer(reports, many=True)
     return Response(serializer.data)

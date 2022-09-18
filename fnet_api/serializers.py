@@ -4,7 +4,7 @@ from .models import (Customer, CustomerWithdrawal, MyPayments, AdminAccountsStar
                      AdminAccountsCompletedWith, CustomerAccounts, CustomerRequestDeposit,
                      ExpensesRequest, MobileMoneyDeposit, BankDeposit, UserMobileMoneyAccountsStarted,
                      UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, Notifications, PaymentAtBank, OTP,
-                     CustomerPaymentAtBank, AddedToApprovedDeposits, AddedToApprovedPayment)
+                     CustomerPaymentAtBank, AddedToApprovedDeposits, AddedToApprovedPayment, Reports)
 
 
 class AddedToApprovedPaymentSerializer(serializers.ModelSerializer):
@@ -282,3 +282,10 @@ class CustomerPaymentAtBankSerializer(serializers.ModelSerializer):
         model = CustomerPaymentAtBank
         fields = ['id', 'customer', 'agent_name', 'amount', 'total', 'd_200', 'd_100', 'd_50',
                   'd_20', 'd_10', 'd_5', 'd_2', 'd_1', 'date_added', 'time_added', ]
+
+
+class ReportsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Reports
+        fields = ['id', 'administrator', 'user', 'title', 'report', 'date_reported', 'time_reported']
+        read_only_fields = ['user']

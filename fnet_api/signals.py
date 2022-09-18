@@ -1,7 +1,7 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from .models import CustomerRequestDeposit, ExpensesRequest, BankDeposit, MyPayments, Notifications, OTP, \
-    CustomerPaymentAtBank, Customer, AddedToApprovedDeposits, AddedToApprovedPayment
+    CustomerPaymentAtBank, Customer, AddedToApprovedDeposits, AddedToApprovedPayment, Reports
 from django.conf import settings
 
 User = settings.AUTH_USER_MODEL
@@ -127,4 +127,17 @@ def send_otp_to_customer_admin(sender, created, instance, **kwargs):
         Notifications.objects.create(item_id=instance.id, transaction_type=transaction_type,
                                      notification_title=title, notification_message=message,
                                      notification_from_customer=instance.customer, user2=admin_user,
+                                     )
+
+
+@receiver(post_save, sender=Reports)
+def alert_report(sender, created, instance, **kwargs):
+    title = f"New Report"
+    message = f"{instance.user.username} submitted a new report"
+    transaction_type = "New Report"
+
+    if created:
+        Notifications.objects.create(item_id=instance.id, transaction_type=transaction_type,
+                                     notification_title=title, notification_message=message,
+                                     notification_from_customer=instance.user, user2=instance.administrator,
                                      )

@@ -198,4 +198,9 @@ urlpatterns = [
     path("get_user_mtn_withdrawal/", views.get_user_mtn_withdrawal),
     path("get_user_tigo_withdrawal/", views.get_user_tigo_withdrawal),
     path("get_user_vodafone_withdrawal/", views.get_user_vodafone_withdrawal),
+
+    #     reports
+    path("add_report/", views.add_report),
+    path("report_detail/<int:id>/", views.report_detail),
+    path("all_reports/", views.get_all_reports),
 ]
