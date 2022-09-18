@@ -202,5 +202,6 @@ urlpatterns = [
     #     reports
     path("add_report/", views.add_report),
     path("report_detail/<int:id>/", views.report_detail),
-    path("all_reports/", views.get_all_reports),
+    path("get_all_my_reports/", views.get_all_my_reports),
+    path("get_all_reports/", views.get_all_reports),
 ]
