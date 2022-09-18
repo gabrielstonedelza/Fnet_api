@@ -204,4 +204,5 @@ urlpatterns = [
     path("report_detail/<int:id>/", views.report_detail),
     path("get_all_my_reports/", views.get_all_my_reports),
     path("get_all_reports/", views.get_all_reports),
+    path("get_user_reports/<str:username>/", views.get_user_reports),
 ]

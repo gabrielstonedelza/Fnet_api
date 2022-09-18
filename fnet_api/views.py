@@ -1546,3 +1546,12 @@ def get_all_reports(request):
     reports = Reports.objects.all().order_by('-date_reported')
     serializer = ReportsSerializer(reports, many=True)
     return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_user_reports(request, username):
+    user = get_object_or_404(User, username=username)
+    report = Report.objects.filter(user=user).order_by('-date_reported')
+    serializer = ReportsSerializer(report, many=True)
+    return Response(serializer.data)
