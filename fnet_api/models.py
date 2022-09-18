@@ -550,6 +550,7 @@ class Reports(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=50)
     report = models.TextField()
+    read = models.BooleanField(default=False)
     date_reported = models.DateField(auto_now_add=True)
     time_reported = models.TimeField(auto_now_add=True)
 

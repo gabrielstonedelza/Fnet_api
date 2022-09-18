@@ -1525,6 +1525,9 @@ def add_report(request):
 @permission_classes([permissions.IsAuthenticated])
 def report_detail(request, id):
     report = get_object_or_404(Reports, id=id)
+    if report:
+        report.read = True
+        report.save()
     serializer = ReportsSerializer(report, many=False)
     return Response(serializer.data)
 
