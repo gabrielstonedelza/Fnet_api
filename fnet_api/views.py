@@ -1535,7 +1535,7 @@ def report_detail(request, id):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_all_my_reports(request):
-    reports = Reports.objects.filter(user=request.user).order_by('date_reported')
+    reports = Reports.objects.filter(user=request.user).order_by('-date_reported')
     serializer = ReportsSerializer(reports, many=True)
     return Response(serializer.data)
 
