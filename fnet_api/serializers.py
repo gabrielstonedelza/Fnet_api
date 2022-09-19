@@ -67,7 +67,7 @@ class CustomerDepositRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomerRequestDeposit
         fields = ['id', 'customer_phone', 'agent', 'customer_name', 'agent_username',
-                  'amount', 'request_option', 'request_status', 'date_requested', 
+                  'amount', 'request_option', 'request_status', 'date_requested',
                   'time_requested', 'slug']
 
     def get_agent_username(self, user):
@@ -287,5 +287,5 @@ class CustomerPaymentAtBankSerializer(serializers.ModelSerializer):
 class ReportsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reports
-        fields = ['id', 'administrator', 'user', 'title', 'report', 'date_reported', 'time_reported','read']
+        fields = ['id', 'administrator', 'user','report', 'date_reported', 'time_reported','read']
         read_only_fields = ['user']

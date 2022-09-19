@@ -548,14 +548,13 @@ class CustomerPaymentAtBank(models.Model):
 class Reports(models.Model):
     administrator = models.ForeignKey(User, on_delete=models.CASCADE, default=1, related_name="admin_user")
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    title = models.CharField(max_length=50)
     report = models.TextField()
     read = models.BooleanField(default=False)
     date_reported = models.DateField(auto_now_add=True)
     time_reported = models.TimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.title
+        return self.user.username
 
     def get_username(self):
         return self.user.username
