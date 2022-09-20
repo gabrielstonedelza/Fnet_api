@@ -61,7 +61,9 @@ BANKS = (
     ("Standard Chartered", "Standard Chartered"),
     ("universal Merchant Bank", "universal Merchant Bank"),
     ("Zenith Bank", "Zenith Bank"),
-
+    ("Mtn", "Mtn"),
+    ("AirtelTigo", "AirtelTigo"),
+    ("Vodafone", "Vodafone"),
 )
 
 PAYMENT_ACTIONS = (
@@ -205,7 +207,6 @@ class CustomerAccounts(models.Model):
     account_number = models.CharField(max_length=16, blank=True)
     account_name = models.CharField(max_length=100, blank=True)
     bank = models.CharField(max_length=100, choices=BANKS, default="Access Bank")
-    network = models.CharField(max_length=20, choices=NETWORKS, blank=True, default="Select Network")
     phone = models.CharField(max_length=15, blank=True)
     date_added = models.DateTimeField(auto_now_add=True)
 
