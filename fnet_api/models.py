@@ -566,7 +566,6 @@ class Reports(models.Model):
 class GroupMessage(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     message = models.TextField()
-    group_users = models.ManyToManyField(User,blank=True, related_name="group_users")
     date_sent = models.DateField(auto_now_add=True)
     time_sent = models.TimeField(auto_now_add=True)
 
