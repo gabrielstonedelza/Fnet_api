@@ -170,9 +170,9 @@ def alert_private_message(sender, created, instance, **kwargs):
             message = f"{instance.sender.username} sent you a message"
             Notifications.objects.create(item_id=instance.id, notification_title=title,
                                          notification_message=message, transaction_type=transaction_type,
-                                         notification_to=instance.receiver)
+                                         user2=instance.receiver)
         if instance.receiver:
             message = f"{instance.receiver.username} sent you a message"
             Notifications.objects.create(item_id=instance.id, notification_title=title,
                                          notification_message=message, transaction_type=transaction_type,
-                                         notification_to=instance.sender)
+                                         user2=instance.sender)
