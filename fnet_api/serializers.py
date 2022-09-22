@@ -296,7 +296,7 @@ class ReportsSerializer(serializers.ModelSerializer):
 class GroupMessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = GroupMessage
-        fields = ['id', 'user', 'message', 'date_sent', 'time_sent']
+        fields = ['id', 'user', 'message', 'date_sent', 'time_sent', 'get_username']
         read_only_fields = ['user']
 
 
