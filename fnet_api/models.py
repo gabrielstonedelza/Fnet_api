@@ -580,7 +580,7 @@ class GroupMessage(models.Model):
 class PrivateUserMessage(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE)
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="chatter2")
-    private_chat_id = models.CharField(max_length=400)
+    private_chat_id = models.CharField(max_length=400, blank=True)
     message = models.TextField()
     read = models.BooleanField(default=False)
     date_created = models.DateField(auto_now_add=True)
@@ -596,10 +596,12 @@ class PrivateUserMessage(models.Model):
         return self.receiver.username
 
     def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
+
         senders_username = self.sender.username[:6]
         receiver_username = self.receiver.username[:6]
         rand_id = random.randint(2, 500)
 
-        if self.private_chat_id != "":
+        if self.private_chat_id == "":
             self.private_chat_id = senders_username + receiver_username + str(rand_id)
+
+        super().save(*args, **kwargs)
