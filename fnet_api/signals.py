@@ -150,11 +150,14 @@ def alert_pub_message(sender, created, instance, **kwargs):
     message = f"{instance.user.username} sent a message to the group"
     transaction_type = "New group message"
 
+    users = User.objects.exclude(id=instance.user.id)
+
     if created:
-        Notifications.objects.create(item_id=instance.id, transaction_type=transaction_type,
-                                     notification_title=title, notification_message=message,
-                                     notification_from=instance.user, user2=instance.group_users,
-                                     )
+        for i in users:
+            Notifications.objects.create(item_id=instance.id, transaction_type=transaction_type,
+                                         notification_title=title, notification_message=message,
+                                         notification_from=instance.user, user2=i,
+                                         )
 
 
 @receiver(post_save, sender=PrivateUserMessage)
@@ -166,10 +169,10 @@ def alert_private_message(sender, created, instance, **kwargs):
         if instance.sender:
             message = f"{instance.sender.username} sent you a message"
             Notifications.objects.create(notification_id=instance.id, notification_title=title,
-                                                  notification_message=message, transaction_type=transaction_type,
-                                                  notification_to=instance.receiver)
+                                         notification_message=message, transaction_type=transaction_type,
+                                         notification_to=instance.receiver)
         if instance.receiver:
             message = f"{instance.receiver.username} sent you a message"
             Notifications.objects.create(notification_id=instance.id, notification_title=title,
-                                                  notification_message=message, transaction_type=transaction_type,
-                                                  notification_to=instance.sender)
+                                         notification_message=message, transaction_type=transaction_type,
+                                         notification_to=instance.sender)
