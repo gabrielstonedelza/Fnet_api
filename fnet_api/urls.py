@@ -179,6 +179,7 @@ urlpatterns = [
     path("get_customer_otp_notifications/", views.get_customer_otp_notifications),
     path("get_user_payments_notifications/", views.get_user_payments_notifications),
     path("get_user_bank_requests_notifications/", views.get_user_bank_requests_notifications),
+    path("get_user_report_notifications/", views.get_user_report_notifications),
     path("get_user_expenses_requests_notifications/", views.get_user_expenses_requests_notifications),
     path("get_customer_requests_notifications/", views.get_customer_requests_notifications),
 

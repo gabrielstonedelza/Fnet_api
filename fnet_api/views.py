@@ -1389,6 +1389,15 @@ def get_user_bank_requests_notifications(request):
 
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
+def get_user_report_notifications(request):
+    customer_bank_notifications = Notifications.objects.filter(user2=request.user).filter(
+        transaction_type="New Report").filter(read="Not Read").order_by('-date_created')
+    serializer = NotificationSerializer(customer_bank_notifications, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
 def get_user_expenses_requests_notifications(request):
     customer_bank_notifications = Notifications.objects.filter(user2=request.user).filter(
         transaction_type="Cash").filter(read="Not Read").order_by('-date_created')
