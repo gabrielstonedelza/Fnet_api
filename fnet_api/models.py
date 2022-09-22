@@ -575,6 +575,9 @@ class GroupMessage(models.Model):
     def get_username(self):
         return self.user.username
 
+    def get_phone_number(self):
+        return self.user.phone
+
 
 class PrivateUserMessage(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE)
