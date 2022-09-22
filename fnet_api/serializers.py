@@ -4,7 +4,8 @@ from .models import (Customer, CustomerWithdrawal, MyPayments, AdminAccountsStar
                      AdminAccountsCompletedWith, CustomerAccounts, CustomerRequestDeposit,
                      ExpensesRequest, MobileMoneyDeposit, BankDeposit, UserMobileMoneyAccountsStarted,
                      UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, Notifications, PaymentAtBank, OTP,
-                     CustomerPaymentAtBank, AddedToApprovedDeposits, AddedToApprovedPayment, Reports)
+                     CustomerPaymentAtBank, AddedToApprovedDeposits, AddedToApprovedPayment, Reports,
+                     PrivateUserMessage, GroupMessage)
 
 
 class AddedToApprovedPaymentSerializer(serializers.ModelSerializer):
@@ -287,5 +288,20 @@ class CustomerPaymentAtBankSerializer(serializers.ModelSerializer):
 class ReportsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reports
-        fields = ['id', 'administrator', 'user','report', 'date_reported', 'time_reported','read']
+        fields = ['id', 'administrator', 'user', 'report', 'date_reported', 'time_reported', 'read']
         read_only_fields = ['user']
+
+
+# public and private messages
+class GroupMessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GroupMessage
+        fields = ['id', 'user', 'message', 'date_sent', 'time_sent']
+        read_only_fields = ['user']
+
+
+class PrivateUserMessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PrivateUserMessage
+        fields = ['id', 'sender', 'receiver', 'private_chat_id', 'message', 'read', 'date_created', 'time_created',
+                  'get_senders_username', 'get_receivers_username']

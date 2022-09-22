@@ -206,4 +206,12 @@ urlpatterns = [
     path("get_all_my_reports/", views.get_all_my_reports),
     path("get_all_reports/", views.get_all_reports),
     path("get_user_reports/<str:username>/", views.get_user_reports),
+
+    # private and group messages
+    path("private_message_detail/<str:private_chat_id>/", views.private_message_detail),
+    path("get_private_message/", views.get_private_message),
+    path("send_private_message/", views.send_private_message),
+    path("get_all_group_message/", views.get_all_group_message),
+    path("send_group_message/", views.send_group_message),
+
 ]

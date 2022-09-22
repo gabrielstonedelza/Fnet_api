@@ -1,7 +1,8 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from .models import CustomerRequestDeposit, ExpensesRequest, BankDeposit, MyPayments, Notifications, OTP, \
-    CustomerPaymentAtBank, Customer, AddedToApprovedDeposits, AddedToApprovedPayment, Reports
+    CustomerPaymentAtBank, Customer, AddedToApprovedDeposits, AddedToApprovedPayment, Reports, GroupMessage, \
+    PrivateUserMessage
 from django.conf import settings
 
 User = settings.AUTH_USER_MODEL
@@ -141,3 +142,34 @@ def alert_report(sender, created, instance, **kwargs):
                                      notification_title=title, notification_message=message,
                                      notification_from_customer=instance.user, user2=instance.administrator,
                                      )
+
+
+@receiver(post_save, sender=GroupMessage)
+def alert_pub_message(sender, created, instance, **kwargs):
+    title = f"New group message"
+    message = f"{instance.user.username} sent a message to the group"
+    transaction_type = "New group message"
+
+    if created:
+        Notifications.objects.create(item_id=instance.id, transaction_type=transaction_type,
+                                     notification_title=title, notification_message=message,
+                                     notification_from=instance.user, user2=instance.group_users,
+                                     )
+
+
+@receiver(post_save, sender=PrivateUserMessage)
+def alert_private_message(sender, created, instance, **kwargs):
+    title = f"New private message"
+    transaction_type = "New private message"
+
+    if created:
+        if instance.sender:
+            message = f"{instance.sender.username} sent you a message"
+            ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                                  notification_message=message, transaction_type=transaction_type,
+                                                  notification_to=instance.receiver)
+        if instance.receiver:
+            message = f"{instance.receiver.username} sent you a message"
+            ScheduledNotifications.objects.create(notification_id=instance.id, notification_title=title,
+                                                  notification_message=message, transaction_type=transaction_type,
+                                                  notification_to=instance.sender)

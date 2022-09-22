@@ -4,9 +4,11 @@ from .models import (Customer, CustomerWithdrawal, MyPayments, AdminAccountsStar
                      AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments, CustomerRequestDeposit,
                      Notifications, ExpensesRequest, BankDeposit, MobileMoneyDeposit, MobileMoneyWithdraw,
                      UserMobileMoneyAccountsStarted, UserMobileMoneyAccountsClosed, PaymentAtBank, OTP,
-                     CustomerPaymentAtBank, AddedToApprovedPayment, AddedToApprovedDeposits, Reports)
+                     CustomerPaymentAtBank, AddedToApprovedPayment, AddedToApprovedDeposits, Reports, GroupMessage, PrivateUserMessage)
 
 admin.site.register(Reports)
+admin.site.register(GroupMessage)
+admin.site.register(PrivateUserMessage)
 admin.site.register(Customer)
 admin.site.register(ExpensesRequest)
 admin.site.register(BankDeposit)

@@ -4,7 +4,7 @@ from django.utils import timezone
 from decimal import Decimal
 from django.utils.text import slugify
 from django.core.exceptions import ValidationError
-
+import random
 from datetime import datetime, date, time
 
 User = settings.AUTH_USER_MODEL
@@ -560,3 +560,46 @@ class Reports(models.Model):
 
     def get_username(self):
         return self.user.username
+
+
+# messages
+class GroupMessage(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    message = models.TextField()
+    group_users = models.ManyToManyField(User,blank=True, related_name="group_users")
+    date_sent = models.DateField(auto_now_add=True)
+    time_sent = models.TimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.user.username
+
+    def get_username(self):
+        return self.user.username
+
+
+class PrivateUserMessage(models.Model):
+    sender = models.ForeignKey(User, on_delete=models.CASCADE)
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="chatter2")
+    private_chat_id = models.CharField(max_length=400)
+    message = models.TextField()
+    read = models.BooleanField(default=False)
+    date_created = models.DateField(auto_now_add=True)
+    time_created = models.TimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.private_chat_id
+
+    def get_senders_username(self):
+        return self.sender.username
+
+    def get_receivers_username(self):
+        return self.receiver.username
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        senders_username = self.sender.username[:6]
+        receiver_username = self.receiver.username[:6]
+        rand_id = random.randint(2, 500)
+
+        if self.private_chat_id != "":
+            self.private_chat_id = senders_username + receiver_username + str(rand_id)
