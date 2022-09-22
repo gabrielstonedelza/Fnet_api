@@ -1587,11 +1587,16 @@ def get_all_group_message(request):
 
 
 # private messages
-@api_view(['POST'])
+@api_view(['GET', 'POST'])
 @permission_classes([permissions.IsAuthenticated])
 def send_private_message(request):
+    messages = PrivateUserMessage.objects.all().order_by('-date_created')
     serializer = PrivateUserMessageSerializer(data=request.data)
     if serializer.is_valid():
+        sender_name = serializer.validated_data.get('sender')
+        receiver_name = serializer.validated_data.get('receiver')
+        print(sender_name)
+        print(receiver_name)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
