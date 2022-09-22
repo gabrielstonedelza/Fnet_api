@@ -1590,16 +1590,29 @@ def get_all_group_message(request):
 @api_view(['GET', 'POST'])
 @permission_classes([permissions.IsAuthenticated])
 def send_private_message(request):
+    private_ids = []
     messages = PrivateUserMessage.objects.all().order_by('-date_created')
+    for i in messages:
+        if i.private_chat_id not in private_ids:
+            private_ids.append(i.private_chat_id)
+
     serializer = PrivateUserMessageSerializer(data=request.data)
     if serializer.is_valid():
         sender_name = serializer.validated_data.get('sender')
         receiver_name = serializer.validated_data.get('receiver')
-        print(sender_name)
-        print(receiver_name)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+        sender_receiver = str(sender_name) + str(receiver_name)
+        receiver_sender = str(receiver_name) + str(sender_name)
+        print(sender_receiver)
+        print(receiver_sender)
+
+        print(private_ids)
+
+        if sender_receiver and receiver_sender not in private_ids:
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET'])

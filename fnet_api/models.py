@@ -595,12 +595,10 @@ class PrivateUserMessage(models.Model):
         return self.receiver.username
 
     def save(self, *args, **kwargs):
-
-        senders_username = self.sender.username[:6]
-        receiver_username = self.receiver.username[:6]
-        rand_id = random.randint(2, 500)
+        senders_username = self.sender.username
+        receiver_username = self.receiver.username
 
         if self.private_chat_id == "":
-            self.private_chat_id = senders_username + receiver_username + str(rand_id)
+            self.private_chat_id = senders_username + receiver_username
 
         super().save(*args, **kwargs)
