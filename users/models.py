@@ -35,3 +35,8 @@ class Profile(models.Model):
             output_size = (300, 300)
             img.thumbnail(output_size)
             img.save(self.profile_pic.path)
+
+    def get_profile_pic(self):
+        if self.profile_pic:
+            return "https://fnetghana.xyz" + self.profile_pic.url
+        return ''
