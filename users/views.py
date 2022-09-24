@@ -8,6 +8,7 @@ from .permissions import IsOwnerOrReadOnly
 
 
 @api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
 def profile(request):
     user = Profile.objects.get(user=request.user)
     serializer = ProfileSerializer(user, many=False)
