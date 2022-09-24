@@ -6,6 +6,7 @@ from django.utils.text import slugify
 from django.core.exceptions import ValidationError
 import random
 from datetime import datetime, date, time
+from django.shortcuts import get_object_or_404
 
 User = settings.AUTH_USER_MODEL
 ID_TYPES = (
@@ -579,10 +580,19 @@ class GroupMessage(models.Model):
         return self.user.phone
 
 
+class PrivateChatId(models.Model):
+    chat_id = models.CharField(max_length=400, blank=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.chat_id
+
+
 class PrivateUserMessage(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE)
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="chatter2")
     private_chat_id = models.CharField(max_length=400, blank=True)
+    private_chat_id2 = models.CharField(max_length=400, blank=True)
     message = models.TextField()
     read = models.BooleanField(default=False)
     date_created = models.DateField(auto_now_add=True)
@@ -600,8 +610,23 @@ class PrivateUserMessage(models.Model):
     def save(self, *args, **kwargs):
         senders_username = self.sender.username
         receiver_username = self.receiver.username
+        sender_receiver = str(senders_username) + str(receiver_username)
+        receiver_sender = str(receiver_username) + str(senders_username)
 
-        if self.private_chat_id == "":
-            self.private_chat_id = senders_username + receiver_username
+        self.private_chat_id = sender_receiver
+        self.private_chat_id2 = receiver_sender
+        # chat_id = get_object_or_404(PrivateChatId, chat_id=sender_receiver)
+        # if chat_id:
+        #     if senders_username or receiver_username == chat_id:
+        #         self.private_chat_id = chat_id
+        #         self.private_chat_id2 = chat_id
+        # else:
+        #     self.private_chat_id = sender_receiver
+        #     self.private_chat_id2 = chat_id
+
+        # if not PrivateChatId.objects.filter(chat_id=sender_receiver).exists() and not PrivateChatId.objects.filter(
+        #         chat_id=receiver_sender).exists():
+        #     PrivateChatId.objects.create(chat_id=sender_receiver)
+        #     self.private_chat_id = sender_receiver
 
         super().save(*args, **kwargs)

@@ -8,13 +8,14 @@ from .serializers import (CustomerSerializer, BankDepositSerializer, ExpenseRequ
                           UserMobileMoneyAccountsClosedSerializer, UserMobileMoneyAccountsStartedSerializer,
                           MobileMoneyWithdrawalSerializer, PaymentAtBankSerializer, OTPSerializer,
                           CustomerPaymentAtBankSerializer, AddedToApprovedPaymentSerializer,
-                          AddedToApprovedBankDepositsSerializer)
+                          AddedToApprovedBankDepositsSerializer, PrivateChatIdSerializer)
 
 from .models import (Customer, BankDeposit, ExpensesRequest, MobileMoneyDeposit, CustomerWithdrawal, MyPayments,
                      AdminAccountsStartedWith, AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments,
                      CustomerRequestDeposit, UserMobileMoneyAccountsStarted, OTP, GroupMessage, PrivateUserMessage,
                      UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, Notifications, PaymentAtBank,
-                     CustomerPaymentAtBank, AddedToApprovedPayment, AddedToApprovedDeposits, Reports)
+                     CustomerPaymentAtBank, AddedToApprovedPayment, AddedToApprovedDeposits, Reports, PrivateChatId,
+                     )
 from drf_multiple_model.views import ObjectMultipleModelAPIView
 
 from rest_framework.decorators import api_view, permission_classes
@@ -1541,6 +1542,17 @@ def report_detail(request, id):
     return Response(serializer.data)
 
 
+@api_view(['GET', 'PUT'])
+@permission_classes([permissions.IsAuthenticated])
+def update_report(request, id):
+    report = get_object_or_404(Reports, id=id)
+    serializer = ReportsSerializer(report, data=request.data)
+    if serializer.is_valid():
+        serializer.save(user=request.user)
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_all_my_reports(request):
@@ -1578,6 +1590,16 @@ def send_group_message(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+# @api_view(['POST'])
+# @permission_classes([permissions.IsAuthenticated])
+# def create_chat_id(request):
+#     serializer = PrivateChatIdSerializer(data=request.data)
+#     if serializer.is_valid():
+#         serializer.save()
+#         return Response(serializer.data, status=status.HTTP_201_CREATED)
+#     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_all_group_message(request):
@@ -1587,46 +1609,35 @@ def get_all_group_message(request):
 
 
 # private messages
-@api_view(['GET', 'POST'])
+@api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
 def send_private_message(request):
-    private_ids = []
-    messages = PrivateUserMessage.objects.all().order_by('-date_created')
-    for i in messages:
-        if i.private_chat_id not in private_ids:
-            private_ids.append(i.private_chat_id)
-
     serializer = PrivateUserMessageSerializer(data=request.data)
     if serializer.is_valid():
-        sender_name = serializer.validated_data.get('sender')
-        receiver_name = serializer.validated_data.get('receiver')
-
-
-        sender_receiver = str(sender_name) + str(receiver_name)
-        receiver_sender = str(receiver_name) + str(sender_name)
-        print(sender_receiver)
-        print(receiver_sender)
-
-        print(private_ids)
-
-        if sender_receiver and receiver_sender not in private_ids:
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
-def get_private_message(request, private_chat_id):
-    messages = PrivateUserMessage.objects.filter(private_chat_id=private_chat_id)
-    serializer = PrivateUserMessageSerializer(messages, many=True)
+def get_private_message(request, user1, user2):
+    all_messages = []
+    messages1 = PrivateUserMessage.objects.filter(sender=user1, receiver=user2).order_by('-date_created')
+    messages2 = PrivateUserMessage.objects.filter(sender=user2, receiver=user1).order_by('-date_created')
+    for i in messages1:
+        all_messages.append(i)
+
+    for m in messages2:
+        all_messages.append(m)
+    serializer = PrivateUserMessageSerializer(all_messages, many=True)
     return Response(serializer.data)
 
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
-def private_message_detail(request, private_chat_id):
-    message = PrivateUserMessage.objects.get(private_chat_id=private_chat_id)
+def private_message_detail(request, user1, user2):
+    message = PrivateUserMessage.objects.get(sender=user1, receiver=user2)
     if message:
         message.read = True
         message.save()

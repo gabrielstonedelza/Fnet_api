@@ -95,7 +95,7 @@ urlpatterns = [
     path("momo_accounts_started_detail/<int:pk>/", views.momo_accounts_started_detail),
 
     path('update_customers_details/<int:id>/', views.update_customers_details),
-    path('update_customers_accounts_details/<int:id>/', views.update_customers_accounts_details),
+    path('update_customers_accounts_details/<int:id>/', views.update_report),
     path('delete_customer_accounts/<int:id>/', views.delete_customer_accounts),
     path("customers_account_detail/<int:pk>/", views.customers_account_detail),
     path('search_customers_accounts/', views.GetAllCustomersAccounts.as_view()),
@@ -203,13 +203,14 @@ urlpatterns = [
     #     reports
     path("add_report/", views.add_report),
     path("report_detail/<int:id>/", views.report_detail),
+    path("update_report/<int:id>/", views.update_report),
     path("get_all_my_reports/", views.get_all_my_reports),
     path("get_all_reports/", views.get_all_reports),
     path("get_user_reports/<str:username>/", views.get_user_reports),
 
     # private and group messages
     path("private_message_detail/<str:private_chat_id>/", views.private_message_detail),
-    path("get_private_message/<str:private_chat_id>/", views.get_private_message),
+    path("get_private_message/<int:user1>/<int:user2>/", views.get_private_message),
     path("send_private_message/", views.send_private_message),
     path("get_all_group_message/", views.get_all_group_message),
     path("send_group_message/", views.send_group_message),
