@@ -26,6 +26,18 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
 
+    def get_company_name(self):
+        return self.user.company_name
+
+    def get_phone(self):
+        return self.user.phone
+
+    def get_email(self):
+        return self.user.email
+
+    def get_username(self):
+        return self.user.username
+
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
 
