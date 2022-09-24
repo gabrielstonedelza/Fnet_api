@@ -17,3 +17,14 @@ def profile(request):
 
 def fnet_home(request):
     return render(request, "users/fnet_home.html")
+
+
+@api_view(['GET', 'PUT'])
+@permission_classes([permissions.IsAuthenticated])
+def update_profile(request):
+    my_profile = Profile.objects.get(user=request.user)
+    serializer = ProfileSerializer(my_profile, data=request.data)
+    if serializer.is_valid():
+        serializer.save(user=request.user)
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
