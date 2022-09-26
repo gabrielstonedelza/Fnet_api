@@ -646,7 +646,7 @@ class GetAllCustomers(generics.ListAPIView):
 
 class GetAllAgents(generics.ListAPIView):
     permission_classes = [permissions.AllowAny]
-    queryset = User.objects.exclude(id=1).order_by('-date_joined')
+    queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UsersSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['username']
