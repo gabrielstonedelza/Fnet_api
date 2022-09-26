@@ -303,7 +303,7 @@ class GroupMessageSerializer(serializers.ModelSerializer):
 class PrivateUserMessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = PrivateUserMessage
-        fields = ['id', 'sender', 'receiver', 'private_chat_id', 'private_chat_id2', 'message', 'read', 'date_created', 'time_created',
+        fields = ['id', 'sender', 'receiver', 'private_chat_id', 'message', 'read', 'date_created', 'time_created',
                   'get_senders_username', 'get_receivers_username']
         # read_only_fields = ['sender', 'receiver']
 
