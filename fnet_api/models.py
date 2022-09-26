@@ -7,6 +7,7 @@ from django.core.exceptions import ValidationError
 import random
 from datetime import datetime, date, time
 from django.shortcuts import get_object_or_404
+from django.contrib.humanize.templatetags import humanize
 
 User = settings.AUTH_USER_MODEL
 ID_TYPES = (
@@ -562,13 +563,11 @@ class Reports(models.Model):
     def get_username(self):
         return self.user.username
 
-
 # messages
-class GroupMessage(models.Model):
+class FnetGroupMessage(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     message = models.TextField()
-    date_sent = models.DateField(auto_now_add=True)
-    time_sent = models.TimeField(auto_now_add=True)
+    timestamp = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.user.username
@@ -579,6 +578,9 @@ class GroupMessage(models.Model):
     def get_phone_number(self):
         return self.user.phone
 
+    def get_date(self):
+        return humanize.naturaltime(self.timestamp)
+
 
 class PrivateChatId(models.Model):
     chat_id = models.CharField(max_length=400, blank=True)
@@ -588,14 +590,13 @@ class PrivateChatId(models.Model):
         return self.chat_id
 
 
-class PrivateUserMessage(models.Model):
+class FnetPrivateUserMessage(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE)
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="chatter2")
     private_chat_id = models.CharField(max_length=400, blank=True)
     message = models.TextField()
     read = models.BooleanField(default=False)
-    date_created = models.DateField(auto_now_add=True)
-    time_created = models.TimeField(auto_now_add=True)
+    timestamp = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.private_chat_id
@@ -605,6 +606,9 @@ class PrivateUserMessage(models.Model):
 
     def get_receivers_username(self):
         return self.receiver.username
+
+    def get_date(self):
+        return humanize.naturaltime(self.timestamp)
 
     def save(self, *args, **kwargs):
         senders_username = self.sender.username

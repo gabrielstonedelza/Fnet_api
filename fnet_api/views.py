@@ -3,7 +3,7 @@ from .serializers import (CustomerSerializer, BankDepositSerializer, ExpenseRequ
                           MobileMoneyDepositSerializer,
                           CustomerWithdrawalSerializer, PaymentsSerializer, AdminAccountsStartedSerializer, \
                           AdminAccountsCompletedSerializer, CustomerAccountsSerializer, CashAtPaymentSerializer,
-                          ReportsSerializer, GroupMessageSerializer, PrivateUserMessageSerializer,
+                          ReportsSerializer, FnetGroupMessageSerializer, FnetPrivateUserMessageSerializer,
                           CustomerDepositRequestSerializer, NotificationSerializer,
                           UserMobileMoneyAccountsClosedSerializer, UserMobileMoneyAccountsStartedSerializer,
                           MobileMoneyWithdrawalSerializer, PaymentAtBankSerializer, OTPSerializer,
@@ -12,7 +12,7 @@ from .serializers import (CustomerSerializer, BankDepositSerializer, ExpenseRequ
 
 from .models import (Customer, BankDeposit, ExpensesRequest, MobileMoneyDeposit, CustomerWithdrawal, MyPayments,
                      AdminAccountsStartedWith, AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments,
-                     CustomerRequestDeposit, UserMobileMoneyAccountsStarted, OTP, GroupMessage, PrivateUserMessage,
+                     CustomerRequestDeposit, UserMobileMoneyAccountsStarted, OTP, FnetGroupMessage, FnetPrivateUserMessage,
                      UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, Notifications, PaymentAtBank,
                      CustomerPaymentAtBank, AddedToApprovedPayment, AddedToApprovedDeposits, Reports, PrivateChatId,
                      )
@@ -1583,7 +1583,7 @@ def get_user_reports(request, username):
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
 def send_group_message(request):
-    serializer = GroupMessageSerializer(data=request.data)
+    serializer = FnetGroupMessageSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save(user=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -1603,8 +1603,8 @@ def send_group_message(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_all_group_message(request):
-    messages = GroupMessage.objects.all().order_by('-date_sent')
-    serializer = GroupMessageSerializer(messages, many=True)
+    messages = FnetGroupMessage.objects.all().order_by('-date_sent')
+    serializer = FnetGroupMessageSerializer(messages, many=True)
     return Response(serializer.data)
 
 
@@ -1612,7 +1612,7 @@ def get_all_group_message(request):
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
 def send_private_message(request):
-    serializer = PrivateUserMessageSerializer(data=request.data)
+    serializer = FnetPrivateUserMessageSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -1623,23 +1623,23 @@ def send_private_message(request):
 @permission_classes([permissions.IsAuthenticated])
 def get_private_message(request, user1, user2):
     all_messages = []
-    messages1 = PrivateUserMessage.objects.filter(sender=user1, receiver=user2).order_by('-date_created')
-    messages2 = PrivateUserMessage.objects.filter(sender=user2, receiver=user1).order_by('-date_created')
+    messages1 = FnetPrivateUserMessage.objects.filter(sender=user1, receiver=user2).order_by('-date_created')
+    messages2 = FnetPrivateUserMessage.objects.filter(sender=user2, receiver=user1).order_by('-date_created')
     for i in messages1:
         all_messages.append(i)
 
     for m in messages2:
         all_messages.append(m)
-    serializer = PrivateUserMessageSerializer(all_messages, many=True)
+    serializer = FnetPrivateUserMessageSerializer(all_messages, many=True)
     return Response(serializer.data)
 
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def private_message_detail(request, user1, user2):
-    message = PrivateUserMessage.objects.get(sender=user1, receiver=user2)
+    message = FnetPrivateUserMessage.objects.get(sender=user1, receiver=user2)
     if message:
         message.read = True
         message.save()
-    serializer = PrivateUserMessageSerializer(message, many=False)
+    serializer = FnetPrivateUserMessageSerializer(message, many=False)
     return Response(serializer.data)

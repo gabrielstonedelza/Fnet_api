@@ -1,8 +1,8 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from .models import CustomerRequestDeposit, ExpensesRequest, BankDeposit, MyPayments, Notifications, OTP, \
-    CustomerPaymentAtBank, Customer, AddedToApprovedDeposits, AddedToApprovedPayment, Reports, GroupMessage, \
-    PrivateUserMessage
+    CustomerPaymentAtBank, Customer, AddedToApprovedDeposits, AddedToApprovedPayment, Reports, FnetGroupMessage, \
+    FnetPrivateUserMessage
 from django.conf import settings
 
 User = settings.AUTH_USER_MODEL
@@ -144,7 +144,7 @@ def alert_report(sender, created, instance, **kwargs):
                                      )
 
 
-@receiver(post_save, sender=GroupMessage)
+@receiver(post_save, sender=FnetGroupMessage)
 def alert_pub_message(sender, created, instance, **kwargs):
     title = f"New group message"
     message = f"{instance.user.username} sent a message to the group"
@@ -160,7 +160,7 @@ def alert_pub_message(sender, created, instance, **kwargs):
                                          )
 
 
-@receiver(post_save, sender=PrivateUserMessage)
+@receiver(post_save, sender=FnetPrivateUserMessage)
 def alert_private_message(sender, created, instance, **kwargs):
     title = f"New private message"
     transaction_type = "New private message"

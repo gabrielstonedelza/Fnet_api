@@ -5,7 +5,7 @@ from .models import (Customer, CustomerWithdrawal, MyPayments, AdminAccountsStar
                      ExpensesRequest, MobileMoneyDeposit, BankDeposit, UserMobileMoneyAccountsStarted,
                      UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, Notifications, PaymentAtBank, OTP,
                      CustomerPaymentAtBank, AddedToApprovedDeposits, AddedToApprovedPayment, Reports,
-                     PrivateUserMessage, GroupMessage, PrivateChatId)
+                     FnetPrivateUserMessage, FnetGroupMessage, PrivateChatId)
 
 
 class AddedToApprovedPaymentSerializer(serializers.ModelSerializer):
@@ -293,17 +293,17 @@ class ReportsSerializer(serializers.ModelSerializer):
 
 
 # public and private messages
-class GroupMessageSerializer(serializers.ModelSerializer):
+class FnetGroupMessageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = GroupMessage
-        fields = ['id', 'user', 'message', 'date_sent', 'time_sent', 'get_username', 'get_phone_number']
+        model = FnetGroupMessage
+        fields = ['id', 'user', 'message', 'get_date', 'get_username', 'get_phone_number']
         read_only_fields = ['user']
 
 
-class PrivateUserMessageSerializer(serializers.ModelSerializer):
+class FnetPrivateUserMessageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = PrivateUserMessage
-        fields = ['id', 'sender', 'receiver', 'private_chat_id', 'message', 'read', 'date_created', 'time_created',
+        model = FnetPrivateUserMessage
+        fields = ['id', 'sender', 'receiver', 'private_chat_id', 'message', 'read', 'get_date',
                   'get_senders_username', 'get_receivers_username']
         # read_only_fields = ['sender', 'receiver']
 
