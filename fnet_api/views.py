@@ -1603,7 +1603,7 @@ def send_group_message(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_all_group_message(request):
-    messages = FnetGroupMessage.objects.all().order_by('-date_sent')
+    messages = FnetGroupMessage.objects.all().order_by('-timestamp')
     serializer = FnetGroupMessageSerializer(messages, many=True)
     return Response(serializer.data)
 
@@ -1623,8 +1623,8 @@ def send_private_message(request):
 @permission_classes([permissions.IsAuthenticated])
 def get_private_message(request, user1, user2):
     all_messages = []
-    messages1 = FnetPrivateUserMessage.objects.filter(sender=user1, receiver=user2).order_by('-date_created')
-    messages2 = FnetPrivateUserMessage.objects.filter(sender=user2, receiver=user1).order_by('-date_created')
+    messages1 = FnetPrivateUserMessage.objects.filter(sender=user1, receiver=user2).order_by('-timestamp')
+    messages2 = FnetPrivateUserMessage.objects.filter(sender=user2, receiver=user1).order_by('-timestamp')
     for i in messages1:
         all_messages.append(i)
 

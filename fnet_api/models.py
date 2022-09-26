@@ -563,6 +563,7 @@ class Reports(models.Model):
     def get_username(self):
         return self.user.username
 
+
 # messages
 class FnetGroupMessage(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
