@@ -597,6 +597,7 @@ class FnetPrivateUserMessage(models.Model):
     private_chat_id = models.CharField(max_length=400, blank=True)
     message = models.TextField()
     read = models.BooleanField(default=False)
+    isSender = models.BooleanField(default=False)
     timestamp = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
@@ -618,6 +619,8 @@ class FnetPrivateUserMessage(models.Model):
         receiver_sender = str(receiver_username) + str(senders_username)
 
         self.private_chat_id = sender_receiver
+        if sender_receiver:
+            self.isSender = True
         # chat_id = get_object_or_404(PrivateChatId, chat_id=sender_receiver)
         # if chat_id:
         #     if senders_username or receiver_username == chat_id:
