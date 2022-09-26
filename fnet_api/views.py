@@ -644,12 +644,23 @@ class GetAllCustomers(generics.ListAPIView):
     search_fields = ['name', 'phone']
 
 
+# class GetAllAgents(generics.ListAPIView):
+#     permission_classes = [permissions.IsAuthenticated]
+#     queryset = User.objects.exclude(id=request.user.id).order_by('-date_joined')
+#     serializer_class = UsersSerializer
+#     filter_backends = [filters.SearchFilter]
+#     search_fields = ['username']
+
+
 class GetAllAgents(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
-    queryset = User.objects.exclude(id=request.user.id).order_by('-date_joined')
     serializer_class = UsersSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['username']
+
+    def get_queryset(self):
+        agent = self.request.user
+        return User.objects.exclude(id=agent.id).order_by('-date_joined')
 
 
 @api_view(['POST'])
