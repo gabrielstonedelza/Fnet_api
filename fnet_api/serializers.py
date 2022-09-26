@@ -304,7 +304,7 @@ class FnetPrivateUserMessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = FnetPrivateUserMessage
         fields = ['id', 'sender', 'receiver', 'private_chat_id', 'message', 'read', 'get_date',
-                  'get_senders_username', 'get_receivers_username', 'timestamp', 'isSender']
+                  'get_senders_username', 'get_receivers_username', 'timestamp', 'isSender','isReceiver']
         # read_only_fields = ['sender', 'receiver']
 
 
