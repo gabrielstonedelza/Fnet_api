@@ -379,6 +379,8 @@ class MyPayments(models.Model):
     transaction_id2 = models.CharField(max_length=30, blank=True, default="")
     payment_action = models.CharField(max_length=50, choices=PAYMENT_ACTIONS, default="Close Payment")
     payment_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
+    payment_month = models.CharField(max_length=10, blank=True, default="")
+    payment_year = models.CharField(max_length=10, blank=True, default="")
     date_created = models.DateField(auto_now_add=True)
     time_created = models.TimeField(auto_now_add=True)
     slug = models.SlugField(max_length=100, default='')
@@ -390,6 +392,10 @@ class MyPayments(models.Model):
         return f"{self.agent.username}'s payment is approved"
 
     def save(self, *args, **kwargs):
+        my_date = datetime.today()
+        de_date = my_date.date()
+        self.payment_month = de_date.month
+        self.payment_year = de_date.year
         value = self.mode_of_payment1
         self.slug = slugify(value, allow_unicode=True)
 

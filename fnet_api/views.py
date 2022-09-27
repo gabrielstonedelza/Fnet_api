@@ -741,7 +741,9 @@ def get_user_payments(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_payment_approved_total(request):
-    payment_today = MyPayments.objects.filter(agent=request.user).filter(payment_status="Approved").order_by(
+    my_date = datetime.today()
+    de_date = my_date.date()
+    payment_today = MyPayments.objects.filter(agent=request.user).filter(payment_status="Approved").filter(payment_month=de_date.month).filter(payment_year=de_date.year).order_by(
         '-date_created')
     serializer = PaymentsSerializer(payment_today, many=True)
     return Response(serializer.data)
