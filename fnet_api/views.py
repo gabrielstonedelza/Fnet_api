@@ -8,13 +8,16 @@ from .serializers import (CustomerSerializer, BankDepositSerializer, ExpenseRequ
                           UserMobileMoneyAccountsClosedSerializer, UserMobileMoneyAccountsStartedSerializer,
                           MobileMoneyWithdrawalSerializer, PaymentAtBankSerializer, OTPSerializer,
                           CustomerPaymentAtBankSerializer, AddedToApprovedPaymentSerializer,
-                          AddedToApprovedBankDepositsSerializer, PrivateChatIdSerializer)
+                          AddedToApprovedBankDepositsSerializer, PrivateChatIdSerializer, AddToCustomerPointsSerializer,
+                          AddToCustomerRedeemPointsSerializer)
 
 from .models import (Customer, BankDeposit, ExpensesRequest, MobileMoneyDeposit, CustomerWithdrawal, MyPayments,
                      AdminAccountsStartedWith, AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments,
-                     CustomerRequestDeposit, UserMobileMoneyAccountsStarted, OTP, FnetGroupMessage, FnetPrivateUserMessage,
+                     CustomerRequestDeposit, UserMobileMoneyAccountsStarted, OTP, FnetGroupMessage,
+                     FnetPrivateUserMessage,
                      UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, Notifications, PaymentAtBank,
                      CustomerPaymentAtBank, AddedToApprovedPayment, AddedToApprovedDeposits, Reports, PrivateChatId,
+                     AddToCustomerPoints, AddToCustomerRedeemPoints
                      )
 from drf_multiple_model.views import ObjectMultipleModelAPIView
 
@@ -743,7 +746,8 @@ def get_user_payments(request):
 def get_payment_approved_total(request):
     my_date = datetime.today()
     de_date = my_date.date()
-    payment_today = MyPayments.objects.filter(agent=request.user).filter(payment_status="Approved").filter(payment_month=de_date.month).filter(payment_year=de_date.year).order_by(
+    payment_today = MyPayments.objects.filter(agent=request.user).filter(payment_status="Approved").filter(
+        payment_month=de_date.month).filter(payment_year=de_date.year).order_by(
         '-date_created')
     serializer = PaymentsSerializer(payment_today, many=True)
     return Response(serializer.data)
@@ -975,7 +979,8 @@ def get_bank_deposits_for_today(request):
     my_date = datetime.today()
     de_date = my_date.date()
     your_bank_requests = BankDeposit.objects.filter(agent=request.user).filter(
-        deposited_month=de_date.month).filter(deposited_year=de_date.year).filter(deposit_paid="Not Paid").order_by('-date_requested')
+        deposited_month=de_date.month).filter(deposited_year=de_date.year).filter(deposit_paid="Not Paid").order_by(
+        '-date_requested')
     serializer = BankDepositSerializer(your_bank_requests, many=True)
     return Response(serializer.data)
 
@@ -1603,16 +1608,6 @@ def send_group_message(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# @api_view(['POST'])
-# @permission_classes([permissions.IsAuthenticated])
-# def create_chat_id(request):
-#     serializer = PrivateChatIdSerializer(data=request.data)
-#     if serializer.is_valid():
-#         serializer.save()
-#         return Response(serializer.data, status=status.HTTP_201_CREATED)
-#     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_all_group_message(request):
@@ -1655,4 +1650,34 @@ def private_message_detail(request, user1, user2):
         message.read = True
         message.save()
     serializer = FnetPrivateUserMessageSerializer(message, many=False)
+    return Response(serializer.data)
+
+
+# customer points
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def add_to_customer_points(request):
+    serializer = AddToCustomerPointsSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def add_to_customer_redeemed_points(request):
+    serializer = AddToCustomerRedeemPointsSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_customer_redeemed_points(request, customer):
+    user = get_object_or_404(AddToCustomerRedeemPoints, username=username)
+    report = Reports.objects.filter(customer=customer).order_by('-date_reported')
+    serializer = AddToCustomerRedeemPointsSerializer(report, many=True)
     return Response(serializer.data)

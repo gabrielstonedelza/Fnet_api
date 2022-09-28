@@ -1,8 +1,9 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from .models import CustomerRequestDeposit, ExpensesRequest, BankDeposit, MyPayments, Notifications, OTP, \
-    CustomerPaymentAtBank, Customer, AddedToApprovedDeposits, AddedToApprovedPayment, Reports, FnetGroupMessage, \
-    FnetPrivateUserMessage
+from .models import (CustomerRequestDeposit, ExpensesRequest, BankDeposit, MyPayments, Notifications, OTP, \
+                     CustomerPaymentAtBank, Customer, AddedToApprovedDeposits, AddedToApprovedPayment, Reports,
+                     FnetGroupMessage, \
+                     FnetPrivateUserMessage, AddToCustomerPoints, AddToCustomerRedeemPoints)
 from django.conf import settings
 
 User = settings.AUTH_USER_MODEL
@@ -176,3 +177,30 @@ def alert_private_message(sender, created, instance, **kwargs):
             Notifications.objects.create(item_id=instance.id, notification_title=title,
                                          notification_message=message, transaction_type=transaction_type,
                                          user2=instance.sender)
+
+
+# customer points
+@receiver(post_save, sender=AddToCustomerPoints)
+def alert_points_created(sender, created, instance, **kwargs):
+    title = f"Points Updated"
+    message = f"hi {instance.customer.name} your points was updated"
+    transaction_type = "Points Updated"
+
+    if created:
+        Notifications.objects.create(item_id=instance.id, transaction_type=transaction_type,
+                                     notification_title=title, notification_message=message,
+                                     notification_to_customer=instance.customer
+                                     )
+
+
+@receiver(post_save, sender=AddToCustomerRedeemPoints)
+def alert_points_redeemed(sender, created, instance, **kwargs):
+    title = f"Points Redeemed"
+    message = f"hi {instance.customer.name} you have redeemed your points of {instance.amount}"
+    transaction_type = "Points Redeemed"
+
+    if created:
+        Notifications.objects.create(item_id=instance.id, transaction_type=transaction_type,
+                                     notification_title=title, notification_message=message,
+                                     notification_to_customer=instance.customer
+                                     )

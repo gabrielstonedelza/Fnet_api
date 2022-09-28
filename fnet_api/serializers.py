@@ -5,7 +5,8 @@ from .models import (Customer, CustomerWithdrawal, MyPayments, AdminAccountsStar
                      ExpensesRequest, MobileMoneyDeposit, BankDeposit, UserMobileMoneyAccountsStarted,
                      UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, Notifications, PaymentAtBank, OTP,
                      CustomerPaymentAtBank, AddedToApprovedDeposits, AddedToApprovedPayment, Reports,
-                     FnetPrivateUserMessage, FnetGroupMessage, PrivateChatId)
+                     FnetPrivateUserMessage, FnetGroupMessage, PrivateChatId, AddToCustomerPoints,
+                     AddToCustomerRedeemPoints)
 
 
 class AddedToApprovedPaymentSerializer(serializers.ModelSerializer):
@@ -40,7 +41,7 @@ class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
         fields = ['id', 'agent', 'administrator', 'username', 'name', 'location', 'digital_address', 'id_type',
-                  'id_number', 'phone',
+                  'id_number', 'phone', 'points',
                   'date_of_birth', 'date_created', 'get_agents_phone']
         read_only_fields = ['agent']
 
@@ -312,3 +313,15 @@ class PrivateChatIdSerializer(serializers.ModelSerializer):
     class Meta:
         model = PrivateChatId
         fields = ['id', 'chat_id', 'date_created']
+
+
+class AddToCustomerPointsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AddToCustomerPoints
+        fields = ['id', 'customer', 'customer_phone', 'points', 'date_created']
+
+
+class AddToCustomerRedeemPointsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AddToCustomerRedeemPoints
+        fields = ['id', 'customer', 'customer_phone', 'points', 'date_created', 'redeem_option']

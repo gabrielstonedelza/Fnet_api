@@ -150,6 +150,12 @@ NOTIFICATIONS_TRIGGERS = (
     ("Not Triggered", "Not Triggered"),
 )
 
+REDEEM_POINTS_OPTIONS = (
+    ("Cash", "Cash"),
+    ("Mobile Credit", "Mobile Credit"),
+    ("Melcom Coupon", "Melcom Coupon"),
+)
+
 
 class CustomerRequestDeposit(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
@@ -194,6 +200,7 @@ class Customer(models.Model):
     id_type = models.CharField(max_length=50, choices=ID_TYPES, blank=True, default="Passport")
     id_number = models.CharField(max_length=50, blank=True, default="")
     phone = models.CharField(max_length=15, unique=True, blank=True)
+    points = models.DecimalField(max_digits=19, decimal_places=2, blank=True, default="0.0")
     date_of_birth = models.CharField(max_length=15, blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
 
@@ -202,6 +209,29 @@ class Customer(models.Model):
 
     def get_agents_phone(self):
         return self.agent.phone
+
+
+class AddToCustomerPoints(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    customer_phone = models.CharField(max_length=20, blank=True)
+    points = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        c_points = str(self.points)
+        return f"{self.customer.name} has {c_points} points"
+
+
+class AddToCustomerRedeemPoints(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    customer_phone = models.CharField(max_length=20, blank=True)
+    points = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
+    redeem_option = models.CharField(max_length=100, choices=REDEEM_POINTS_OPTIONS, default="Mobile Credit")
+    date_created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        c_points = str(self.points)
+        return f"{self.customer.name} has redeemed {c_points} points"
 
 
 class CustomerAccounts(models.Model):
