@@ -1673,7 +1673,7 @@ def add_to_customer_points(request):
 
 
 @api_view(['POST'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 def add_to_customer_redeemed_points(request):
     serializer = AddToCustomerRedeemPointsSerializer(data=request.data)
     if serializer.is_valid():
