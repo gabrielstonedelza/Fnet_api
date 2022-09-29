@@ -120,7 +120,7 @@ class BankDepositSerializer(serializers.ModelSerializer):
     class Meta:
         model = BankDeposit
         fields = ['id', 'guarantor', 'customer', 'agent', 'guarantor_username', 'customer_username', 'deposit_paid',
-                  'agent_username', 'bank', 'account_number', 'account_name', 'customer_phone',  'amount', 'depositor_name',
+                  'agent_username', 'bank', 'account_number', 'account_name', 'amount', 'depositor_name',
                   'request_status',
                   'date_requested', 'time_requested', 'slug', 'app_version']
         read_only_fields = ['agent']
