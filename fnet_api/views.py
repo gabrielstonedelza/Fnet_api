@@ -484,6 +484,14 @@ def customer_details(request, pk):
     return Response(serializer.data)
 
 
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def customer_details_by_phone(request, phone):
+    customer = get_object_or_404(Customer, customer_phone=phone)
+    serializer = CustomerSerializer(customer, many=False)
+    return Response(serializer.data)
+
+
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
 def customer_withdrawal(request):
