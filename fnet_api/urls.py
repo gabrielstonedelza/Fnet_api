@@ -216,4 +216,9 @@ urlpatterns = [
     path("get_all_group_message/", views.get_all_group_message),
     path("send_group_message/", views.send_group_message),
 
+    #   customer points
+    path("get_customer_points/<str:customer_phone>/", views.get_customer_points),
+    path("get_customer_redeemed_points/<str:customer_phone>/", views.get_customer_redeemed_points)
+
+
 ]

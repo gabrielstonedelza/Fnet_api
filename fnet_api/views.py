@@ -1684,8 +1684,15 @@ def add_to_customer_redeemed_points(request):
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
-def get_customer_redeemed_points(request, customer):
-    user = get_object_or_404(AddToCustomerRedeemPoints, username=username)
-    report = Reports.objects.filter(customer=customer).order_by('-date_reported')
-    serializer = AddToCustomerRedeemPointsSerializer(report, many=True)
+def get_customer_redeemed_points(request, customer_phone):
+    redeemedPoints = AddToCustomerRedeemPoints.objects.filter(customer_phone=customer_phone).order_by('-date_created')
+    serializer = AddToCustomerRedeemPointsSerializer(redeemedPoints, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_customer_points(request, customer_phone):
+    points = AddToCustomerPoints.objects.filter(customer_phone=customer_phone).order_by('-date_created')
+    serializer = AddToCustomerPointsSerializer(points, many=True)
     return Response(serializer.data)
