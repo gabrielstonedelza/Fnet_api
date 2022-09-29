@@ -219,6 +219,7 @@ urlpatterns = [
     #   customer points
     path("get_customer_points/<str:customer_phone>/", views.get_customer_points),
     path("get_customer_redeemed_points/<str:customer_phone>/", views.get_customer_redeemed_points)
+    path("add_to_customer_redeemed_points/", views.add_to_customer_redeemed_points)
 
 
 ]
