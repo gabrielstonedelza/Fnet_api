@@ -487,7 +487,7 @@ def customer_details(request, pk):
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def customer_details_by_phone(request, phone):
-    customer = get_object_or_404(Customer, customer_phone=phone)
+    customer = get_object_or_404(Customer, phone=phone)
     serializer = CustomerSerializer(customer, many=False)
     return Response(serializer.data)
 
