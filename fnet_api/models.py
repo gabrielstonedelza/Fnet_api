@@ -151,8 +151,9 @@ NOTIFICATIONS_TRIGGERS = (
 )
 
 REDEEM_POINTS_OPTIONS = (
-    ("Cash", "Cash"),
-    ("Mobile Credit", "Mobile Credit"),
+    ("Select Option","Select Option"),
+    ("Express Accounts", "Express Accounts"),
+    ("Airtime", "Airtime"),
     ("Melcom Coupon", "Melcom Coupon"),
 )
 
@@ -223,10 +224,11 @@ class AddToCustomerPoints(models.Model):
 
 
 class AddToCustomerRedeemPoints(models.Model):
+    administrator = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     customer_phone = models.CharField(max_length=20, blank=True)
     points = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
-    redeem_option = models.CharField(max_length=100, choices=REDEEM_POINTS_OPTIONS, default="Mobile Credit")
+    redeem_option = models.CharField(max_length=100, choices=REDEEM_POINTS_OPTIONS, default="Airtime")
     date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

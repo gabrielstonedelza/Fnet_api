@@ -196,11 +196,11 @@ def alert_points_created(sender, created, instance, **kwargs):
 @receiver(post_save, sender=AddToCustomerRedeemPoints)
 def alert_points_redeemed(sender, created, instance, **kwargs):
     title = f"Points Redeemed"
-    message = f"hi {instance.customer.name} you have redeemed your points of {instance.amount}"
+    message = f"{instance.customer.name} wants to redeem his points for {instance.redeem_option}"
     transaction_type = "Points Redeemed"
 
     if created:
         Notifications.objects.create(item_id=instance.id, transaction_type=transaction_type,
                                      notification_title=title, notification_message=message,
-                                     notification_to_customer=instance.customer
+                                     user2=instance.administrator
                                      )
