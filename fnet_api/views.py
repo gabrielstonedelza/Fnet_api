@@ -343,7 +343,6 @@ def register_customer_account(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def get_customer_accounts(request):
@@ -440,6 +439,7 @@ def admin_register_customer(request):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['GET', 'PUT'])
 @permission_classes([permissions.AllowAny])
@@ -1748,7 +1748,7 @@ def referral_detail(request, pk):
 # get all referrals for
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
-def get_all_referrals(request,):
+def get_all_referrals(request, ):
     referrals = ReferCustomer.objects.all().order_by('-date_created')
     serializer = ReferCustomerSerializer(referrals, many=True)
     return Response(serializer.data)

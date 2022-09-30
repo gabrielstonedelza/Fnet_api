@@ -48,7 +48,7 @@ def alert_customer_created(sender, created, instance, **kwargs):
     if created:
         Notifications.objects.create(user=instance.agent, transaction_type=transaction_type, item_id=instance.id,
                                      notification_title=title, notification_message=message,
-                                     customer=instance.customer_phone, user2=instance.agent,
+                                     customer=instance.phone, user2=instance.agent,
                                      notification_to_admin=instance.administrator,
                                      notification_to_customer=instance.customer
                                      )
