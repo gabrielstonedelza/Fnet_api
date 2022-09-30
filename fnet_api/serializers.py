@@ -50,6 +50,19 @@ class CustomerSerializer(serializers.ModelSerializer):
         return username
 
 
+class AdminCustomerSerializer(serializers.ModelSerializer):
+    username = serializers.SerializerMethodField('get_username')
+
+    class Meta:
+        model = Customer
+        fields = ['id', 'agent', 'administrator', 'username', 'name', 'location', 'digital_address', 'id_type',
+                  'id_number', 'phone', 'points', 'status',
+                  'date_of_birth', 'date_created', 'get_agents_phone', 'referral']
+
+    def get_username(self, user):
+        username = user.agent.username
+        return username
+
 class ReferCustomerSerializer(serializers.ModelSerializer):
 
     class Meta:

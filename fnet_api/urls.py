@@ -6,6 +6,7 @@ urlpatterns = [
     path('request_detail/<int:pk>/', views.expense_detail),
 
     path('register_customer/', views.register_customer),
+    path('admin_register_customer/', views.admin_register_customer),
     path('customer_withdrawal/', views.customer_withdrawal),
     path('all_agents/', views.GetAllAgents.as_view()),
     path('all_customers/', views.GetAllCustomers.as_view()),

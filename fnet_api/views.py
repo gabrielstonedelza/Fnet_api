@@ -9,7 +9,7 @@ from .serializers import (CustomerSerializer, BankDepositSerializer, ExpenseRequ
                           MobileMoneyWithdrawalSerializer, PaymentAtBankSerializer, OTPSerializer,
                           CustomerPaymentAtBankSerializer, AddedToApprovedPaymentSerializer,
                           AddedToApprovedBankDepositsSerializer, PrivateChatIdSerializer, AddToCustomerPointsSerializer,
-                          AddToCustomerRedeemPointsSerializer, ReferCustomerSerializer)
+                          AddToCustomerRedeemPointsSerializer, ReferCustomerSerializer, AdminCustomerSerializer)
 
 from .models import (Customer, BankDeposit, ExpensesRequest, MobileMoneyDeposit, CustomerWithdrawal, MyPayments,
                      AdminAccountsStartedWith, AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments,
@@ -343,6 +343,7 @@ def register_customer_account(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def get_customer_accounts(request):
@@ -430,6 +431,15 @@ def register_customer(request):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+def admin_register_customer(request):
+    serializer = AdminCustomerSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'PUT'])
 @permission_classes([permissions.AllowAny])
