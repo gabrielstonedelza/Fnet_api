@@ -221,7 +221,6 @@ class Customer(models.Model):
 
 class ReferCustomer(models.Model):
     administrator = models.ForeignKey(User, on_delete=models.CASCADE, default=1, related_name="referral_administrator")
-    agent = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=150, blank=True)
     location = models.CharField(max_length=100, blank=True)
     digital_address = models.CharField(max_length=25, blank=True)
