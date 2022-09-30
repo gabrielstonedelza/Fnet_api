@@ -235,9 +235,6 @@ class ReferCustomer(models.Model):
     def __str__(self):
         return self.name
 
-    def get_agents_phone(self):
-        return self.agent.phone
-
 
 class AddToCustomerPoints(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
