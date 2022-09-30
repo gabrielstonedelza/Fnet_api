@@ -1752,3 +1752,14 @@ def get_all_referrals(request, ):
     referrals = ReferCustomer.objects.all().order_by('-date_created')
     serializer = ReferCustomerSerializer(referrals, many=True)
     return Response(serializer.data)
+
+
+@api_view(['GET', 'PUT'])
+@permission_classes([permissions.IsAuthenticated])
+def update_referral(request, id):
+    referral = get_object_or_404(ReferCustomer, id=id)
+    serializer = ReferCustomerSerializer(referral, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

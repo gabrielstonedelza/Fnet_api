@@ -50,7 +50,7 @@ def alert_customer_created(sender, created, instance, **kwargs):
                                      notification_title=title, notification_message=message,
                                      customer=instance.phone, user2=instance.agent,
                                      notification_to_admin=instance.administrator,
-                                    
+
                                      )
 
 

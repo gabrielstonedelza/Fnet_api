@@ -63,8 +63,8 @@ class AdminCustomerSerializer(serializers.ModelSerializer):
         username = user.agent.username
         return username
 
-class ReferCustomerSerializer(serializers.ModelSerializer):
 
+class ReferCustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReferCustomer
         fields = ['id', 'administrator', 'name', 'location', 'digital_address', 'id_type',
