@@ -9,7 +9,7 @@ from .serializers import (CustomerSerializer, BankDepositSerializer, ExpenseRequ
                           MobileMoneyWithdrawalSerializer, PaymentAtBankSerializer, OTPSerializer,
                           CustomerPaymentAtBankSerializer, AddedToApprovedPaymentSerializer,
                           AddedToApprovedBankDepositsSerializer, PrivateChatIdSerializer, AddToCustomerPointsSerializer,
-                          AddToCustomerRedeemPointsSerializer)
+                          AddToCustomerRedeemPointsSerializer, ReferCustomerSerializer)
 
 from .models import (Customer, BankDeposit, ExpensesRequest, MobileMoneyDeposit, CustomerWithdrawal, MyPayments,
                      AdminAccountsStartedWith, AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments,
@@ -17,7 +17,7 @@ from .models import (Customer, BankDeposit, ExpensesRequest, MobileMoneyDeposit,
                      FnetPrivateUserMessage,
                      UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, Notifications, PaymentAtBank,
                      CustomerPaymentAtBank, AddedToApprovedPayment, AddedToApprovedDeposits, Reports, PrivateChatId,
-                     AddToCustomerPoints, AddToCustomerRedeemPoints
+                     AddToCustomerPoints, AddToCustomerRedeemPoints, ReferCustomer
                      )
 from drf_multiple_model.views import ObjectMultipleModelAPIView
 
@@ -1703,4 +1703,42 @@ def get_all_redeemed_points(request):
 def get_customer_points(request, customer_phone):
     points = Customer.objects.filter(phone=customer_phone).order_by('-date_created')
     serializer = CustomerSerializer(points, many=True)
+    return Response(serializer.data)
+
+
+# customer referral
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+def refer_customer(request):
+    serializer = ReferCustomerSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# get customer referrals
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_all_customer_referrals(request, referral):
+    referrals = ReferCustomer.objects.filter(referral=referral).order_by('-date_created')
+    serializer = ReferCustomerSerializer(referrals, many=True)
+    return Response(serializer.data)
+
+
+# referral detail
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def referral_detail(request, pk):
+    referral = get_object_or_404(ReferCustomer, pk=pk)
+    serializer = ReferCustomerSerializer(referral, many=False)
+    return Response(serializer.data)
+
+
+# get all referrals for
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_all_referrals(request,):
+    referrals = ReferCustomer.objects.all().order_by('-date_created')
+    serializer = ReferCustomerSerializer(referrals, many=True)
     return Response(serializer.data)

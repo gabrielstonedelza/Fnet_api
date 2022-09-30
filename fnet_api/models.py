@@ -151,10 +151,15 @@ NOTIFICATIONS_TRIGGERS = (
 )
 
 REDEEM_POINTS_OPTIONS = (
-    ("Select Option","Select Option"),
+    ("Select Option", "Select Option"),
     ("Express Accounts", "Express Accounts"),
     ("Airtime", "Airtime"),
     ("Melcom Coupon", "Melcom Coupon"),
+)
+
+CUSTOMER_REFERRAL_STATUS = (
+    ("Was Referred", "Was Referred"),
+    ("User Registration", "User Registration"),
 )
 
 
@@ -202,6 +207,29 @@ class Customer(models.Model):
     id_number = models.CharField(max_length=50, blank=True, default="")
     phone = models.CharField(max_length=15, unique=True, blank=True)
     points = models.DecimalField(max_digits=19, decimal_places=2, blank=True, default="0.0")
+    referral = models.CharField(max_length=200, blank=True, default="")
+    status = models.CharField(max_length=100, choices=CUSTOMER_REFERRAL_STATUS, default="User Registration", blank=True)
+    date_of_birth = models.CharField(max_length=15, blank=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+    def get_agents_phone(self):
+        return self.agent.phone
+
+
+class ReferCustomer(models.Model):
+    administrator = models.ForeignKey(User, on_delete=models.CASCADE, default=1, related_name="referral_administrator")
+    agent = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=150, blank=True)
+    location = models.CharField(max_length=100, blank=True)
+    digital_address = models.CharField(max_length=25, blank=True)
+    id_type = models.CharField(max_length=50, choices=ID_TYPES, blank=True, default="Passport")
+    id_number = models.CharField(max_length=50, blank=True, default="")
+    phone = models.CharField(max_length=15, unique=True, blank=True)
+    referral = models.CharField(max_length=200, blank=True, default="")
+    status = models.CharField(max_length=100, choices=CUSTOMER_REFERRAL_STATUS, default="Was Referred", blank=True)
     date_of_birth = models.CharField(max_length=15, blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
 

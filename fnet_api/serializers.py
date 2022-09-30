@@ -6,7 +6,7 @@ from .models import (Customer, CustomerWithdrawal, MyPayments, AdminAccountsStar
                      UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, Notifications, PaymentAtBank, OTP,
                      CustomerPaymentAtBank, AddedToApprovedDeposits, AddedToApprovedPayment, Reports,
                      FnetPrivateUserMessage, FnetGroupMessage, PrivateChatId, AddToCustomerPoints,
-                     AddToCustomerRedeemPoints)
+                     AddToCustomerRedeemPoints, ReferCustomer)
 
 
 class AddedToApprovedPaymentSerializer(serializers.ModelSerializer):
@@ -41,13 +41,23 @@ class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
         fields = ['id', 'agent', 'administrator', 'username', 'name', 'location', 'digital_address', 'id_type',
-                  'id_number', 'phone', 'points',
-                  'date_of_birth', 'date_created', 'get_agents_phone']
+                  'id_number', 'phone', 'points', 'status',
+                  'date_of_birth', 'date_created', 'get_agents_phone', 'referral']
         read_only_fields = ['agent']
 
     def get_username(self, user):
         username = user.agent.username
         return username
+
+
+class ReferCustomerSerializer(serializers.ModelSerializer):
+    username = serializers.SerializerMethodField('get_username')
+
+    class Meta:
+        model = ReferCustomer
+        fields = ['id', 'agent', 'administrator', 'username', 'name', 'location', 'digital_address', 'id_type',
+                  'id_number', 'phone', 'status',
+                  'date_of_birth', 'date_created', 'get_agents_phone', 'referral']
 
 
 class CustomerAccountsSerializer(serializers.ModelSerializer):

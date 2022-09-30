@@ -3,7 +3,7 @@ from django.dispatch import receiver
 from .models import (CustomerRequestDeposit, ExpensesRequest, BankDeposit, MyPayments, Notifications, OTP, \
                      CustomerPaymentAtBank, Customer, AddedToApprovedDeposits, AddedToApprovedPayment, Reports,
                      FnetGroupMessage, \
-                     FnetPrivateUserMessage, AddToCustomerPoints, AddToCustomerRedeemPoints)
+                     FnetPrivateUserMessage, AddToCustomerPoints, AddToCustomerRedeemPoints, ReferCustomer)
 from django.conf import settings
 
 User = settings.AUTH_USER_MODEL
@@ -198,6 +198,19 @@ def alert_points_redeemed(sender, created, instance, **kwargs):
     title = f"Points Redeemed"
     message = f"{instance.customer.name} wants to redeem his points for {instance.redeem_option}"
     transaction_type = "Points Redeemed"
+
+    if created:
+        Notifications.objects.create(item_id=instance.id, transaction_type=transaction_type,
+                                     notification_title=title, notification_message=message,
+                                     user2=instance.administrator
+                                     )
+
+
+@receiver(post_save, sender=ReferCustomer)
+def alert_customer_referral(sender, created, instance, **kwargs):
+    title = f"New Customer Referred"
+    message = f"Got new customer referral from {instance.referral}"
+    transaction_type = "New Customer Referred"
 
     if created:
         Notifications.objects.create(item_id=instance.id, transaction_type=transaction_type,
