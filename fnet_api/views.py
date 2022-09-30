@@ -1755,7 +1755,7 @@ def get_all_referrals(request, ):
 
 
 @api_view(['GET', 'PUT'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 def update_referral(request, id):
     referral = get_object_or_404(ReferCustomer, id=id)
     serializer = ReferCustomerSerializer(referral, data=request.data)
