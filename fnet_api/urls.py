@@ -229,4 +229,5 @@ urlpatterns = [
     path("referral_detail/<int:pk>/", views.referral_detail),
     path("update_referral/<int:id>/", views.update_referral),
     path("get_all_referrals/", views.get_all_referrals),
+    path("get_all_was_referred_customers/", views.get_all_was_referred_customers),
 ]

@@ -1763,3 +1763,11 @@ def update_referral(request, id):
         serializer.save()
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_all_was_referred_customers(request, ):
+    referrals = Customer.objects.filter(status="Was Referred").order_by('-date_created')
+    serializer = CustomerSerializer(referrals, many=True)
+    return Response(serializer.data)
