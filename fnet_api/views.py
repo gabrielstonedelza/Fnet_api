@@ -1771,3 +1771,15 @@ def get_all_was_referred_customers(request, ):
     referrals = Customer.objects.filter(status="Was Referred").order_by('-date_created')
     serializer = CustomerSerializer(referrals, many=True)
     return Response(serializer.data)
+
+
+@api_view(['GET', 'DELETE'])
+@permission_classes([permissions.AllowAny])
+def delete_notifications(request, ):
+    try:
+        all_notifications = Notifications.objects.all()
+        for i in all_notifications:
+            i.delete()
+    except All_Notifications.DoesNotExist:
+        return Http404
+    return Response(status=status.HTTP_204_NO_CONTENT)
