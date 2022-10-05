@@ -1783,3 +1783,34 @@ def delete_notifications(request, ):
     except All_Notifications.DoesNotExist:
         return Http404
     return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+# delete momo deposit and withdraws
+@api_view(['GET', 'DELETE'])
+@permission_classes([permissions.AllowAny])
+def delete_momo_deposit_request(request, id):
+    try:
+        momo_request = get_object_or_404(MobileMoneyDeposit, id=id)
+        momo_request.delete()
+    except Momo_Request.DoesNotExist:
+        return Http404
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['GET', 'DELETE'])
+@permission_classes([permissions.AllowAny])
+def delete_momo_withdraw_request(request, id):
+    try:
+        momo_request = get_object_or_404(MobileMoneyWithdraw, id=id)
+        momo_request.delete()
+    except Momo_Request.DoesNotExist:
+        return Http404
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_agents_unpaid_deposits(request):
+    deposits = BankDeposit.objects.filter(deposit_paid="Not Paid").order_by('-date_requested')
+    serializer = BankDepositSerializer(deposits, many=True)
+    return Response(serializer.data)

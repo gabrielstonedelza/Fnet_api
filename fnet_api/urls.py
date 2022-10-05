@@ -231,4 +231,9 @@ urlpatterns = [
     path("get_all_referrals/", views.get_all_referrals),
     path("get_all_was_referred_customers/", views.get_all_was_referred_customers),
     path("delete_notifications/", views.delete_notifications),
+
+    #     delete momo_deposits and withdraws
+    path("delete_momo_deposit_request/<int:id>/", views.delete_momo_deposit_request),
+    path("delete_momo_withdraw_request/<int:id>/", views.delete_momo_withdraw_request),
+    path("get_agents_unpaid_deposits/", views.get_agents_unpaid_deposits),
 ]
