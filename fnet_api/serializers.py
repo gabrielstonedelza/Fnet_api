@@ -12,7 +12,7 @@ from .models import (Customer, CustomerWithdrawal, MyPayments, AdminAccountsStar
 class AddToBlockListSerializer(serializers.ModelSerializer):
     class Meta:
         model = AddToBlockList
-        fields = ['id', 'administrator', 'user', 'date_blocked']
+        fields = ['id', 'administrator', 'user', 'date_blocked', 'get_username']
 
 
 class AddedToApprovedPaymentSerializer(serializers.ModelSerializer):
