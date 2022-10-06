@@ -8,6 +8,8 @@ urlpatterns = [
     path('', views.fnet_home, name="home"),
     path('profile/', views.profile),
     path('update_profile/', views.update_profile),
+    path('update_blocked/<int:id>/', views.update_blocked),
+    path('get_all_blocked_users/', views.get_all_blocked_users),
     path('password-reset/', auth_views.PasswordResetView.as_view(
         template_name='users/password_reset.html'), name='password_reset'),
     path('password-reset/done/', auth_views.PasswordResetDoneView.as_view(

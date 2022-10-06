@@ -28,3 +28,22 @@ def update_profile(request):
         serializer.save(user=request.user)
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'PUT'])
+@permission_classes([permissions.AllowAny])
+def update_blocked(request, id):
+    user = get_object_or_404(User, id=id)
+    serializer = UsersSerializer(user, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_all_blocked_users(request):
+    users = User.objects.filter(user_blocked=True)
+    serializer = UsersSerializer(users, many=True)
+    return Response(serializer.data)

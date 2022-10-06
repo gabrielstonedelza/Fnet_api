@@ -11,6 +11,7 @@ class User(AbstractUser):
     phone = models.CharField(max_length=15, unique=True, help_text="please format should be +233")
     company_name = models.CharField(max_length=200)
     full_name = models.CharField(max_length=150, default="Fnet User")
+    user_blocked = models.BooleanField(default=False)
 
     REQUIRED_FIELDS = ['email', 'phone', 'company_name', 'full_name']
     USERNAME_FIELD = 'username'
