@@ -6,7 +6,13 @@ from .models import (Customer, CustomerWithdrawal, MyPayments, AdminAccountsStar
                      UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, Notifications, PaymentAtBank, OTP,
                      CustomerPaymentAtBank, AddedToApprovedDeposits, AddedToApprovedPayment, Reports,
                      FnetPrivateUserMessage, FnetGroupMessage, PrivateChatId, AddToCustomerPoints,
-                     AddToCustomerRedeemPoints, ReferCustomer)
+                     AddToCustomerRedeemPoints, ReferCustomer, AddToBlockList)
+
+
+class AddToBlockListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AddToBlockList
+        fields = ['id', 'administrator', 'user', 'date_blocked']
 
 
 class AddedToApprovedPaymentSerializer(serializers.ModelSerializer):

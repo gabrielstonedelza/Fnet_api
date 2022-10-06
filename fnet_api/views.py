@@ -9,7 +9,8 @@ from .serializers import (CustomerSerializer, BankDepositSerializer, ExpenseRequ
                           MobileMoneyWithdrawalSerializer, PaymentAtBankSerializer, OTPSerializer,
                           CustomerPaymentAtBankSerializer, AddedToApprovedPaymentSerializer,
                           AddedToApprovedBankDepositsSerializer, PrivateChatIdSerializer, AddToCustomerPointsSerializer,
-                          AddToCustomerRedeemPointsSerializer, ReferCustomerSerializer, AdminCustomerSerializer)
+                          AddToCustomerRedeemPointsSerializer, ReferCustomerSerializer, AdminCustomerSerializer,
+                          AddToBlockListSerializer)
 
 from .models import (Customer, BankDeposit, ExpensesRequest, MobileMoneyDeposit, CustomerWithdrawal, MyPayments,
                      AdminAccountsStartedWith, AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments,
@@ -17,7 +18,7 @@ from .models import (Customer, BankDeposit, ExpensesRequest, MobileMoneyDeposit,
                      FnetPrivateUserMessage,
                      UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, Notifications, PaymentAtBank,
                      CustomerPaymentAtBank, AddedToApprovedPayment, AddedToApprovedDeposits, Reports, PrivateChatId,
-                     AddToCustomerPoints, AddToCustomerRedeemPoints, ReferCustomer
+                     AddToCustomerPoints, AddToCustomerRedeemPoints, ReferCustomer, AddToBlockList
                      )
 from drf_multiple_model.views import ObjectMultipleModelAPIView
 
@@ -1813,4 +1814,34 @@ def delete_momo_withdraw_request(request, id):
 def get_agents_unpaid_deposits(request):
     deposits = BankDeposit.objects.filter(deposit_paid="Not Paid").order_by('-date_requested')
     serializer = BankDepositSerializer(deposits, many=True)
+    return Response(serializer.data)
+
+
+# block list
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+def add_to_blocked(request):
+    serializer = AddToBlockListSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'DELETE'])
+@permission_classes([permissions.AllowAny])
+def remove_from_blocked(request, id):
+    try:
+        user_blocked = get_object_or_404(AddToBlockList, id=id)
+        user_blocked.delete()
+    except User_Blocked.DoesNotExist:
+        return Http404
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_blocked_users(request):
+    users = AddToBlockList.objects.all().order_by('-date_blocked')
+    serializer = AddToBlockListSerializer(users, many=True)
     return Response(serializer.data)

@@ -226,7 +226,7 @@ class ReferCustomer(models.Model):
     digital_address = models.CharField(max_length=25, blank=True)
     id_type = models.CharField(max_length=50, choices=ID_TYPES, blank=True, default="Passport")
     id_number = models.CharField(max_length=50, blank=True, default="")
-    phone = models.CharField(max_length=15, unique=True, blank=True,)
+    phone = models.CharField(max_length=15, unique=True, blank=True, )
     referral = models.CharField(max_length=200, blank=True, default="")
     status = models.CharField(max_length=100, choices=CUSTOMER_REFERRAL_STATUS, default="Was Referred", blank=True)
     created = models.BooleanField(default=False)
@@ -691,3 +691,12 @@ class FnetPrivateUserMessage(models.Model):
         #     self.private_chat_id = sender_receiver
 
         super().save(*args, **kwargs)
+
+
+class AddToBlockList(models.Model):
+    administrator = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_being_blocked")
+    date_blocked = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.user.username

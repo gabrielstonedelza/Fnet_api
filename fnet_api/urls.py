@@ -236,4 +236,9 @@ urlpatterns = [
     path("delete_momo_deposit_request/<int:id>/", views.delete_momo_deposit_request),
     path("delete_momo_withdraw_request/<int:id>/", views.delete_momo_withdraw_request),
     path("get_agents_unpaid_deposits/", views.get_agents_unpaid_deposits),
+
+    #     block listing
+    path("add_to_blocked/", views.add_to_blocked),
+    path("get_blocked_users/", views.get_blocked_users),
+    path("remove_from_blocked/<int:id>/", views.remove_from_blocked),
 ]
