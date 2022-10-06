@@ -1,7 +1,7 @@
 from rest_framework import viewsets, permissions, generics, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from .serializers import ProfileSerializer
+from .serializers import ProfileSerializer, UsersSerializer
 from .models import Profile, User
 from django.shortcuts import render, get_object_or_404
 from .permissions import IsOwnerOrReadOnly
