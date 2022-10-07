@@ -112,7 +112,7 @@ class ExpenseRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = ExpensesRequest
         fields = ['id', 'guarantor', 'agent', 'guarantor_username', 'deposit_paid',
-                  'agent_username', 'amount', 'reason', 'request_status', 'date_requested', 'time_requested','app_name'
+                  'agent_username', 'amount', 'reason', 'request_status', 'date_requested', 'time_requested',
                   ]
         read_only_fields = ['agent']
 
@@ -132,7 +132,7 @@ class MobileMoneyDepositSerializer(serializers.ModelSerializer):
         model = MobileMoneyDeposit
         fields = ['id', 'agent', 'customer_phone', 'username', 'network', 'type', 'amount', 'charges',
                   'depositor_name', 'depositor_number',
-                  'agent_commission', 'date_deposited', 'time_deposited', 'app_name']
+                  'agent_commission', 'date_deposited', 'time_deposited', ]
         read_only_fields = ['agent']
 
     def get_username(self, user):
@@ -150,7 +150,7 @@ class BankDepositSerializer(serializers.ModelSerializer):
         fields = ['id', 'guarantor', 'customer', 'agent', 'guarantor_username', 'customer_username', 'deposit_paid',
                   'agent_username', 'bank', 'account_number', 'account_name', 'amount', 'depositor_name',
                   'request_status',
-                  'date_requested', 'time_requested', 'slug', 'app_name']
+                  'date_requested', 'time_requested', 'slug', ]
         read_only_fields = ['agent']
 
     def get_guarantor_username(self, user):
@@ -194,7 +194,7 @@ class PaymentsSerializer(serializers.ModelSerializer):
         fields = ['id', 'agent', 'agent_username', 'mode_of_payment1', 'mode_of_payment2', 'cash_at_location1',
                   'cash_at_location2', 'amount', 'amount1', 'amount2', 'bank1', 'bank2', 'transaction_id1',
                   'transaction_id2', 'payment_action', 'payment_status', 'date_created', 'time_created', 'slug',
-                  'payment_month', 'payment_year', 'app_name']
+                  'payment_month', 'payment_year', ]
         read_only_fields = ['agent']
 
     def get_agent_username(self, user):
