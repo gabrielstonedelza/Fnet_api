@@ -260,6 +260,12 @@ class AddToCustomerRedeemPoints(models.Model):
         c_points = str(self.points)
         return f"{self.customer.name} has redeemed {c_points} points"
 
+    def get_customer_name(self):
+        return self.customer.name
+
+    def get_customer_phone(self):
+        return self.customer.phone
+
 
 class CustomerAccounts(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -283,7 +289,6 @@ class ExpensesRequest(models.Model):
     date_requested = models.DateField(auto_now_add=True)
     time_requested = models.TimeField(auto_now_add=True)
 
-
     def __str__(self):
         return f"Expense request made for {self.amount} by {self.agent.username}"
 
@@ -304,7 +309,6 @@ class BankDeposit(models.Model):
     deposited_year = models.CharField(max_length=10, blank=True, default="")
     time_requested = models.TimeField(auto_now_add=True)
     slug = models.SlugField(max_length=100, default='')
-
 
     def __str__(self):
         if self.request_status == "Pending":
@@ -343,7 +347,6 @@ class MobileMoneyDeposit(models.Model):
     date_deposited = models.DateField(auto_now_add=True)
     time_deposited = models.TimeField(auto_now_add=True)
 
-
     def __str__(self):
         return f"Mobile money request made for {self.amount}"
 
@@ -363,7 +366,6 @@ class MobileMoneyWithdraw(models.Model):
     mtn_commission = models.DecimalField(max_digits=19, decimal_places=2, default=0.0)
     date_of_withdrawal = models.DateField(auto_now_add=True)
     time_of_withdrawal = models.TimeField(auto_now_add=True)
-
 
     def __str__(self):
         return f"Withdrawal made for {self.amount}"
@@ -441,7 +443,6 @@ class MyPayments(models.Model):
     date_created = models.DateField(auto_now_add=True)
     time_created = models.TimeField(auto_now_add=True)
     slug = models.SlugField(max_length=100, default='')
-
 
     def __str__(self):
         if self.payment_status == "Pending":
