@@ -882,7 +882,7 @@ def customer_deposit_request(request):
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def get_customer_request_summary(request, phone):
-    request_summary = CustomerRequestDeposit.objects.filter(customer_phone=phone).order_by('-date_requested')
+    request_summary = CustomerRequestDeposit.objects.filter(customer_phone=phone).filter(request_status="Approved").order_by('-date_requested')
     serializer = CustomerDepositRequestSerializer(request_summary, many=True)
     return Response(serializer.data)
 
