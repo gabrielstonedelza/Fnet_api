@@ -10,5 +10,13 @@ class AdminUsers(admin.ModelAdmin):
         model = User
 
 
+class AdminProfile(admin.ModelAdmin):
+    list_display = ['id', 'user', 'email', 'profile_pic']
+    search_fields = ['id', 'user', 'email', ]
+
+    class Meta:
+        model = Profile
+
+
 admin.site.register(User, AdminUsers)
-admin.site.register(Profile)
+admin.site.register(Profile, AdminProfile)
