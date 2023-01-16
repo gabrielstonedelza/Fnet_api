@@ -682,19 +682,6 @@ class FnetPrivateUserMessage(models.Model):
         receiver_sender = str(receiver_username) + str(senders_username)
 
         self.private_chat_id = sender_receiver
-        # chat_id = get_object_or_404(PrivateChatId, chat_id=sender_receiver)
-        # if chat_id:
-        #     if senders_username or receiver_username == chat_id:
-        #         self.private_chat_id = chat_id
-        #         self.private_chat_id2 = chat_id
-        # else:
-        #     self.private_chat_id = sender_receiver
-        #     self.private_chat_id2 = chat_id
-
-        # if not PrivateChatId.objects.filter(chat_id=sender_receiver).exists() and not PrivateChatId.objects.filter(
-        #         chat_id=receiver_sender).exists():
-        #     PrivateChatId.objects.create(chat_id=sender_receiver)
-        #     self.private_chat_id = sender_receiver
 
         super().save(*args, **kwargs)
 

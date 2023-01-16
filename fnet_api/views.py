@@ -882,7 +882,8 @@ def customer_deposit_request(request):
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def get_customer_request_summary(request, phone):
-    request_summary = CustomerRequestDeposit.objects.filter(customer_phone=phone).filter(request_status="Approved").order_by('-date_requested')
+    request_summary = CustomerRequestDeposit.objects.filter(customer_phone=phone).filter(
+        request_status="Approved").order_by('-date_requested')
     serializer = CustomerDepositRequestSerializer(request_summary, many=True)
     return Response(serializer.data)
 
@@ -1844,4 +1845,21 @@ def remove_from_blocked(request, id):
 def get_blocked_users(request):
     users = AddToBlockList.objects.all().order_by('-date_blocked')
     serializer = AddToBlockListSerializer(users, many=True)
+    return Response(serializer.data)
+
+
+# fetching banks
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_all_fidelity(request):
+    fidelities = BankDeposit.objects.filter(bank="Fidelity Bank").order_by('-date_requested')
+    serializer = BankDepositSerializer(fidelities, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_all_cals(request):
+    cals = BankDeposit.objects.filter(bank="Cal Bank").order_by('-date_requested')
+    serializer = BankDepositSerializer(cals, many=True)
     return Response(serializer.data)

@@ -241,4 +241,8 @@ urlpatterns = [
     path("add_to_blocked/", views.add_to_blocked),
     path("get_blocked_users/", views.get_blocked_users),
     path("remove_from_blocked/<int:id>/", views.remove_from_blocked),
+
+    #     bank filters
+    path("all_fidelity/", views.get_all_fidelity),
+    path("all_cal/", views.get_all_cals),
 ]
