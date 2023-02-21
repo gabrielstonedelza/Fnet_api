@@ -1852,8 +1852,8 @@ def get_blocked_users(request):
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def get_all_fidelity(request):
-    fidelities = BankDeposit.objects.filter(bank="Fidelity Bank").order_by('-date_requested')
-    serializer = BankDepositSerializer(fidelities, many=True)
+    fidelity_bank = BankDeposit.objects.filter(bank="Fidelity Bank").order_by('-date_requested')
+    serializer = BankDepositSerializer(fidelity_bank, many=True)
     return Response(serializer.data)
 
 
@@ -1862,4 +1862,33 @@ def get_all_fidelity(request):
 def get_all_cals(request):
     cals = BankDeposit.objects.filter(bank="Cal Bank").order_by('-date_requested')
     serializer = BankDepositSerializer(cals, many=True)
+    return Response(serializer.data)
+
+# getting users fidelity,ecobank and calbank transactions
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_agents_cal_bank(request, username):
+    user = get_object_or_404(User, username=username)
+    bank = BankDeposit.objects.filter(agent=user).filter(bank="Cal Bank").order_by(
+        '-date_requested')
+    serializer = BankDepositSerializer(bank, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_agents_fidelity_bank(request, username):
+    user = get_object_or_404(User, username=username)
+    bank = BankDeposit.objects.filter(agent=user).filter(bank="Fidelity Bank").order_by(
+        '-date_requested')
+    serializer = BankDepositSerializer(bank, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_agents_eco_bank(request, username):
+    user = get_object_or_404(User, username=username)
+    bank = BankDeposit.objects.filter(agent=user).filter(bank="Ecobank").order_by(
+        '-date_requested')
+    serializer = BankDepositSerializer(bank, many=True)
     return Response(serializer.data)

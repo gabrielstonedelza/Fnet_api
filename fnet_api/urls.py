@@ -245,4 +245,8 @@ urlpatterns = [
     #     bank filters
     path("all_fidelity/", views.get_all_fidelity),
     path("all_cal/", views.get_all_cals),
+#     users bank transactions
+    path("get_agents_cal_bank/", views.get_agents_cal_bank),
+    path("get_agents_fidelity_bank/", views.get_agents_fidelity_bank),
+    path("get_agents_eco_bank/", views.get_agents_eco_bank),
 ]

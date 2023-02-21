@@ -31,7 +31,6 @@ BANKS = (
     ("Ecobank", "Ecobank"),
     ("Adansi rural bank", "Adansi rural bank"),
     ("Kwumawuman Bank", "Kwumawuman Bank"),
-
     ("Pan Africa", "Pan Africa"),
     ("SGSSB", "SGSSB"),
     ("Atwima Rural Bank", "Atwima Rural Bank"),
@@ -102,9 +101,6 @@ WITHDRAW_TYPES = (
     ("MomoPay", "MomoPay"),
     ("Cash Out", "Cash Out"),
     ("Agent to Agent", "Agent to Agent"),
-)
-BANK_WITHDRAW_TYPES = (
-
 )
 
 REQUEST_STATUS = (
