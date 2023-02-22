@@ -51,13 +51,13 @@ class AdminExpensesRequest(admin.ModelAdmin):
         model = ExpensesRequest
 
 
-class AdminBankDeposit(admin.ModelAdmin):
-    list_display = ['id', 'agent', 'customer', 'bank', 'account_number', 'account_name', 'amount', 'depositor_name',
-                    'request_status', 'deposit_paid', '']
-    search_fields = ['id', 'agent', ]
-
-    class Meta:
-        model = BankDeposit
+# class AdminBankDeposit(admin.ModelAdmin):
+#     list_display = ['id', 'agent', 'customer', 'bank', 'account_number', 'account_name', 'amount', 'depositor_name',
+#                     'request_status', 'deposit_paid', '']
+#     search_fields = ['id', 'agent', ]
+#
+#     class Meta:
+#         model = BankDeposit
 
 
 class AdminMobileMoneyDeposit(admin.ModelAdmin):
@@ -135,7 +135,7 @@ admin.site.register(FnetGroupMessage)
 admin.site.register(FnetPrivateUserMessage)
 admin.site.register(Customer, AdminCustomer)
 admin.site.register(ExpensesRequest, AdminExpensesRequest)
-admin.site.register(BankDeposit, AdminBankDeposit)
+admin.site.register(BankDeposit)
 admin.site.register(MobileMoneyDeposit, AdminMobileMoneyDeposit)
 admin.site.register(MobileMoneyWithdraw, AdminMobileMoneyWithdraw)
 admin.site.register(CustomerWithdrawal, AdminCustomerWithdrawal)
