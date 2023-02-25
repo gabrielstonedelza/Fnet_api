@@ -1892,3 +1892,22 @@ def get_agents_eco_bank(request, username):
         '-date_requested')
     serializer = BankDepositSerializer(bank, many=True)
     return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_agents_access_bank(request, username):
+    user = get_object_or_404(User, username=username)
+    bank = BankDeposit.objects.filter(agent=user).filter(bank="Access Bank").order_by(
+        '-date_requested')
+    serializer = BankDepositSerializer(bank, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_agents_gt_bank(request, username):
+    user = get_object_or_404(User, username=username)
+    bank = BankDeposit.objects.filter(agent=user).filter(bank="GT Bank").order_by(
+        '-date_requested')
+    serializer = BankDepositSerializer(bank, many=True)
+    return Response(serializer.data)
