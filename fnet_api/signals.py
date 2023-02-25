@@ -81,7 +81,7 @@ def create_expense_request(sender, created, instance, **kwargs):
 @receiver(post_save, sender=BankDeposit)
 def create_bank_request(sender, created, instance, **kwargs):
     title = f"New Bank Deposit from {instance.agent.username}"
-    message = f"{instance.agent.username} just made a bank deposit of {instance.amount} for {instance.customer}"
+    message = f"{instance.agent.username} just made {instance.bank} deposit of {instance.amount} for {instance.customer}"
     transaction_type = "Bank"
 
     if created:
