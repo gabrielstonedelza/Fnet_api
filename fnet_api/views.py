@@ -1918,6 +1918,6 @@ def get_agents_gt_bank(request, username):
 @permission_classes([permissions.AllowAny])
 def get_agents_eco_bank_by_date(request, username,date_from,date_to):
     user = get_object_or_404(User, username=username)
-    bank = BankDeposit.objects.filter(agent=user).filter(bank="Ecobank").filter(date_requested=date_from).filter(date_requested=date_to)
+    bank = BankDeposit.objects.filter(agent=user).filter(bank="Ecobank").filter(date_requested=date_from).filter(date_requested=date_to).filter(request_status="Approved")
     serializer = BankDepositSerializer(bank, many=True)
     return Response(serializer.data)
