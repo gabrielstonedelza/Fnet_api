@@ -251,4 +251,6 @@ urlpatterns = [
     path("get_agents_eco_bank/<str:username>/", views.get_agents_eco_bank),
     path("get_agents_access_bank/<str:username>/", views.get_agents_access_bank),
     path("get_agents_gt_bank/<str:username>/", views.get_agents_gt_bank),
+    # bank transactions by date
+    path("get_agents_eco_bank_by_date/<str:username>/<str:date_from>/<str:date_to>/", views.get_agents_eco_bank_by_date),
 ]
