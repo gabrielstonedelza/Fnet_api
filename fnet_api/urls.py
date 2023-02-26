@@ -256,4 +256,5 @@ urlpatterns = [
     path("get_agents_cal_bank_by_date/<str:username>/<str:d_month>/<str:d_year>/", views.get_agents_cal_bank_by_date),
     path("get_agents_access_bank_by_date/<str:username>/<str:d_month>/<str:d_year>/", views.get_agents_access_bank_by_date),
     path("get_agents_fidelity_bank_by_date/<str:username>/<str:d_month>/<str:d_year>/", views.get_agents_fidelity_bank_by_date),
+    path("get_agents_gt_bank_by_date/<str:username>/<str:d_month>/<str:d_year>/", views.get_agents_gt_bank_by_date),
 ]
