@@ -1921,3 +1921,30 @@ def get_agents_eco_bank_by_date(request, username, d_month, d_year):
     bank = BankDeposit.objects.filter(agent=user).filter(bank="Ecobank").filter(deposited_month=d_month).filter(deposited_year=d_year).filter(request_status="Approved")
     serializer = BankDepositSerializer(bank, many=True)
     return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_agents_fidelity_bank_by_date(request, username, d_month, d_year):
+    user = get_object_or_404(User, username=username)
+    bank = BankDeposit.objects.filter(agent=user).filter(bank="Fidelity Bank").filter(deposited_month=d_month).filter(deposited_year=d_year).filter(request_status="Approved")
+    serializer = BankDepositSerializer(bank, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_agents_access_bank_by_date(request, username, d_month, d_year):
+    user = get_object_or_404(User, username=username)
+    bank = BankDeposit.objects.filter(agent=user).filter(bank="Access Bank").filter(deposited_month=d_month).filter(deposited_year=d_year).filter(request_status="Approved")
+    serializer = BankDepositSerializer(bank, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_agents_cal_bank_by_date(request, username, d_month, d_year):
+    user = get_object_or_404(User, username=username)
+    bank = BankDeposit.objects.filter(agent=user).filter(bank="Cal Bank").filter(deposited_month=d_month).filter(deposited_year=d_year).filter(request_status="Approved")
+    serializer = BankDepositSerializer(bank, many=True)
+    return Response(serializer.data)
