@@ -2054,8 +2054,8 @@ def get_agent2_cash_request_all(request):
 @api_view(['GET', 'PUT'])
 @permission_classes([permissions.AllowAny])
 def update_cash_requests(request, id):
-    request = get_object_or_404(CashRequest, id=id)
-    serializer = CashRequestSerializer(request, data=request.data)
+    cash_request = get_object_or_404(CashRequest, id=id)
+    serializer = CashRequestSerializer(cash_request, data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
