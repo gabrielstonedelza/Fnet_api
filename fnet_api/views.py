@@ -1998,6 +1998,14 @@ def get_admin_user_cash_requests(request):
     serializer = CashRequestSerializer(all_agents_cash_requests, many=True)
     return Response(serializer.data)
 
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_admin_all_user_cash_requests(request,username):
+    user = get_object_or_404(User, username=username)
+    all_agents_cash_requests = CashRequest.objects.filter(agent1=user).filter(request_status="Approved").order_by('-date_requested')
+    serializer = CashRequestSerializer(all_agents_cash_requests, many=True)
+    return Response(serializer.data)
+
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])

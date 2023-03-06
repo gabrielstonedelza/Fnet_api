@@ -266,6 +266,7 @@ urlpatterns = [
 #     cash request
     path("add_cash_request/", views.post_cash_deposit),
     path("get_admin_user_cash_requests/", views.get_admin_user_cash_requests),
+    path("get_admin_all_user_cash_requests/<str:username>/", views.get_admin_all_user_cash_requests),
     path("get_agent1_cash_request_all/", views.get_agent1_cash_request_all),
     path("get_agent2_cash_request_all/", views.get_agent2_cash_request_all),
     path("get_agent1_cash_requests_today/<str:username>/", views.get_agent1_cash_requests_today),
