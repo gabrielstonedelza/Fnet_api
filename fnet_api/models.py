@@ -135,6 +135,7 @@ PAYMENT_OFFICES = (
     ("MELCOM TAFO", "MELCOM TAFO"),
     ("MELCOM AHODWO", "MELCOM AHODWO"),
     ("MELCOM ADUM", "MELCOM ADUM"),
+    ("MELCOM SUAME", "MELCOM SUAME"),
 )
 
 REQUEST_PAID_OPTIONS = (
@@ -698,3 +699,33 @@ class AddToBlockList(models.Model):
 
     def get_username(self):
         return self.user.username
+
+
+class CashRequest(models.Model):
+    administrator = models.ForeignKey(User, on_delete=models.CASCADE,default=1)
+    agent1 = models.ForeignKey(User, on_delete=models.CASCADE, related_name="agent_requesting_cash")
+    agent2 = models.ForeignKey(User, on_delete=models.CASCADE, related_name="agent_delivering_cash")
+    amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
+    request_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
+    date_requested = models.DateField(auto_now_add=True)
+    requested_month = models.CharField(max_length=10, blank=True, default="")
+    requested_year = models.CharField(max_length=10, blank=True, default="")
+    time_requested = models.TimeField(auto_now_add=True)
+
+    def get_agent1_username(self):
+        return self.agent1.username
+
+    def get_agent2_username(self):
+        return self.agent1.username
+
+    def __str__(self):
+        if self.request_status == "Pending":
+            return f"{self.agent1.username}'s cash deposit is pending"
+        return f"{self.agent1.username}'s cash deposit is approved"
+
+    def save(self, *args, **kwargs):
+        my_date = datetime.today()
+        de_date = my_date.date()
+        self.requested_month = de_date.month
+        self.requested_year = de_date.year
+        super().save(*args, **kwargs)

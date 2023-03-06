@@ -2,12 +2,33 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from .models import (CustomerRequestDeposit, ExpensesRequest, BankDeposit, MyPayments, Notifications, OTP, \
                      CustomerPaymentAtBank, Customer, AddedToApprovedDeposits, AddedToApprovedPayment, Reports,
-                     FnetGroupMessage, \
+                     FnetGroupMessage, CashRequest,
                      FnetPrivateUserMessage, AddToCustomerPoints, AddToCustomerRedeemPoints, ReferCustomer)
 from django.conf import settings
 
 User = settings.AUTH_USER_MODEL
 from users.models import User
+
+
+@receiver(post_save,sender=CashRequest)
+def alert_cash_request(sender,created,instance,**kwargs):
+    title = ""
+    message1 = f"{instance.agent1.username} is requesting cash worth of {instance.amount} from you."
+    message2 = f"{instance.agent1.username} is requesting cash worth of {instance.amount} from  {instance.agent2.username}."
+    transaction_type = "Cash Request"
+
+    if created:
+        Notifications.objects.create(user=instance.agent1, transaction_type=transaction_type,
+                                     item_id=instance.id,
+                                     notification_title=title, notification_message=message1,
+                                     user2=instance.agent2,
+                                     )
+
+        Notifications.objects.create(user=instance.agent1, transaction_type=transaction_type,
+                                     item_id=instance.id,
+                                     notification_title=title, notification_message=message2,
+                                     user2=instance.administrator,
+                                     )
 
 
 @receiver(post_save, sender=AddedToApprovedPayment)

@@ -257,4 +257,18 @@ urlpatterns = [
     path("get_agents_access_bank_by_date/<str:username>/<str:d_month>/<str:d_year>/", views.get_agents_access_bank_by_date),
     path("get_agents_fidelity_bank_by_date/<str:username>/<str:d_month>/<str:d_year>/", views.get_agents_fidelity_bank_by_date),
     path("get_agents_gt_bank_by_date/<str:username>/<str:d_month>/<str:d_year>/", views.get_agents_gt_bank_by_date),
+
+#     admin update payment and request
+    path("update_payment/<int:id>/", views.update_payment),
+    path("update_bank_deposit/<int:id>/", views.update_bank_deposit),
+
+#     cash request
+    path("add_cash_request/", views.post_cash_deposit),
+    path("get_admin_user_cash_requests/", views.get_admin_user_cash_requests),
+    path("get_agent1_cash_request_all/", views.get_agent1_cash_request_all),
+    path("get_agent2_cash_request_all/", views.get_agent2_cash_request_all),
+    path("get_agent1_cash_requests_today/<str:username>/", views.get_agent1_cash_requests_today),
+    path("get_agent2_cash_requests_today/<str:username>/", views.get_agent2_cash_requests_today),
+    path("approve_cash_request/<int:id>/", views.approve_cash_request),
+    path("cash_requests_detail/<int:pk>/", views.cash_requests_detail),
 ]

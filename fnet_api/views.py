@@ -8,7 +8,7 @@ from .serializers import (CustomerSerializer, BankDepositSerializer, ExpenseRequ
                           UserMobileMoneyAccountsClosedSerializer, UserMobileMoneyAccountsStartedSerializer,
                           MobileMoneyWithdrawalSerializer, PaymentAtBankSerializer, OTPSerializer,
                           CustomerPaymentAtBankSerializer, AddedToApprovedPaymentSerializer,
-                          AddedToApprovedBankDepositsSerializer, PrivateChatIdSerializer, AddToCustomerPointsSerializer,
+                          AddedToApprovedBankDepositsSerializer, PrivateChatIdSerializer, AddToCustomerPointsSerializer,CashRequestSerializer,
                           AddToCustomerRedeemPointsSerializer, ReferCustomerSerializer, AdminCustomerSerializer,
                           AddToBlockListSerializer)
 
@@ -17,7 +17,7 @@ from .models import (Customer, BankDeposit, ExpensesRequest, MobileMoneyDeposit,
                      CustomerRequestDeposit, UserMobileMoneyAccountsStarted, OTP, FnetGroupMessage,
                      FnetPrivateUserMessage,
                      UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, Notifications, PaymentAtBank,
-                     CustomerPaymentAtBank, AddedToApprovedPayment, AddedToApprovedDeposits, Reports, PrivateChatId,
+                     CustomerPaymentAtBank, AddedToApprovedPayment, AddedToApprovedDeposits, Reports, PrivateChatId,CashRequest,
                      AddToCustomerPoints, AddToCustomerRedeemPoints, ReferCustomer, AddToBlockList
                      )
 from drf_multiple_model.views import ObjectMultipleModelAPIView
@@ -585,6 +585,27 @@ def approve_payment(request, id):
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+# admin update payment
+@api_view(['GET', 'PUT'])
+@permission_classes([permissions.AllowAny])
+def update_payment(request, id):
+    payment = get_object_or_404(MyPayments, id=id)
+    serializer = PaymentsSerializer(payment, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'PUT'])
+@permission_classes([permissions.AllowAny])
+def update_bank_deposit(request, id):
+    deposit = get_object_or_404(BankDeposit, id=id)
+    serializer = BankDepositSerializer(deposit, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'DELETE'])
 @permission_classes([permissions.AllowAny])
@@ -1956,4 +1977,76 @@ def get_agents_gt_bank_by_date(request, username, d_month, d_year):
     user = get_object_or_404(User, username=username)
     bank = BankDeposit.objects.filter(agent=user).filter(bank="GT Bank").filter(deposited_month=d_month).filter(deposited_year=d_year).filter(request_status="Approved")
     serializer = BankDepositSerializer(bank, many=True)
+    return Response(serializer.data)
+
+
+# cash request
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def post_cash_deposit(request):
+    serializer = CashRequestSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(agent1=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_admin_user_cash_requests(request):
+    all_agents_cash_requests = CashRequest.objects.filter(request_status="Pending").order_by('-date_requested')
+    serializer = CashRequestSerializer(all_agents_cash_requests, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_agent1_cash_requests_today(request, username):
+    user = get_object_or_404(User, username=username)
+    all_agents_cash_requests = CashRequest.objects.filter(agent1=user).filter(request_status="Approved").order_by(
+        '-date_requested')
+    serializer = CashRequestSerializer(all_agents_cash_requests, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_agent2_cash_requests_today(request, username):
+    user = get_object_or_404(User, username=username)
+    all_agents_cash_requests = CashRequest.objects.filter(agent2=user).filter(request_status="Approved").order_by(
+        '-date_requested')
+    serializer = CashRequestSerializer(all_agents_cash_requests, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET', 'PUT'])
+@permission_classes([permissions.AllowAny])
+def approve_cash_request(request, id):
+    agent_request = get_object_or_404(CashRequest, id=id)
+    serializer = CashRequestSerializer(agent_request, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def cash_requests_detail(request, pk):
+    c_detail = CashRequest.objects.get(pk=pk)
+    serializer = CashRequestSerializer(c_detail, many=False)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_agent1_cash_request_all(request):
+    your_cash_requests = CashRequest.objects.filter(agent1=request.user).order_by('-date_requested')
+    serializer = CashRequestSerializer(your_cash_requests, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_agent2_cash_request_all(request):
+    your_cash_requests = CashRequest.objects.filter(agent2=request.user).order_by('-date_requested')
+    serializer = CashRequestSerializer(your_cash_requests, many=True)
     return Response(serializer.data)
