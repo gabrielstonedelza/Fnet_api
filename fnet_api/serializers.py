@@ -359,4 +359,3 @@ class CashRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = CashRequest
         fields = ['id','administrator','agent1','agent2','amount','request_status','date_requested','requested_month','requested_year','time_requested','get_agent1_username','get_agent2_username']
-        read_onlu_fields = ['agent1']
