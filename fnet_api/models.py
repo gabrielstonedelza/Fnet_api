@@ -716,7 +716,7 @@ class CashRequest(models.Model):
         return self.agent1.username
 
     def get_agent2_username(self):
-        return self.agent1.username
+        return self.agent2.username
 
     def __str__(self):
         if self.request_status == "Pending":
