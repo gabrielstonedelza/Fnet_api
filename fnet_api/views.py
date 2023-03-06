@@ -2050,3 +2050,13 @@ def get_agent2_cash_request_all(request):
     your_cash_requests = CashRequest.objects.filter(agent2=request.user).order_by('-date_requested')
     serializer = CashRequestSerializer(your_cash_requests, many=True)
     return Response(serializer.data)
+
+@api_view(['GET', 'PUT'])
+@permission_classes([permissions.AllowAny])
+def update_cash_requests(request, id):
+    request = get_object_or_404(CashRequest, id=id)
+    serializer = CashRequestSerializer(request, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

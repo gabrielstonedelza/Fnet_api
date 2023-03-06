@@ -261,6 +261,7 @@ urlpatterns = [
 #     admin update payment and request
     path("update_payment/<int:id>/", views.update_payment),
     path("update_bank_deposit/<int:id>/", views.update_bank_deposit),
+    path("update_cash_requests/<int:id>/", views.update_cash_requests),
 
 #     cash request
     path("add_cash_request/", views.post_cash_deposit),
