@@ -12,7 +12,7 @@ from users.models import User
 
 @receiver(post_save,sender=CashRequest)
 def alert_cash_request(sender,created,instance,**kwargs):
-    title = ""
+    title = "New Cash Request"
     message1 = f"{instance.agent1.username} is requesting cash worth of {instance.amount} from you."
     message2 = f"{instance.agent1.username} is requesting cash worth of {instance.amount} from  {instance.agent2.username}."
     transaction_type = "Cash Request"
