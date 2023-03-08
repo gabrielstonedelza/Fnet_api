@@ -19,10 +19,14 @@ urlpatterns = [
     path('payments/', views.get_payments),
     path('make_payments/', views.make_payments),
     path('approve_payments/<int:id>/', views.approve_payment),
+    path('approve_cash_payment/<int:id>/', views.approve_cash_payment),
     path('delete_payment/<int:id>/', views.delete_payment),
+    path('delete_cash_payment/<int:id>/', views.delete_cash_payment),
     path('payment_summary/', views.payment_summary),
+    path('cash_payment_summary/', views.cash_payment_summary),
     path('get_agent/<str:username>/', views.get_agent),
     path('payment_detail/<int:pk>/', views.payment_detail),
+    path('cash_payment_detail/<int:pk>/', views.cash_payment_detail),
     path('get_customer/<str:name>/', views.get_customer),
     path('get_customer_by_phone/<str:phone>/', views.get_customer_by_phone),
     path('admin_accounts_started/', views.admin_accounts_started),
@@ -117,6 +121,7 @@ urlpatterns = [
     path('search_agents_momo_withdraw_transaction/', views.SearchAgentsMomoWithdrawTransactions.as_view()),
     path('approve_bank_deposit_paid/<int:id>/', views.approve_bank_deposit_paid),
     path('approve_cash_deposit_paid/<int:id>/', views.approve_expense_request_paid),
+    path('approve_cash_request_paid/<int:id>/', views.approve_cash_request_paid),
     path('get_unpaid_cash_deposits_for_today/', views.get_unpaid_expense_request_for_today),
     path('get_unpaid_bank_deposits_for_today/', views.get_unpaid_bank_deposits_for_today),
 
@@ -285,4 +290,5 @@ urlpatterns = [
     path('get_user_payments_cash/', views.get_user_payments_cash),
     path('make_cash_payments/', views.make_cash_payments),
     path('get_cash_payments/', views.get_cash_payments),
+    path('get_cash_requests_for_today/', views.get_cash_requests_for_today),
 ]

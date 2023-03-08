@@ -2143,3 +2143,62 @@ def get_cash_payments(request):
     payments = MyCashPayments.objects.filter(payment_status="Pending").order_by('-date_created')
     serializer = CashPaymentsSerializer(payments, many=True)
     return Response(serializer.data)
+
+
+@api_view(['GET', 'PUT'])
+@permission_classes([permissions.AllowAny])
+def approve_cash_request_paid(request, id):
+    cash_request = get_object_or_404(CashRequest, id=id)
+    serializer = CashRequestSerializer(cash_request, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def cash_payment_summary(request):
+    user = get_object_or_404(User, username=request.user.username)
+    my_payments = MyCashPayments.objects.filter(agent=user).order_by('-date_created')
+    serializer = CashPaymentsSerializer(my_payments, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_cash_requests_for_today(request):
+    my_date = datetime.today()
+    de_date = my_date.date()
+    your_cash_requests = CashRequests.objects.filter(agent=request.user).filter(
+        deposited_month=de_date.month).filter(deposited_year=de_date.year).filter(request_paid="Not Paid").order_by(
+        '-date_requested')
+    serializer = CashRequestSerializer(your_cash_requests, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def cash_payment_detail(request, pk):
+    dpayment = MyCashPayments.objects.get(pk=pk)
+    serializer = CashPaymentsSerializer(dpayment, many=False)
+    return Response(serializer.data)
+
+
+@api_view(['GET', 'PUT'])
+@permission_classes([permissions.AllowAny])
+def approve_cash_payment(request, id):
+    payment = get_object_or_404(MyCashPayments, id=id)
+    serializer = CashPaymentsSerializer(payment, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'DELETE'])
+@permission_classes([permissions.AllowAny])
+def delete_cash_payment(request, id):
+    try:
+        user_payment = get_object_or_404(MyCashPayments, id=id)
+        user_payment.delete()
+    except User_Payment.DoesNotExist:
+        return Http404
+    return Response(status=status.HTTP_204_NO_CONTENT)
