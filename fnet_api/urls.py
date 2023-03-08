@@ -143,6 +143,7 @@ urlpatterns = [
     path('get_agents_bank_total_by_date/', views.get_agents_bank_total_by_date),
     path('get_agents_cash_total_by_date/', views.get_agents_expense_request_total_by_date),
     path('user_total_payments/', views.user_total_payments),
+
     path('get_all_users_expenses_total/', views.get_all_users_expenses_total),
 
     #
@@ -180,6 +181,7 @@ urlpatterns = [
     path("get_customer_bank_payment_notifications/", views.get_customer_bank_payment_notifications),
     path("get_customer_otp_notifications/", views.get_customer_otp_notifications),
     path("get_user_payments_notifications/", views.get_user_payments_notifications),
+    path("get_user_cash_payments_notifications/", views.get_user_cash_payments_notifications),
     path("get_user_bank_requests_notifications/", views.get_user_bank_requests_notifications),
     path("get_user_report_notifications/", views.get_user_report_notifications),
     path("get_user_expenses_requests_notifications/", views.get_user_expenses_requests_notifications),
@@ -188,6 +190,7 @@ urlpatterns = [
     #     ADD TO APPROVED
     path("admin_add_to_approved_payment/", views.admin_add_to_approved_payment),
     path("admin_add_to_approved_bank_deposit/", views.admin_add_to_approved_bank_deposit),
+
 
     #     getting customers deposit transactions
     path("get_customers_deposit_transactions/", views.GetCustomersDepositTransactions.as_view()),
@@ -273,4 +276,13 @@ urlpatterns = [
     path("get_agent2_cash_requests_today/<str:username>/", views.get_agent2_cash_requests_today),
     path("approve_cash_request/<int:id>/", views.approve_cash_request),
     path("cash_requests_detail/<int:pk>/", views.cash_requests_detail),
+
+    path("get_all_user_cash_payments/", views.get_all_user_cash_payments),
+    path("admin_add_to_approved_cash_payment/", views.admin_add_to_approved_cash_payment),
+    path("get_agents_unpaid_cash_deposits/", views.get_agents_unpaid_cash_deposits),
+    path('user_total_cash_payments/', views.user_total_cash_payments),
+    path('get_cash_payment_approved_total/', views.get_cash_payment_approved_total),
+    path('get_user_payments_cash/', views.get_user_payments_cash),
+    path('make_cash_payments/', views.make_cash_payments),
+    path('get_cash_payments/', views.get_cash_payments),
 ]

@@ -4,7 +4,7 @@ from .models import (Customer, CustomerWithdrawal, MyPayments, AdminAccountsStar
                      AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments, CustomerRequestDeposit,
                      Notifications, ExpensesRequest, BankDeposit, MobileMoneyDeposit, MobileMoneyWithdraw,
                      UserMobileMoneyAccountsStarted, UserMobileMoneyAccountsClosed, PaymentAtBank, OTP,
-                     CustomerPaymentAtBank, AddedToApprovedPayment, AddedToApprovedDeposits, Reports, FnetGroupMessage,CashRequest,
+                     CustomerPaymentAtBank, AddedToApprovedPayment, AddedToApprovedDeposits, Reports, FnetGroupMessage,CashRequest,MyCashPayments,AddedToApprovedCashPayment,
                      FnetPrivateUserMessage, PrivateChatId, AddToCustomerPoints, AddToCustomerRedeemPoints,
                      ReferCustomer, AddToBlockList)
 
@@ -125,6 +125,8 @@ class AdminPaymentAtBank(admin.ModelAdmin):
         model = PaymentAtBank
 
 
+admin.site.register(MyCashPayments)
+admin.site.register(AddedToApprovedCashPayment)
 admin.site.register(ReferCustomer)
 admin.site.register(CashRequest)
 admin.site.register(AddToBlockList)

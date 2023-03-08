@@ -8,7 +8,7 @@ from .serializers import (CustomerSerializer, BankDepositSerializer, ExpenseRequ
                           UserMobileMoneyAccountsClosedSerializer, UserMobileMoneyAccountsStartedSerializer,
                           MobileMoneyWithdrawalSerializer, PaymentAtBankSerializer, OTPSerializer,
                           CustomerPaymentAtBankSerializer, AddedToApprovedPaymentSerializer,
-                          AddedToApprovedBankDepositsSerializer, PrivateChatIdSerializer, AddToCustomerPointsSerializer,CashRequestSerializer,
+                          AddedToApprovedBankDepositsSerializer, PrivateChatIdSerializer, AddToCustomerPointsSerializer,CashRequestSerializer,CashPaymentsSerializer,AddedToApprovedCashPaymentSerializer,
                           AddToCustomerRedeemPointsSerializer, ReferCustomerSerializer, AdminCustomerSerializer,
                           AddToBlockListSerializer)
 
@@ -17,7 +17,7 @@ from .models import (Customer, BankDeposit, ExpensesRequest, MobileMoneyDeposit,
                      CustomerRequestDeposit, UserMobileMoneyAccountsStarted, OTP, FnetGroupMessage,
                      FnetPrivateUserMessage,
                      UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, Notifications, PaymentAtBank,
-                     CustomerPaymentAtBank, AddedToApprovedPayment, AddedToApprovedDeposits, Reports, PrivateChatId,CashRequest,
+                     CustomerPaymentAtBank, AddedToApprovedPayment, AddedToApprovedDeposits, Reports, PrivateChatId,CashRequest,MyCashPayments,AddedToApprovedCashPayment,
                      AddToCustomerPoints, AddToCustomerRedeemPoints, ReferCustomer, AddToBlockList
                      )
 from drf_multiple_model.views import ObjectMultipleModelAPIView
@@ -32,6 +32,14 @@ from datetime import datetime, date, time
 
 from fnet_api import serializers
 
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+def admin_add_to_approved_cash_payment(request):
+    serializer = AdminAddToCashPaymentSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])
@@ -2068,3 +2076,70 @@ def update_cash_requests(request, id):
         serializer.save()
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_all_user_cash_payments(request):
+    user_payments = MyCashPayments.objects.all().order_by('-date_created')
+    serializer = CashPaymentSerializerPaymentsSerializer(user_payments, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_agents_unpaid_cash_deposits(request):
+    deposits = CashRequest.objects.filter(request_paid="Not Paid").order_by('-date_requested')
+    serializer = CashRequestSerializer(deposits, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_user_cash_payments_notifications(request):
+    customer_bank_notifications = Notifications.objects.filter(user2=request.user).filter(
+        transaction_type="Cash Payment").filter(read="Not Read").order_by('-date_created')
+    serializer = NotificationSerializer(customer_bank_notifications, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def user_total_cash_payments(request):
+    all_user_payments = MyCashPaymentsPayments.objects.filter(agent=request.user).filter(payment_status="Approved").order_by(
+        '-date_created')
+    serializer = CashPaymentsSerializerPaymentsSerializer(all_user_payments, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_cash_payment_approved_total(request):
+    my_date = datetime.today()
+    de_date = my_date.date()
+    payment_today = MyCashPayments.objects.filter(agent=request.user).filter(payment_status="Approved").filter(
+        payment_month=de_date.month).filter(payment_year=de_date.year).order_by(
+        '-date_created')
+    serializer = CashPaymentsSerializer(payment_today, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_user_payments_cash(request):
+    payment_today = MyCashPayments.objects.filter(agent=request.user).order_by('-date_created')
+    serializer = CashPaymentsSerializer(payment_today, many=True)
+    return Response(serializer.data)
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def make_cash_payments(request):
+    serializer = CashPaymentsSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(agent=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_cash_payments(request):
+    my_date = datetime.today()
+    payments = MyCashPayments.objects.filter(payment_status="Pending").order_by('-date_created')
+    serializer = CashPaymentsSerializer(payments, many=True)
+    return Response(serializer.data)

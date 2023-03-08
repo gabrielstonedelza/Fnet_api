@@ -2,7 +2,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from .models import (CustomerRequestDeposit, ExpensesRequest, BankDeposit, MyPayments, Notifications, OTP, \
                      CustomerPaymentAtBank, Customer, AddedToApprovedDeposits, AddedToApprovedPayment, Reports,
-                     FnetGroupMessage, CashRequest,
+                     FnetGroupMessage, CashRequest,MyCashPayments,AddedToApprovedCashPayment,
                      FnetPrivateUserMessage, AddToCustomerPoints, AddToCustomerRedeemPoints, ReferCustomer)
 from django.conf import settings
 
@@ -36,6 +36,19 @@ def alert_payment_approved(sender, created, instance, **kwargs):
     title = "Payment approved"
     transaction_type = "Payment Approved"
     message = f"Your payment of {instance.payment.amount} was approved successfully."
+
+    if created:
+        Notifications.objects.create(user=instance.payment.agent, transaction_type=transaction_type,
+                                     item_id=instance.id,
+                                     notification_title=title, notification_message=message,
+                                     user2=instance.payment.agent,
+                                     )
+
+@receiver(post_save, sender=AddedToApprovedCashPayment)
+def alert_cash_payment_approved(sender, created, instance, **kwargs):
+    title = "Payment approved"
+    transaction_type = "Payment Approved"
+    message = f"Your cash payment of {instance.payment.amount} was approved successfully."
 
     if created:
         Notifications.objects.create(user=instance.payment.agent, transaction_type=transaction_type,
@@ -118,6 +131,19 @@ def create_payment(sender, created, instance, **kwargs):
     message = f"{instance.agent.username} just made a payment amount of {instance.amount}"
     admin_user = User.objects.get(id=1)
     transaction_type = "Payment"
+
+    if created:
+        Notifications.objects.create(user=instance.agent, item_id=instance.id, transaction_type=transaction_type,
+                                     notification_title=title, notification_message=message,
+                                     user2=admin_user, payment_slug=instance.slug)
+
+
+@receiver(post_save, sender=MyCashPayments)
+def create_cash_payment(sender, created, instance, **kwargs):
+    title = f"New cash payment from {instance.agent.username}"
+    message = f"{instance.agent.username} just made a cash payment amount of {instance.amount}"
+    admin_user = User.objects.get(id=1)
+    transaction_type = "Cash Payment"
 
     if created:
         Notifications.objects.create(user=instance.agent, item_id=instance.id, transaction_type=transaction_type,

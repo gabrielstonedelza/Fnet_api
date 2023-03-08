@@ -707,6 +707,7 @@ class CashRequest(models.Model):
     agent2 = models.ForeignKey(User, on_delete=models.CASCADE, related_name="agent_delivering_cash")
     amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
     request_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
+    request_paid = models.CharField(choices=REQUEST_PAID_OPTIONS, default="Not Paid", blank=True, max_length=20)
     date_requested = models.DateField(auto_now_add=True)
     requested_month = models.CharField(max_length=10, blank=True, default="")
     requested_year = models.CharField(max_length=10, blank=True, default="")
@@ -729,3 +730,50 @@ class CashRequest(models.Model):
         self.requested_month = de_date.month
         self.requested_year = de_date.year
         super().save(*args, **kwargs)
+
+
+class MyCashPayments(models.Model):
+    agent = models.ForeignKey(User, on_delete=models.CASCADE)
+    mode_of_payment1 = models.CharField(max_length=30, choices=MODE_OF_PAYMENT, blank=True)
+    mode_of_payment2 = models.CharField(max_length=30, choices=MODE_OF_PAYMENT, blank=True)
+    cash_at_location1 = models.CharField(max_length=30, choices=PAYMENT_OFFICES, blank=True, default="")
+    cash_at_location2 = models.CharField(max_length=30, choices=PAYMENT_OFFICES, blank=True, default="")
+    bank1 = models.CharField(max_length=50, choices=BANKS, blank=True)
+    bank2 = models.CharField(max_length=50, choices=BANKS, blank=True)
+    amount = models.DecimalField(max_digits=19, decimal_places=2, default=0.0, blank=True)
+    amount1 = models.DecimalField(max_digits=19, decimal_places=2, default=0.0)
+    amount2 = models.DecimalField(max_digits=19, decimal_places=2, default=0.0)
+    transaction_id1 = models.CharField(max_length=30, blank=True, default="")
+    transaction_id2 = models.CharField(max_length=30, blank=True, default="")
+    payment_action = models.CharField(max_length=50, choices=PAYMENT_ACTIONS, default="Close Payment")
+    payment_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
+    payment_month = models.CharField(max_length=10, blank=True, default="")
+    payment_year = models.CharField(max_length=10, blank=True, default="")
+    date_created = models.DateField(auto_now_add=True)
+    time_created = models.TimeField(auto_now_add=True)
+    slug = models.SlugField(max_length=100, default='')
+
+    def __str__(self):
+        if self.payment_status == "Pending":
+            return f"{self.agent.username}'s payment is pending"
+        return f"{self.agent.username}'s payment is approved"
+
+    def save(self, *args, **kwargs):
+        my_date = datetime.today()
+        de_date = my_date.date()
+        self.payment_month = de_date.month
+        self.payment_year = de_date.year
+        value = self.mode_of_payment1
+        self.slug = slugify(value, allow_unicode=True)
+
+        amount_total = Decimal(self.amount1) + Decimal(self.amount2)
+        self.amount = Decimal(amount_total)
+        super().save(*args, **kwargs)
+
+
+class AddedToApprovedCashPayment(models.Model):
+    payment = models.ForeignKey(MyCashPayments, on_delete=models.CASCADE)
+    date_approved = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.payment.amount} was approved"

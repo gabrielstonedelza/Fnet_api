@@ -5,8 +5,8 @@ from .models import (Customer, CustomerWithdrawal, MyPayments, AdminAccountsStar
                      ExpensesRequest, MobileMoneyDeposit, BankDeposit, UserMobileMoneyAccountsStarted,
                      UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, Notifications, PaymentAtBank, OTP,
                      CustomerPaymentAtBank, AddedToApprovedDeposits, AddedToApprovedPayment, Reports,
-                     FnetPrivateUserMessage, FnetGroupMessage, PrivateChatId, AddToCustomerPoints,
-                     AddToCustomerRedeemPoints, ReferCustomer, AddToBlockList, CashRequest)
+                     FnetPrivateUserMessage, FnetGroupMessage, PrivateChatId, AddToCustomerPoints,AddedToApprovedCashPayment,
+                     AddToCustomerRedeemPoints, ReferCustomer, AddToBlockList, CashRequest,MyCashPayments)
 
 
 class AddToBlockListSerializer(serializers.ModelSerializer):
@@ -358,4 +358,24 @@ class AddToCustomerRedeemPointsSerializer(serializers.ModelSerializer):
 class CashRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = CashRequest
-        fields = ['id','administrator','agent1','agent2','amount','request_status','date_requested','requested_month','requested_year','time_requested','get_agent1_username','get_agent2_username']
+        fields = ['id','administrator','agent1','agent2','amount','request_status','date_requested','requested_month','requested_year','time_requested','get_agent1_username','get_agent2_username','request_paid']
+
+class CashPaymentsSerializer(serializers.ModelSerializer):
+    agent_username = serializers.SerializerMethodField('get_agent_username')
+
+    class Meta:
+        model = MyCashPayments
+        fields = ['id', 'agent', 'agent_username', 'mode_of_payment1', 'mode_of_payment2', 'cash_at_location1',
+                  'cash_at_location2', 'amount', 'amount1', 'amount2', 'bank1', 'bank2', 'transaction_id1',
+                  'transaction_id2', 'payment_action', 'payment_status', 'date_created', 'time_created', 'slug',
+                  'payment_month', 'payment_year', ]
+        read_only_fields = ['agent']
+
+    def get_agent_username(self, user):
+        agent_username = user.agent.username
+        return agent_username
+
+class AddedToApprovedCashPaymentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AddedToApprovedCashPayment
+        fields = ['id', 'payment', 'date_approved']
