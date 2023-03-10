@@ -105,7 +105,7 @@ WITHDRAW_TYPES = (
 
 REQUEST_STATUS = (
     ("Approved", "Approved"),
-    ("Pending", "Pending")
+    ("Pending", "Pending"),
     ("Rejected", "Rejected")
 )
 
