@@ -106,6 +106,7 @@ WITHDRAW_TYPES = (
 REQUEST_STATUS = (
     ("Approved", "Approved"),
     ("Pending", "Pending")
+    ("Rejected", "Rejected")
 )
 
 MODE_OF_PAYMENT = (
