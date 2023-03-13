@@ -260,11 +260,11 @@ urlpatterns = [
     path("get_agents_access_bank/<str:username>/", views.get_agents_access_bank),
     path("get_agents_gt_bank/<str:username>/", views.get_agents_gt_bank),
     # bank transactions by date
-    path("get_agents_eco_bank_by_date/<str:username>/<str:d_month>/<str:d_year>/<str:bank>/", views.get_agents_eco_bank_by_date),
-    path("get_agents_cal_bank_by_date/<str:username>/<str:d_month>/<str:d_year>/", views.get_agents_cal_bank_by_date),
-    path("get_agents_access_bank_by_date/<str:username>/<str:d_month>/<str:d_year>/", views.get_agents_access_bank_by_date),
-    path("get_agents_fidelity_bank_by_date/<str:username>/<str:d_month>/<str:d_year>/", views.get_agents_fidelity_bank_by_date),
-    path("get_agents_gt_bank_by_date/<str:username>/<str:d_month>/<str:d_year>/", views.get_agents_gt_bank_by_date),
+    path("get_agents_bank_transactions_by_date/<str:username>/<str:d_month>/<str:d_year>/<str:bank>/", views.get_agents_bank_transactions_by_date),
+    # path("get_agents_cal_bank_by_date/<str:username>/<str:d_month>/<str:d_year>/", views.get_agents_cal_bank_by_date),
+    # path("get_agents_access_bank_by_date/<str:username>/<str:d_month>/<str:d_year>/", views.get_agents_access_bank_by_date),
+    # path("get_agents_fidelity_bank_by_date/<str:username>/<str:d_month>/<str:d_year>/", views.get_agents_fidelity_bank_by_date),
+    # path("get_agents_gt_bank_by_date/<str:username>/<str:d_month>/<str:d_year>/", views.get_agents_gt_bank_by_date),
 
 #     admin update payment and request
     path("update_payment/<int:id>/", views.update_payment),
