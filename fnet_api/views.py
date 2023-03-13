@@ -2087,7 +2087,7 @@ def get_all_user_cash_payments(request):
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def get_agents_unpaid_cash_deposits(request):
-    deposits = CashRequest.objects.filter(request_paid="Not Paid").order_by('-date_requested')
+    deposits = CashRequest.objects.filter(agent1=request.user).filter(request_paid="Not Paid").order_by('-date_requested')
     serializer = CashRequestSerializer(deposits, many=True)
     return Response(serializer.data)
 
