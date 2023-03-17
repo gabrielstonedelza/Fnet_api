@@ -575,7 +575,7 @@ def get_payments(request):
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def get_all_payments(request):
-    payments = MyPayments.objects.all().order_by('-date_created')[:50]
+    payments = MyPayments.objects.all().order_by('-date_created')
     serializer = PaymentsSerializer(payments, many=True)
     return Response(serializer.data)
 
