@@ -17,6 +17,7 @@ urlpatterns = [
 
     path('agents_customers_withdrawal_summary/', views.customer_withdrawal_summary),
     path('payments/', views.get_payments),
+    path('get_all_payments/', views.get_all_payments),
     path('make_payments/', views.make_payments),
     path('approve_payments/<int:id>/', views.approve_payment),
     path('approve_cash_payment/<int:id>/', views.approve_cash_payment),
@@ -290,5 +291,6 @@ urlpatterns = [
     path('get_user_payments_cash/', views.get_user_payments_cash),
     path('make_cash_payments/', views.make_cash_payments),
     path('get_cash_payments/', views.get_cash_payments),
+    path('get_all_cash_payments/', views.get_all_cash_payments),
     path('get_cash_requests_for_today/', views.get_cash_requests_for_today),
 ]

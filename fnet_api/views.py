@@ -572,6 +572,13 @@ def get_payments(request):
     serializer = PaymentsSerializer(payments, many=True)
     return Response(serializer.data)
 
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_all_payments(request):
+    payments = MyPayments.objects.all().order_by('-date_created')
+    serializer = PaymentsSerializer(payments, many=True)
+    return Response(serializer.data)
+
 
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
@@ -2141,6 +2148,13 @@ def make_cash_payments(request):
 def get_cash_payments(request):
     my_date = datetime.today()
     payments = MyCashPayments.objects.filter(payment_status="Pending").order_by('-date_created')
+    serializer = CashPaymentsSerializer(payments, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_all_cash_payments(request):
+    payments = MyCashPayments.objects.all().order_by('-date_created')
     serializer = CashPaymentsSerializer(payments, many=True)
     return Response(serializer.data)
 
