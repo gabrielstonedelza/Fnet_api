@@ -2358,7 +2358,13 @@ def get_all_users_mobile_money_accounts_started(request):
 @api_view(["GET"])
 @permission_classes([permissions.AllowAny])
 def get_all_users_mobile_money_accounts_closed(request):
+    today_year = timezone.now().year
+  
     deposits = UserMobileMoneyAccountsClosed.objects.all().order_by("-date_posted")
+    for deposit in deposits:
+        if deposit.date_posted.year != today_year:
+            deposit.delete()
+    
     serializer = UserMobileMoneyAccountsClosedSerializer(deposits, many=True)
     return Response(serializer.data)
 
