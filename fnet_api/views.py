@@ -2470,7 +2470,14 @@ def get_all_customers_payment_at_bank(request):
 @api_view(["GET"])
 @permission_classes([permissions.AllowAny])
 def get_all_users_reports(request):
+    today_year = timezone.now().year
+  
     reports = Reports.objects.all().order_by("-date_reported")
+    for deposit in reports:
+        if deposit.date_reported.year != today_year:
+            deposit.delete()
+
+    
     serializer = ReportsSerializer(reports, many=True)
     return Response(serializer.data)
 
