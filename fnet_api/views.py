@@ -2421,7 +2421,13 @@ def get_all_admin_accounts_started_with(request):
 @api_view(["GET"])
 @permission_classes([permissions.AllowAny])
 def get_all_admin_accounts_with_with(request):
+    today_year = timezone.now().year
+  
     accounts_started = AdminAccountsCompletedWith.objects.all().order_by("-date_closed")
+    for deposit in accounts_started:
+        if deposit.date_closed.year != today_year:
+            deposit.delete()
+    
     serializer = AdminAccountsCompletedSerializer(accounts_started, many=True)
     return Response(serializer.data)
 
