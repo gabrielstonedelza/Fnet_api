@@ -2379,7 +2379,13 @@ def get_all_customers_withdrawals(request):
 @api_view(["GET"])
 @permission_classes([permissions.AllowAny])
 def get_all_users_bank_payments(request):
+    today_year = timezone.now().year
+  
     payments = MyPayments.objects.all().order_by("-date_created")
+    for deposit in payments:
+        if deposit.date_created.year != today_year:
+            deposit.delete()
+    
     serializer = PaymentsSerializer(payments, many=True)
     return Response(serializer.data)
 

@@ -1,9 +1,1 @@
-{
-    "version": 3,
-    "mappings": "",
-    "sources": [
-        "email_styles.scss"
-    ],
-    "names": [],
-    "file": "email_styles.css"
-}
+{"version":3,"sources":[],"names":[],"mappings":"","file":"email_styles.css"}
