@@ -2216,3 +2216,237 @@ def delete_cash_payment(request, id):
     except User_Payment.DoesNotExist:
         return Http404
     return Response(status=status.HTTP_204_NO_CONTENT)
+
+# for saving data
+@api_view(["GET"])
+@permission_classes([permissions.AllowAny])
+def get_all_customer_requests_deposits(request):
+    request_deposits = CustomerRequestDeposit.objects.all().order_by("-date_requested")
+    serializer = CustomerDepositRequestSerializer(request_deposits, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+@permission_classes([permissions.AllowAny])
+def get_all_cash_at_payments(request):
+    payments = CashAtPayments.objects.all().order_by("-date_paid")
+    serializer = CashAtPaymentSerializer(payments, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+@permission_classes([permissions.AllowAny])
+def get_all_fnet_customers(request):
+    customers = Customer.objects.all().order_by("-date_created")
+    serializer = CustomerSerializer(customers, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+@permission_classes([permissions.AllowAny])
+def get_all_referred_customers(request):
+    customers = ReferCustomer.objects.all().order_by("-date_created")
+    serializer = ReferCustomerSerializer(customers, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+@permission_classes([permissions.AllowAny])
+def get_all_add_to_customers_points(request):
+    customers = AddToCustomerPoints.objects.all().order_by("-date_created")
+    serializer = AddToCustomerPointsSerializer(customers, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+@permission_classes([permissions.AllowAny])
+def get_all_add_to_customers_redeemed_points(request):
+    customers = AddToCustomerRedeemPoints.objects.all().order_by("-date_created")
+    serializer = AddToCustomerRedeemPointsSerializer(customers, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+@permission_classes([permissions.AllowAny])
+def get_all_customers_accounts_registered(request):
+    customers = CustomerAccounts.objects.all().order_by("-date_added")
+    serializer = CustomerAccountsSerializer(customers, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+@permission_classes([permissions.AllowAny])
+def get_all_users_expenses(request):
+    users = ExpensesRequest.objects.all().order_by("-date_requested")
+    serializer = ExpenseRequestSerializer(users, many=True)
+    return Response(serializer.data)
+
+@api_view(["GET"])
+@permission_classes([permissions.AllowAny])
+def get_all_users_bank_requests_deposits(request):
+    deposits = BankDeposit.objects.all().order_by("-date_requested")
+    serializer = BankDepositSerializer(deposits, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+@permission_classes([permissions.AllowAny])
+def get_all_add_to_approved_requests_deposits(request):
+    deposits = AddedToApprovedDeposits.objects.all().order_by("-date_approved")
+    serializer = AddedToApprovedBankDepositsSerializer(deposits, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+@permission_classes([permissions.AllowAny])
+def get_all_users_mobile_money_deposit_requests_deposits(request):
+    deposits = MobileMoneyDeposit.objects.all().order_by("-date_deposited")
+    serializer = MobileMoneyDepositSerializer(deposits, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+@permission_classes([permissions.AllowAny])
+def get_all_users_mobile_money_withdrawal_requests_deposits(request):
+    deposits = MobileMoneyWithdraw.objects.all().order_by("-date_of_withdrawal")
+    serializer = MobileMoneyWithdrawalSerializer(deposits, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+@permission_classes([permissions.AllowAny])
+def get_all_users_mobile_money_accounts_started(request):
+    deposits = UserMobileMoneyAccountsStarted.objects.all().order_by("-date_posted")
+    serializer = UserMobileMoneyAccountsStartedSerializer(deposits, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+@permission_classes([permissions.AllowAny])
+def get_all_users_mobile_money_accounts_closed(request):
+    deposits = UserMobileMoneyAccountsClosed.objects.all().order_by("-date_posted")
+    serializer = UserMobileMoneyAccountsClosedSerializer(deposits, many=True)
+    return Response(serializer.data)
+
+@api_view(["GET"])
+@permission_classes([permissions.AllowAny])
+def get_all_customers_withdrawals(request):
+    withdrawals = CustomerWithdrawal.objects.all().order_by("-date_requested")
+    serializer = CustomerWithdrawalSerializer(withdrawals, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+@permission_classes([permissions.AllowAny])
+def get_all_users_bank_payments(request):
+    payments = MyPayments.objects.all().order_by("-date_created")
+    serializer = PaymentsSerializer(payments, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+@permission_classes([permissions.AllowAny])
+def get_all_added_to_approved_payments(request):
+    payments = AddedToApprovedPayment.objects.all().order_by("-date_approved")
+    serializer = AddedToApprovedPaymentSerializer(payments, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+@permission_classes([permissions.AllowAny])
+def get_all_admin_accounts_started_with(request):
+    accounts_started = AdminAccountsStartedWith.objects.all().order_by("-date_started")
+    serializer = AdminAccountsStartedSerializer(accounts_started, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+@permission_classes([permissions.AllowAny])
+def get_all_admin_accounts_with_with(request):
+    accounts_started = AdminAccountsCompletedWith.objects.all().order_by("-date_closed")
+    serializer = AdminAccountsCompletedSerializer(accounts_started, many=True)
+    return Response(serializer.data)
+
+
+
+@api_view(["GET"])
+@permission_classes([permissions.AllowAny])
+def get_all_fnet_notifications(request):
+    fnotifications = Notifications.objects.all().order_by("-date_created")
+    serializer = NotificationSerializer(fnotifications, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+@permission_classes([permissions.AllowAny])
+def get_all_users_payment_at_bank(request):
+    payments = PaymentAtBank.objects.all().order_by("-date_added")
+    serializer = PaymentAtBankSerializer(payments, many=True)
+    return Response(serializer.data)
+
+@api_view(["GET"])
+@permission_classes([permissions.AllowAny])
+def get_all_customers_payment_at_bank(request):
+    payments = CustomerPaymentAtBank.objects.all().order_by("-date_added")
+    serializer = CustomerPaymentAtBankSerializer(payments, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+@permission_classes([permissions.AllowAny])
+def get_all_users_reports(request):
+    reports = Reports.objects.all().order_by("-date_added")
+    serializer = ReportsSerializer(reports, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+@permission_classes([permissions.AllowAny])
+def get_all_fnet_messages(request):
+    fnetmessages = FnetGroupMessage.objects.all().order_by("-timestamp")
+    serializer = FnetGroupMessageSerializer(fnetmessages, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+@permission_classes([permissions.AllowAny])
+def get_all_fnet_messages_chat_id(request):
+    chat_id = PrivateChatId.objects.all().order_by("-date_created")
+    serializer = PrivateChatIdSerializer(chat_id, many=True)
+    return Response(serializer.data)
+
+@api_view(["GET"])
+@permission_classes([permissions.AllowAny])
+def get_all_fnet_private_chat_messages(request):
+    pmessages = FnetPrivateUserMessage.objects.all().order_by("-timestamp")
+    serializer = FnetPrivateUserMessageSerializer(pmessages, many=True)
+    return Response(serializer.data)
+
+@api_view(["GET"])
+@permission_classes([permissions.AllowAny])
+def get_all_users_blocked_lists(request):
+    blockedlists = AddToBlockList.objects.all().order_by("-date_blocked")
+    serializer = AddToBlockListSerializer(blockedlists, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+@permission_classes([permissions.AllowAny])
+def get_all_users_cash_request_deposits(request):
+    cash_requests = CashRequest.objects.all().order_by("-date_requested")
+    serializer = CashRequestSerializer(cash_requests, many=True)
+    return Response(serializer.data)
+
+@api_view(["GET"])
+@permission_classes([permissions.AllowAny])
+def get_all_users_cash_payments(request):
+    cash_payments = MyCashPayments.objects.all().order_by("-date_created")
+    serializer = CashPaymentsSerializer(cash_payments, many=True)
+    return Response(serializer.data)
+
+@api_view(["GET"])
+@permission_classes([permissions.AllowAny])
+def get_all_users_added_to_approved_cash_payments(request):
+    cash_payments = AddedToApprovedCashPayment.objects.all().order_by("-date_approved")
+    serializer = AddedToApprovedCashPaymentSerializer(cash_payments, many=True)
+    return Response(serializer.data)
