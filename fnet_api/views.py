@@ -2395,7 +2395,7 @@ def get_all_customers_payment_at_bank(request):
 @api_view(["GET"])
 @permission_classes([permissions.AllowAny])
 def get_all_users_reports(request):
-    reports = Reports.objects.all().order_by("-date_added")
+    reports = Reports.objects.all().order_by("-date_reported")
     serializer = ReportsSerializer(reports, many=True)
     return Response(serializer.data)
 
