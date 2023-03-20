@@ -2449,7 +2449,13 @@ def get_all_fnet_notifications(request):
 @api_view(["GET"])
 @permission_classes([permissions.AllowAny])
 def get_all_users_payment_at_bank(request):
+    today_year = timezone.now().year
+  
     payments = PaymentAtBank.objects.all().order_by("-date_added")
+    for deposit in payments:
+        if deposit.date_added.year != today_year:
+            deposit.delete()
+    
     serializer = PaymentAtBankSerializer(payments, many=True)
     return Response(serializer.data)
 
