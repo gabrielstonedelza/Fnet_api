@@ -2220,7 +2220,13 @@ def delete_cash_payment(request, id):
 @api_view(["GET"])
 @permission_classes([permissions.AllowAny])
 def get_all_customer_requests_deposits(request):
+    today_year = timezone.now().year
+  
     request_deposits = CustomerRequestDeposit.objects.all().order_by("-date_requested")
+    for notification in request_deposits:
+        if notification.date_requested.year != today_year:
+            notification.delete()
+    
     serializer = CustomerDepositRequestSerializer(request_deposits, many=True)
     return Response(serializer.data)
 
@@ -2276,7 +2282,12 @@ def get_all_customers_accounts_registered(request):
 @api_view(["GET"])
 @permission_classes([permissions.AllowAny])
 def get_all_users_expenses(request):
+    today_year = timezone.now().year
+  
     users = ExpensesRequest.objects.all().order_by("-date_requested")
+    for user in users:
+        if user.date_requested.year != today_year:
+            user.delete()
     serializer = ExpenseRequestSerializer(users, many=True)
     return Response(serializer.data)
 
