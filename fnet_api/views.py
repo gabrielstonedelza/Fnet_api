@@ -2308,13 +2308,7 @@ def get_all_users_bank_requests_deposits(request):
 @api_view(["GET"])
 @permission_classes([permissions.AllowAny])
 def get_all_add_to_approved_requests_deposits(request):
-    today_year = timezone.now().year
-  
     deposits = AddedToApprovedDeposits.objects.all().order_by("-date_approved")
-    for deposit in deposits:
-        if deposit.date_approved.year != today_year:
-            deposit.delete()
-    
     serializer = AddedToApprovedBankDepositsSerializer(deposits, many=True)
     return Response(serializer.data)
 
@@ -2322,7 +2316,13 @@ def get_all_add_to_approved_requests_deposits(request):
 @api_view(["GET"])
 @permission_classes([permissions.AllowAny])
 def get_all_users_mobile_money_deposit_requests_deposits(request):
+    today_year = timezone.now().year
+  
     deposits = MobileMoneyDeposit.objects.all().order_by("-date_deposited")
+    for deposit in deposits:
+        if deposit.date_deposited.year != today_year:
+            deposit.delete()
+    
     serializer = MobileMoneyDepositSerializer(deposits, many=True)
     return Response(serializer.data)
 
