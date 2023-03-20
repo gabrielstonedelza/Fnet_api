@@ -326,4 +326,7 @@ urlpatterns = [
     path("get_all_users_cash_request_deposits/", views.get_all_users_cash_request_deposits),
     path("get_all_users_cash_payments/", views.get_all_users_cash_payments),
     path("get_all_users_added_to_approved_cash_payments/", views.get_all_users_added_to_approved_cash_payments),
+
+#     remove from database
+    path("delete_all_customer_requests_deposits/", views.delete_all_customer_requests_deposits)
 ]

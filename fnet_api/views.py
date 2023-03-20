@@ -1138,8 +1138,6 @@ def get_unpaid_expense_request_for_today(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_unpaid_bank_deposits_for_today(request):
-    my_date = datetime.today()
-
     your_bank_requests = BankDeposit.objects.filter(agent=request.user).filter(deposit_paid="Not Paid").filter(
         request_status="Approved").order_by('-date_requested')
     serializer = BankDepositSerializer(your_bank_requests, many=True)
@@ -2449,4 +2447,20 @@ def get_all_users_cash_payments(request):
 def get_all_users_added_to_approved_cash_payments(request):
     cash_payments = AddedToApprovedCashPayment.objects.all().order_by("-date_approved")
     serializer = AddedToApprovedCashPaymentSerializer(cash_payments, many=True)
+    return Response(serializer.data)
+
+
+# deleting from database
+# my_date = datetime.today()
+# de_date = my_date.date()
+@api_view(["GET"])
+@permission_classes([permissions.AllowAny])
+def delete_all_customer_requests_deposits(request):
+    my_date = datetime.today()
+    de_date = my_date.date()
+    deposit = CustomerRequestDeposit.objects.exclude(date_paid=de_date).order_by("-date_requested")
+    # request_deposits = CustomerRequestDeposit.objects.all().order_by("-date_requested")
+    for i in deposit:
+        i.delete()
+    serializer = CustomerDepositRequestSerializer(deposit, many=True)
     return Response(serializer.data)
