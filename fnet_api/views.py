@@ -2344,7 +2344,13 @@ def get_all_users_mobile_money_withdrawal_requests_deposits(request):
 @api_view(["GET"])
 @permission_classes([permissions.AllowAny])
 def get_all_users_mobile_money_accounts_started(request):
+    today_year = timezone.now().year
+  
     deposits = UserMobileMoneyAccountsStarted.objects.all().order_by("-date_posted")
+    for deposit in deposits:
+        if deposit.date_posted.year != today_year:
+            deposit.delete()
+    
     serializer = UserMobileMoneyAccountsStartedSerializer(deposits, many=True)
     return Response(serializer.data)
 
