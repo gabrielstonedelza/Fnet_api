@@ -2371,11 +2371,11 @@ def get_all_admin_accounts_with_with(request):
 @api_view(["GET"])
 @permission_classes([permissions.AllowAny])
 def get_all_fnet_notifications(request):
-    today = timezone.now().date()
+    today_year = timezone.now().year
   
     fnotifications = Notifications.objects.all().order_by("-date_created")
     for notification in fnotifications:
-        if notification.date_created.date() != today:
+        if notification.date_created.year != today_year:
             notification.delete()
     serializer = NotificationSerializer(fnotifications, many=True)
     return Response(serializer.data)
