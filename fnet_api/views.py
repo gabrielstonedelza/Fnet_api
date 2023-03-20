@@ -31,6 +31,7 @@ from rest_framework import filters
 from datetime import datetime, date, time
 
 from fnet_api import serializers
+from django.utils import timezone
 
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])
@@ -2370,7 +2371,12 @@ def get_all_admin_accounts_with_with(request):
 @api_view(["GET"])
 @permission_classes([permissions.AllowAny])
 def get_all_fnet_notifications(request):
+    today = timezone.now().date()
+  
     fnotifications = Notifications.objects.all().order_by("-date_created")
+    for notification in fnotifications:
+        if notification.date_created.date() != today:
+            notification.delete()
     serializer = NotificationSerializer(fnotifications, many=True)
     return Response(serializer.data)
 
