@@ -2393,7 +2393,13 @@ def get_all_users_bank_payments(request):
 @api_view(["GET"])
 @permission_classes([permissions.AllowAny])
 def get_all_added_to_approved_payments(request):
+    today_year = timezone.now().year
+  
     payments = AddedToApprovedPayment.objects.all().order_by("-date_approved")
+    for deposit in payments:
+        if deposit.date_approved.year != today_year:
+            deposit.delete()
+    
     serializer = AddedToApprovedPaymentSerializer(payments, many=True)
     return Response(serializer.data)
 
