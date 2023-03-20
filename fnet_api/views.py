@@ -2458,7 +2458,7 @@ def get_all_users_added_to_approved_cash_payments(request):
 def delete_all_customer_requests_deposits(request):
     my_date = datetime.today()
     de_date = my_date.date()
-    deposit = CustomerRequestDeposit.objects.exclude(date_paid=de_date).order_by("-date_requested")
+    deposit = CustomerRequestDeposit.objects.exclude(date_requested=de_date).order_by("-date_requested")
     # request_deposits = CustomerRequestDeposit.objects.all().order_by("-date_requested")
     for i in deposit:
         i.delete()
