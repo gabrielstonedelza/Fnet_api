@@ -2407,7 +2407,13 @@ def get_all_added_to_approved_payments(request):
 @api_view(["GET"])
 @permission_classes([permissions.AllowAny])
 def get_all_admin_accounts_started_with(request):
+    today_year = timezone.now().year
+  
     accounts_started = AdminAccountsStartedWith.objects.all().order_by("-date_started")
+    for deposit in accounts_started:
+        if deposit.date_started.year != today_year:
+            deposit.delete()
+    
     serializer = AdminAccountsStartedSerializer(accounts_started, many=True)
     return Response(serializer.data)
 
