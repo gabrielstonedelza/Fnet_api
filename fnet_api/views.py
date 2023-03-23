@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from .serializers import (CustomerSerializer, BankDepositSerializer, ExpenseRequestSerializer,
-                          MobileMoneyDepositSerializer,
+                          MobileMoneyDepositSerializer,WithdrawalReferenceSerializer,
                           CustomerWithdrawalSerializer, PaymentsSerializer, AdminAccountsStartedSerializer, \
                           AdminAccountsCompletedSerializer, CustomerAccountsSerializer, CashAtPaymentSerializer,
                           ReportsSerializer, FnetGroupMessageSerializer, FnetPrivateUserMessageSerializer,
@@ -15,7 +15,7 @@ from .serializers import (CustomerSerializer, BankDepositSerializer, ExpenseRequ
 from .models import (Customer, BankDeposit, ExpensesRequest, MobileMoneyDeposit, CustomerWithdrawal, MyPayments,
                      AdminAccountsStartedWith, AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments,
                      CustomerRequestDeposit, UserMobileMoneyAccountsStarted, OTP, FnetGroupMessage,
-                     FnetPrivateUserMessage,
+                     FnetPrivateUserMessage,WithdrawalReference,
                      UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, Notifications, PaymentAtBank,
                      CustomerPaymentAtBank, AddedToApprovedPayment, AddedToApprovedDeposits, Reports, PrivateChatId,CashRequest,MyCashPayments,AddedToApprovedCashPayment,
                      AddToCustomerPoints, AddToCustomerRedeemPoints, ReferCustomer, AddToBlockList
@@ -2471,13 +2471,10 @@ def get_all_customers_payment_at_bank(request):
 @permission_classes([permissions.AllowAny])
 def get_all_users_reports(request):
     today_year = timezone.now().year
-  
     reports = Reports.objects.all().order_by("-date_reported")
     for deposit in reports:
         if deposit.date_reported.year != today_year:
             deposit.delete()
-
-    
     serializer = ReportsSerializer(reports, many=True)
     return Response(serializer.data)
 
@@ -2548,3 +2545,14 @@ def delete_all_customer_requests_deposits(request):
         i.delete()
     serializer = CustomerDepositRequestSerializer(deposit, many=True)
     return Response(serializer.data)
+
+
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def add_withdraw_reference(request):
+    serializer = WithdrawReferenceSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

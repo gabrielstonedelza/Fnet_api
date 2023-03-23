@@ -1,14 +1,17 @@
 from django.db.models import fields
 from rest_framework import serializers
 from .models import (Customer, CustomerWithdrawal, MyPayments, AdminAccountsStartedWith, CashAtPayments,
-                     AdminAccountsCompletedWith, CustomerAccounts, CustomerRequestDeposit,
+                     AdminAccountsCompletedWith, CustomerAccounts, CustomerRequestDeposit,WithdrawalReference,
                      ExpensesRequest, MobileMoneyDeposit, BankDeposit, UserMobileMoneyAccountsStarted,
                      UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, Notifications, PaymentAtBank, OTP,
                      CustomerPaymentAtBank, AddedToApprovedDeposits, AddedToApprovedPayment, Reports,
                      FnetPrivateUserMessage, FnetGroupMessage, PrivateChatId, AddToCustomerPoints,AddedToApprovedCashPayment,
                      AddToCustomerRedeemPoints, ReferCustomer, AddToBlockList, CashRequest,MyCashPayments)
 
-
+class WithdrawalReferenceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WithdrawalReference
+        fields = ['id','agent','amount','reference','date_added','get_username']
 class AddToBlockListSerializer(serializers.ModelSerializer):
     class Meta:
         model = AddToBlockList
