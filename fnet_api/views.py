@@ -2551,7 +2551,7 @@ def delete_all_customer_requests_deposits(request):
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
 def add_withdraw_reference(request):
-    serializer = WithdrawReferenceSerializer(data=request.data)
+    serializer = WithdrawalReferenceSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
