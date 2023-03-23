@@ -12,6 +12,7 @@ class WithdrawalReferenceSerializer(serializers.ModelSerializer):
     class Meta:
         model = WithdrawalReference
         fields = ['id','agent','amount','reference','date_added','get_username']
+        read_only_fields = ['agent']
 class AddToBlockListSerializer(serializers.ModelSerializer):
     class Meta:
         model = AddToBlockList
