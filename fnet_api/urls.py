@@ -50,7 +50,7 @@ urlpatterns = [
     path('get_customer_accounts_by_bank/<str:customer_phone>/<str:bank>/', views.get_customer_accounts_by_bank),
 
     path("make_cash_at_payment/", views.make_bank_payment),
-    # path("add_withdraw_reference/", views.add_withdraw_reference),
+    path("add_withdraw_reference/", views.add_withdraw_reference),
     path("get_bank_payments/", views.get_user_bank_payments),
     # path("get_withdraw_reference/", views.get_user_withdraw_reference),
 
