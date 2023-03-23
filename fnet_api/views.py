@@ -2563,3 +2563,12 @@ def get_customer_bank_withdrawal_summary(request):
     summary = CustomerWithdrawal.objects.filter(agent=request.user).order_by("-date_requested")
     serializer = CustomerWithdrawalSerializer(summary,many=True)
     return Response(serializer.data)
+
+# unpaid cash deposits
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_agents_unpaid_cash_request_deposits(request):
+    deposits = CashRequest.objects.filter(request_paid="Not Paid").order_by('-date_requested')
+    serializer = CashRequestSerializer(deposits, many=True)
+    return Response(serializer.data)
