@@ -147,9 +147,9 @@ urlpatterns = [
     path("get_customer_accounts/<str:phone>/", views.get_customer_accounts),
     path("get_momo_withdraw_user/<str:phone>/", views.get_momo_withdraw_user),
     path('get_agents_bank_total_by_date/', views.get_agents_bank_total_by_date),
+    path('get_customer_bank_withdrawal_summary/', views.get_customer_bank_withdrawal_summary),
     path('get_agents_cash_total_by_date/', views.get_agents_expense_request_total_by_date),
     path('user_total_payments/', views.user_total_payments),
-
     path('get_all_users_expenses_total/', views.get_all_users_expenses_total),
 
     #

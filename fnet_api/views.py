@@ -2556,3 +2556,10 @@ def add_withdraw_reference(request):
         serializer.save(agent=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_customer_bank_withdrawal_summary(request):
+    summary = CustomerWithdrawal.objects.filter(agent=request.user).order_by("-date_requested")
+    serializer = CustomerWithdrawalSerializer(summary,many=True)
+    return Response(serializer.data)
