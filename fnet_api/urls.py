@@ -292,6 +292,8 @@ urlpatterns = [
     path('get_user_payments_cash/', views.get_user_payments_cash),
     path('make_cash_payments/', views.make_cash_payments),
     path('get_cash_payments/', views.get_cash_payments),
+    path('get_all_my_cash_payments/', views.get_all_my_cash_payments),
+    path('get_all_cash_payments_by_username/<str:username>/', views.get_all_cash_payments_by_username),
     path('get_all_cash_payments/', views.get_all_cash_payments),
     path('get_cash_requests_for_today/', views.get_cash_requests_for_today),
 

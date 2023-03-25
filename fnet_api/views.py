@@ -2158,6 +2158,22 @@ def get_all_cash_payments(request):
     return Response(serializer.data)
 
 
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_all_my_cash_payments(request):
+    payments = MyCashPayments.objects.filter(agent=request.user).order_by('-date_created')
+    serializer = CashPaymentsSerializer(payments, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_all_cash_payments_by_username(request,username):
+    user = get_object_or_404(User, username=username)
+    payments = MyCashPayments.objects.filter(agent=user).order_by('-date_created')
+    serializer = CashPaymentsSerializer(payments, many=True)
+    return Response(serializer.data)
+
+
 @api_view(['GET', 'PUT'])
 @permission_classes([permissions.AllowAny])
 def approve_cash_request_paid(request, id):
