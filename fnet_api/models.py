@@ -313,7 +313,7 @@ class BankDeposit(models.Model):
     deposited_year = models.CharField(max_length=10, blank=True, default="")
     time_requested = models.TimeField(auto_now_add=True)
     slug = models.SlugField(max_length=100, default='')
-    app_version = models.CharField(max_length=10)
+    app_version = models.CharField(max_length=10,default="1")
 
     def __str__(self):
         if self.request_status == "Pending":
