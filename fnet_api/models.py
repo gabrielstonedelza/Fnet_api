@@ -88,8 +88,8 @@ DEPOSIT_REQUEST_OPTIONS = (
 )
 
 MOBILE_MONEY_DEPOSIT_TYPE = (
-    ("Loading", "Loading"),
-    ("Direct", "Direct"),
+    ("Customer", "Customer"),
+    ("Merchant", "Merchant"),
     ("Agent to Agent", "Agent to Agent"),
 )
 MOBILE_MONEY_ACTION = (
