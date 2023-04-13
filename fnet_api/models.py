@@ -98,7 +98,6 @@ MOBILE_MONEY_ACTION = (
 )
 
 WITHDRAW_TYPES = (
-    ("MomoPay", "MomoPay"),
     ("Cash Out", "Cash Out"),
     ("Agent to Agent", "Agent to Agent"),
 )
@@ -362,8 +361,6 @@ class MobileMoneyWithdraw(models.Model):
     # customer_name = models.CharField(max_length=30, blank=True)
     network = models.CharField(max_length=20, choices=NETWORKS, blank=True, default="Select Network")
     type = models.CharField(max_length=30, choices=WITHDRAW_TYPES, blank=True, default="")
-    id_type = models.CharField(max_length=30, choices=ID_TYPES)
-    id_number = models.CharField(max_length=20)
     amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
     charges = models.DecimalField(max_digits=19, decimal_places=2, default=0.0)
     cash_out_commission = models.DecimalField(max_digits=19, decimal_places=2, default=0.0)

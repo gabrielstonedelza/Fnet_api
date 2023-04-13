@@ -71,7 +71,7 @@ class AdminMobileMoneyDeposit(admin.ModelAdmin):
 
 class AdminMobileMoneyWithdraw(admin.ModelAdmin):
     list_display = ['id', 'agent', 'customer_phone', 'network', 'type', 'amount',
-                    'charges', 'agent_commission', 'id_number', 'cash_out_commission', 'mtn_commission']
+                    'charges', 'agent_commission', 'cash_out_commission', 'mtn_commission']
     search_fields = ['id', 'agent', 'customer_phone']
 
     class Meta:
