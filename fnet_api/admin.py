@@ -62,7 +62,7 @@ class AdminExpensesRequest(admin.ModelAdmin):
 
 class AdminMobileMoneyDeposit(admin.ModelAdmin):
     list_display = ['id', 'agent', 'customer_phone', 'depositor_name', 'depositor_number', 'network', 'type', 'amount',
-                    'charges', 'agent_commission', 'date_deposited']
+                 'date_deposited']
     search_fields = ['id', 'agent', 'customer_phone']
 
     class Meta:
@@ -70,8 +70,7 @@ class AdminMobileMoneyDeposit(admin.ModelAdmin):
 
 
 class AdminMobileMoneyWithdraw(admin.ModelAdmin):
-    list_display = ['id', 'agent', 'customer_phone', 'network', 'type', 'amount',
-                    'charges', 'agent_commission', 'cash_out_commission', 'mtn_commission']
+    list_display = ['id', 'agent', 'customer_phone', 'network', 'type', 'amount',]
     search_fields = ['id', 'agent', 'customer_phone']
 
     class Meta:

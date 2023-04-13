@@ -90,17 +90,13 @@ DEPOSIT_REQUEST_OPTIONS = (
 MOBILE_MONEY_DEPOSIT_TYPE = (
     ("Customer", "Customer"),
     ("Merchant", "Merchant"),
-    ("Agent to Agent", "Agent to Agent"),
+    ("Agent", "Agent"),
 )
 MOBILE_MONEY_ACTION = (
     ("Deposit", "Deposit"),
     ("Withdraw", "Withdraw"),
 )
 
-WITHDRAW_TYPES = (
-    ("Cash Out", "Cash Out"),
-    ("Agent to Agent", "Agent to Agent"),
-)
 
 REQUEST_STATUS = (
     ("Approved", "Approved"),
@@ -346,8 +342,8 @@ class MobileMoneyDeposit(models.Model):
     network = models.CharField(max_length=20, choices=NETWORKS, blank=True, default="Select Network")
     type = models.CharField(max_length=20, blank=True, choices=MOBILE_MONEY_DEPOSIT_TYPE)
     amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
-    charges = models.DecimalField(max_digits=19, decimal_places=2, default=0.0)
-    agent_commission = models.DecimalField(max_digits=19, decimal_places=2, default=0.0)
+    # charges = models.DecimalField(max_digits=19, decimal_places=2, default=0.0)
+    # agent_commission = models.DecimalField(max_digits=19, decimal_places=2, default=0.0)
     date_deposited = models.DateField(auto_now_add=True)
     time_deposited = models.TimeField(auto_now_add=True)
 
@@ -360,12 +356,12 @@ class MobileMoneyWithdraw(models.Model):
     customer_phone = models.CharField(max_length=30, blank=True)
     # customer_name = models.CharField(max_length=30, blank=True)
     network = models.CharField(max_length=20, choices=NETWORKS, blank=True, default="Select Network")
-    type = models.CharField(max_length=30, choices=WITHDRAW_TYPES, blank=True, default="")
+    type = models.CharField(max_length=30, blank=True, default="Cash Out")
     amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
-    charges = models.DecimalField(max_digits=19, decimal_places=2, default=0.0)
-    cash_out_commission = models.DecimalField(max_digits=19, decimal_places=2, default=0.0)
-    agent_commission = models.DecimalField(max_digits=19, decimal_places=2, default=0.0)
-    mtn_commission = models.DecimalField(max_digits=19, decimal_places=2, default=0.0)
+    # charges = models.DecimalField(max_digits=19, decimal_places=2, default=0.0)
+    # cash_out_commission = models.DecimalField(max_digits=19, decimal_places=2, default=0.0)
+    # agent_commission = models.DecimalField(max_digits=19, decimal_places=2, default=0.0)
+    # mtn_commission = models.DecimalField(max_digits=19, decimal_places=2, default=0.0)
     date_of_withdrawal = models.DateField(auto_now_add=True)
     time_of_withdrawal = models.TimeField(auto_now_add=True)
 
