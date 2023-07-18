@@ -331,5 +331,10 @@ urlpatterns = [
     path("get_all_users_added_to_approved_cash_payments/", views.get_all_users_added_to_approved_cash_payments),
 
 #     remove from database
-    path("delete_all_customer_requests_deposits/", views.delete_all_customer_requests_deposits)
+    path("delete_all_customer_requests_deposits/", views.delete_all_customer_requests_deposits),
+    path("authenticate_agent_phone/",views.authenticate_agent_phone),
+    path("get_all_auth_phones/",views.get_all_auth_phones),
+    path("get_all_auth_phone_agent_by_phone_id/<str:phone_id>/",views.get_all_auth_phone_agent_by_phone_id),
+    path("get_auth_phone_by_username/<str:username>/",views.get_auth_phone_by_username),
+    path("delete_auth_phone/<int:id>/",views.delete_auth_phone),
 ]

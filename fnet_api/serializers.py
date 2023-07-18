@@ -5,8 +5,14 @@ from .models import (Customer, CustomerWithdrawal, MyPayments, AdminAccountsStar
                      ExpensesRequest, MobileMoneyDeposit, BankDeposit, UserMobileMoneyAccountsStarted,
                      UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, Notifications, PaymentAtBank, OTP,
                      CustomerPaymentAtBank, AddedToApprovedDeposits, AddedToApprovedPayment, Reports,
-                     FnetPrivateUserMessage, FnetGroupMessage, PrivateChatId, AddToCustomerPoints,AddedToApprovedCashPayment,
+                     FnetPrivateUserMessage, FnetGroupMessage, PrivateChatId, AddToCustomerPoints,AddedToApprovedCashPayment,AuthenticateAgentPhone,
                      AddToCustomerRedeemPoints, ReferCustomer, AddToBlockList, CashRequest,MyCashPayments)
+
+class AuthenticateAgentPhoneSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AuthenticateAgentPhone
+        fields = ['id','agent','phone_id','phone_model','phone_brand','finger_print','phone_authenticated','date_authenticated','get_agent_unique_code','get_agent_username']
+        read_only_fields = ['agent']
 
 class WithdrawalReferenceSerializer(serializers.ModelSerializer):
     class Meta:

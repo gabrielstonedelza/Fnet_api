@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from .serializers import (CustomerSerializer, BankDepositSerializer, ExpenseRequestSerializer,
+from .serializers import (CustomerSerializer, BankDepositSerializer, ExpenseRequestSerializer,AuthenticateAgentPhoneSerializer,
                           MobileMoneyDepositSerializer, WithdrawalReferenceSerializer,
                           CustomerWithdrawalSerializer, PaymentsSerializer, AdminAccountsStartedSerializer, \
                           AdminAccountsCompletedSerializer, CustomerAccountsSerializer, CashAtPaymentSerializer,
@@ -14,7 +14,7 @@ from .serializers import (CustomerSerializer, BankDepositSerializer, ExpenseRequ
                           AddToBlockListSerializer)
 
 from .models import (Customer, BankDeposit, ExpensesRequest, MobileMoneyDeposit, CustomerWithdrawal, MyPayments,
-                     AdminAccountsStartedWith, AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments,
+                     AdminAccountsStartedWith, AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments,AuthenticateAgentPhone,
                      CustomerRequestDeposit, UserMobileMoneyAccountsStarted, OTP, FnetGroupMessage,
                      FnetPrivateUserMessage, WithdrawalReference,
                      UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, Notifications, PaymentAtBank,
@@ -23,7 +23,7 @@ from .models import (Customer, BankDeposit, ExpensesRequest, MobileMoneyDeposit,
                      AddToCustomerPoints, AddToCustomerRedeemPoints, ReferCustomer, AddToBlockList
                      )
 from drf_multiple_model.views import ObjectMultipleModelAPIView
-
+from django.http import Http404
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework import viewsets, permissions, generics, status
 from rest_framework.response import Response
@@ -2629,3 +2629,46 @@ def get_agents_unpaid_cash_request_deposits(request):
     deposits = CashRequest.objects.filter(request_paid="Not Paid").order_by('-date_requested')
     serializer = CashRequestSerializer(deposits, many=True)
     return Response(serializer.data)
+
+# authenticate agent phone
+@api_view(['GET','POST'])
+@permission_classes([permissions.IsAuthenticated])
+def authenticate_agent_phone(request):
+    serializer = AuthenticateAgentPhoneSerializer(data=request.data)
+    if serializer.is_valid():
+        if not AuthenticateAgentPhone.objects.filter(agent=request.user).exists():
+            serializer.save(agent=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_all_auth_phones(request):
+    auth_phones = AuthenticateAgentPhone.objects.all().order_by("-date_authenticated")
+    serializer = AuthenticateAgentPhoneSerializer(auth_phones, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_all_auth_phone_agent_by_phone_id(request,phone_id):
+    agent_auth_phone = AuthenticateAgentPhone.objects.filter(phone_id=phone_id)
+    serializer = AuthenticateAgentPhoneSerializer(agent_auth_phone, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_auth_phone_by_username(request, username):
+    user = get_object_or_404(User, username=username)
+    agent_auth_phone = AuthenticateAgentPhone.objects.filter(agent=user).order_by('-date_authenticated')
+    serializer = AuthenticateAgentPhoneSerializer(agent_auth_phone, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET', 'DELETE'])
+@permission_classes([permissions.AllowAny])
+def delete_auth_phone(request, id):
+    try:
+        agent_phone = get_object_or_404(AuthenticateAgentPhone, id=id)
+        agent_phone.delete()
+    except AuthenticateAgentPhone.DoesNotExist:
+        return Http404
+    return Response(status=status.HTTP_204_NO_CONTENT)

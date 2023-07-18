@@ -786,3 +786,21 @@ class WithdrawalReference(models.Model):
 
     def get_username(self):
         return self.agent.username
+    
+class AuthenticateAgentPhone(models.Model):
+    agent = models.ForeignKey(User, on_delete=models.CASCADE)
+    phone_id = models.CharField(max_length=255,unique=True)
+    phone_model = models.CharField(max_length=55,unique=True)
+    phone_brand = models.CharField(max_length=55,unique=True)
+    finger_print = models.CharField(max_length=255,unique=True)
+    phone_authenticated = models.BooleanField(default=False)
+    date_authenticated = models.DateTimeField(auto_now_add=True)
+
+    def get_agent_username(self):
+        return self.agent.username
+
+    def __str__(self):
+        return self.agent.username
+
+    def get_agent_unique_code(self):
+        return self.agent.agent_unique_code
