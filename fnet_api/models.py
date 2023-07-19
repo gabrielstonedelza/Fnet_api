@@ -808,6 +808,7 @@ class AuthenticateAgentPhone(models.Model):
 
 class AccountNumberWithPoints(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
+    bank = models.CharField(max_length=50, choices=BANKS, blank=True, default="")
     account_number = models.TextField(blank=True, max_length=17)
     account_name = models.CharField(max_length=100, blank=True, default="")
     customer = models.CharField(max_length=100)

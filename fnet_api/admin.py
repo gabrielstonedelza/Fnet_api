@@ -9,8 +9,8 @@ from .models import (Customer, CustomerWithdrawal, MyPayments, AdminAccountsStar
                      ReferCustomer, AddToBlockList)
 
 class AdminAccountNumberWithPoints(admin.ModelAdmin):
-    list_display = ['id', 'agent', 'account_number', 'account_name', 'customer', 'points', 'date_deposited','time_deposited']
-    search_fields = ['id', 'agent', 'customer','account_number', 'account_name',]
+    list_display = ['id', 'agent', 'account_number', 'account_name', 'customer', 'points', 'date_deposited','time_deposited','bank']
+    search_fields = ['id', 'agent', 'customer','account_number', 'account_name','bank']
 
     class Meta:
         model = AccountNumberWithPoints
