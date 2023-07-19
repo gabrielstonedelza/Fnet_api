@@ -4,10 +4,16 @@ from .models import (Customer, CustomerWithdrawal, MyPayments, AdminAccountsStar
                      AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments, CustomerRequestDeposit,
                      Notifications, ExpensesRequest, BankDeposit, MobileMoneyDeposit, MobileMoneyWithdraw,
                      UserMobileMoneyAccountsStarted, UserMobileMoneyAccountsClosed, PaymentAtBank, OTP,
-                     CustomerPaymentAtBank, AddedToApprovedPayment, AddedToApprovedDeposits, Reports, FnetGroupMessage,CashRequest,MyCashPayments,AddedToApprovedCashPayment,WithdrawalReference,
+                     CustomerPaymentAtBank, AddedToApprovedPayment, AddedToApprovedDeposits, Reports, FnetGroupMessage,CashRequest,MyCashPayments,AddedToApprovedCashPayment,WithdrawalReference,AccountNumberWithPoints,
                      FnetPrivateUserMessage, PrivateChatId, AddToCustomerPoints, AddToCustomerRedeemPoints,
                      ReferCustomer, AddToBlockList)
 
+class AdminAccountNumberWithPoints(admin.ModelAdmin):
+    list_display = ['id', 'agent', 'account_number', 'account_name', 'customer', 'points', 'date_deposited','time_deposited']
+    search_fields = ['id', 'agent', 'customer','account_number', 'account_name',]
+
+    class Meta:
+        model = AccountNumberWithPoints
 
 class AdminCustomerRequests(admin.ModelAdmin):
     list_display = ['id', 'agent', 'customer_phone', 'amount', 'request_option', 'request_status', 'date_requested']
