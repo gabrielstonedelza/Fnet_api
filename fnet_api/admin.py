@@ -130,6 +130,7 @@ class AdminPaymentAtBank(admin.ModelAdmin):
         model = PaymentAtBank
 
 
+admin.site.register(AccountNumberWithPoints,AdminAccountNumberWithPoints)
 admin.site.register(MyCashPayments)
 admin.site.register(WithdrawalReference)
 admin.site.register(AddedToApprovedCashPayment)
