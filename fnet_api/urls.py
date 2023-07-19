@@ -337,4 +337,11 @@ urlpatterns = [
     path("get_all_auth_phone_agent_by_phone_id/<str:phone_id>/",views.get_all_auth_phone_agent_by_phone_id),
     path("get_auth_phone_by_username/<str:username>/",views.get_auth_phone_by_username),
     path("delete_auth_phone/<int:id>/",views.delete_auth_phone),
+
+#     add account points
+    path("add_account_points/", views.add_account_points),
+    path("get_account_number_points_today/", views.get_account_number_points_today),
+    path("get_my_account_number_points/", views.get_my_account_number_points),
+    path("get_all_account_number_points/", views.get_all_account_number_points),
+    path("get_user_account_points_by_username/<str:username>/", views.get_user_account_points_by_username),
 ]

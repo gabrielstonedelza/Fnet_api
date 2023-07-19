@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from .serializers import (CustomerSerializer, BankDepositSerializer, ExpenseRequestSerializer,AuthenticateAgentPhoneSerializer,
+from .serializers import (CustomerSerializer, BankDepositSerializer, ExpenseRequestSerializer,AuthenticateAgentPhoneSerializer,AccountNumberWithPointsSerializer,
                           MobileMoneyDepositSerializer, WithdrawalReferenceSerializer,
                           CustomerWithdrawalSerializer, PaymentsSerializer, AdminAccountsStartedSerializer, \
                           AdminAccountsCompletedSerializer, CustomerAccountsSerializer, CashAtPaymentSerializer,
@@ -13,7 +13,7 @@ from .serializers import (CustomerSerializer, BankDepositSerializer, ExpenseRequ
                           AddToCustomerRedeemPointsSerializer, ReferCustomerSerializer, AdminCustomerSerializer,
                           AddToBlockListSerializer)
 
-from .models import (Customer, BankDeposit, ExpensesRequest, MobileMoneyDeposit, CustomerWithdrawal, MyPayments,
+from .models import (Customer, BankDeposit, ExpensesRequest, MobileMoneyDeposit, CustomerWithdrawal, MyPayments,AccountNumberWithPoints,
                      AdminAccountsStartedWith, AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments,AuthenticateAgentPhone,
                      CustomerRequestDeposit, UserMobileMoneyAccountsStarted, OTP, FnetGroupMessage,
                      FnetPrivateUserMessage, WithdrawalReference,
@@ -34,6 +34,50 @@ from datetime import datetime, date, time
 
 from fnet_api import serializers
 from django.utils import timezone
+
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def add_account_points(request):
+    serializer = AccountNumberWithPointsSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(agent=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_account_number_points_today(request):
+    my_date = datetime.today()
+    for_today = my_date.date()
+    accounts = AccountNumberWithPoints.objects.filter(
+        date_deposited=for_today).order_by('-date_deposited')
+    serializer = AccountNumberWithPointsSerializer(accounts, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_my_account_number_points(request):
+    accounts = AccountNumberWithPoints.objects.filter(agent=request.user).order_by('-date_deposited')
+    serializer = AccountNumberWithPointsSerializer(accounts, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_all_account_number_points(request):
+    accounts = AccountNumberWithPoints.objects.all().order_by('-date_deposited')
+    serializer = AccountNumberWithPointsSerializer(accounts, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_user_account_points_by_username(request, username):
+    user = get_object_or_404(User, username=username)
+    accounts = AccountNumberWithPoints.objects.filter(agent=user).order_by('-date_deposited')
+    serializer = AccountNumberWithPointsSerializer(accounts, many=True)
+    return Response(serializer.data)
 
 
 @api_view(['POST'])

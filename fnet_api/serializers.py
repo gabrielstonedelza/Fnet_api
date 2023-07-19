@@ -3,10 +3,16 @@ from rest_framework import serializers
 from .models import (Customer, CustomerWithdrawal, MyPayments, AdminAccountsStartedWith, CashAtPayments,
                      AdminAccountsCompletedWith, CustomerAccounts, CustomerRequestDeposit,WithdrawalReference,
                      ExpensesRequest, MobileMoneyDeposit, BankDeposit, UserMobileMoneyAccountsStarted,
-                     UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, Notifications, PaymentAtBank, OTP,
+                     UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, Notifications, PaymentAtBank, OTP,AccountNumberWithPoints,
                      CustomerPaymentAtBank, AddedToApprovedDeposits, AddedToApprovedPayment, Reports,
                      FnetPrivateUserMessage, FnetGroupMessage, PrivateChatId, AddToCustomerPoints,AddedToApprovedCashPayment,AuthenticateAgentPhone,
                      AddToCustomerRedeemPoints, ReferCustomer, AddToBlockList, CashRequest,MyCashPayments)
+
+class AccountNumberWithPointsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AccountNumberWithPoints
+        fields = ['id','agent','account_number','account_name','date_deposited','time_deposited','points']
+        read_only_fields =['agent']
 
 class AuthenticateAgentPhoneSerializer(serializers.ModelSerializer):
     class Meta:

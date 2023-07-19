@@ -804,3 +804,16 @@ class AuthenticateAgentPhone(models.Model):
 
     def get_agent_unique_code(self):
         return self.agent.agent_unique_code
+
+
+class AccountNumberWithPoints(models.Model):
+    agent = models.ForeignKey(User, on_delete=models.CASCADE)
+    account_number = models.TextField(blank=True, max_length=17)
+    account_name = models.CharField(max_length=100, blank=True, default="")
+    customer = models.CharField(max_length=100)
+    points = models.IntegerField(default=0)
+    date_deposited = models.DateField(auto_now_add=True)
+    time_deposited = models.TimeField(auto_now=True)
+
+    def __str__(self):
+        return self.agent.username
