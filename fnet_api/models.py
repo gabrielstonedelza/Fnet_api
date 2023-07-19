@@ -818,6 +818,9 @@ class AccountNumberWithPoints(models.Model):
     deposited_month = models.CharField(max_length=10, blank=True, default="")
     deposited_year = models.CharField(max_length=10, blank=True, default="")
 
+    def get_agent_username(self):
+        return self.agent.username
+
     def __str__(self):
         return self.agent.username
 
