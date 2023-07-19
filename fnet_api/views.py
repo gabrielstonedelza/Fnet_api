@@ -61,19 +61,17 @@ from datetime import timedelta
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_account_number_points_week(request):
-    today = datetime.today().date()
+    today = timezone.now().date()
     past_week = today - timedelta(days=7)
     accounts = AccountNumberWithPoints.objects.filter(
         date_deposited__range=[past_week, today]).order_by('-date_deposited')
     serializer = AccountNumberWithPointsSerializer(accounts, many=True)
     return Response(serializer.data)
 
-from datetime import timedelta
-
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def get_account_number_points_month(request):
-    today = datetime.today().date()
+    today = timezone.now().date()
     past_month = today - timedelta(days=30)  # Assuming a month has 30 days for simplicity
     accounts = AccountNumberWithPoints.objects.filter(
         date_deposited__range=[past_month, today]).order_by('-date_deposited')
