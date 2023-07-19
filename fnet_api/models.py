@@ -815,6 +815,15 @@ class AccountNumberWithPoints(models.Model):
     points = models.IntegerField(default=0)
     date_deposited = models.DateField(auto_now_add=True)
     time_deposited = models.TimeField(auto_now=True)
+    deposited_month = models.CharField(max_length=10, blank=True, default="")
+    deposited_year = models.CharField(max_length=10, blank=True, default="")
 
     def __str__(self):
         return self.agent.username
+
+    def save(self, *args, **kwargs):
+        my_date = datetime.today()
+        de_date = my_date.date()
+        self.deposited_month = de_date.month
+        self.deposited_year = de_date.year
+        super().save(*args, **kwargs)

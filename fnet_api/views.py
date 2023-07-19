@@ -79,6 +79,15 @@ def get_account_number_points_month(request):
     return Response(serializer.data)
 
 
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_agents_account_number_points(request, username, d_month,d_year):
+    user = get_object_or_404(User, username=username)
+    accounts = AccountNumberWithPoints.objects.filter(agent=user).filter(deposited_month=d_month).filter(deposited_year=d_year).order_by("-date_deposited")
+    serializer = AccountNumberWithPointsSerializer(accounts, many=True)
+    return Response(serializer.data)
+
+
 
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])

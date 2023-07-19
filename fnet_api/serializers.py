@@ -11,7 +11,7 @@ from .models import (Customer, CustomerWithdrawal, MyPayments, AdminAccountsStar
 class AccountNumberWithPointsSerializer(serializers.ModelSerializer):
     class Meta:
         model = AccountNumberWithPoints
-        fields = ['id','agent','account_number','customer','account_name','date_deposited','time_deposited','points','bank']
+        fields = ['id','agent','account_number','customer','account_name','date_deposited','time_deposited','points','bank','deposited_month','deposited_year']
         read_only_fields =['agent']
 
 class AuthenticateAgentPhoneSerializer(serializers.ModelSerializer):
