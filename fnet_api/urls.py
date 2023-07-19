@@ -341,6 +341,8 @@ urlpatterns = [
 #     add account points
     path("add_account_points/", views.add_account_points),
     path("get_account_number_points_today/", views.get_account_number_points_today),
+    path("get_account_number_points_week/", views.get_account_number_points_week),
+    path("get_account_number_points_month/", views.get_account_number_points_month),
     path("get_my_account_number_points/", views.get_my_account_number_points),
     path("get_all_account_number_points/", views.get_all_account_number_points),
     path("get_user_account_points_by_username/<str:username>/", views.get_user_account_points_by_username),
