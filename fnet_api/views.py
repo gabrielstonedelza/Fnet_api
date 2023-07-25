@@ -636,9 +636,9 @@ def customer_details(request, pk):
 
 @api_view(['GET', 'DELETE'])
 @permission_classes([permissions.AllowAny])
-def delete_customer_account(request, id):
+def delete_customer_account(request, phone):
     try:
-        customer = get_object_or_404(Customer, id=id)
+        customer = get_object_or_404(Customer, phone=phone)
         customer.delete()
     except Customer.DoesNotExist:
         return Http404

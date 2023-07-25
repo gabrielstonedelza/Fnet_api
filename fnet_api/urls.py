@@ -11,7 +11,7 @@ urlpatterns = [
     path('all_agents/', views.GetAllAgents.as_view()),
     path('all_customers/', views.GetAllCustomers.as_view()),
     path('customer_detail/<int:pk>/', views.customer_details),
-    path('delete_customer_account/<int:id>/', views.delete_customer_account),
+    path('delete_customer_account/<str:phone>/', views.delete_customer_account),
     path('customer_details_by_phone/<str:phone>/', views.customer_details_by_phone),
     path('get_user_customers/<str:username>/', views.get_user_customers),
     path('agent_customer_summary/', views.agent_customers_summary),
