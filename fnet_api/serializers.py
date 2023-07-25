@@ -11,7 +11,7 @@ from .models import (Customer, CustomerWithdrawal, MyPayments, AdminAccountsStar
 class CommercialsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Commercials
-        fields = ['id','ecobank_youtube_video_link','date_added']
+        fields = ['id','ecobank_youtube_video_link','fidelity_youtube_video_link','calbank_youtube_video_link','mtn_youtube_video_link','date_added']
 class AgentAndOwnerAccountsSerializer(serializers.ModelSerializer):
     class Meta:
         model = AgentAndOwnerAccounts

@@ -848,10 +848,10 @@ class AgentAndOwnerAccounts(models.Model):
         return self.agent.username
 
 class Commercials(models.Model):
-    ecobank_youtube_video_link = models.CharField(max_length=500)
-    # fidelity_youtube_video_link = models.CharField(max_length=500)
-    # calbank_youtube_video_link = models.CharField(max_length=500)
-    # mtn_youtube_video_link = models.CharField(max_length=500)
+    ecobank_youtube_video_link = models.CharField(max_length=100)
+    fidelity_youtube_video_link = models.CharField(max_length=100, default="")
+    calbank_youtube_video_link = models.CharField(max_length=100, default="")
+    mtn_youtube_video_link = models.CharField(max_length=100, default="")
     date_added = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
