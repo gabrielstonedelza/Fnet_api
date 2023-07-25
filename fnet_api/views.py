@@ -10,11 +10,11 @@ from .serializers import (CustomerSerializer, BankDepositSerializer, ExpenseRequ
                           CustomerPaymentAtBankSerializer, AddedToApprovedPaymentSerializer,
                           AddedToApprovedBankDepositsSerializer, PrivateChatIdSerializer, AddToCustomerPointsSerializer,
                           CashRequestSerializer, CashPaymentsSerializer, AddedToApprovedCashPaymentSerializer,
-                          AddToCustomerRedeemPointsSerializer, ReferCustomerSerializer, AdminCustomerSerializer,
+                          AddToCustomerRedeemPointsSerializer, ReferCustomerSerializer, AdminCustomerSerializer,CommercialsSerializer,
                           AddToBlockListSerializer,AgentAndOwnerAccountsSerializer)
 
 from .models import (Customer, BankDeposit, ExpensesRequest, MobileMoneyDeposit, CustomerWithdrawal, MyPayments,AccountNumberWithPoints,AgentAndOwnerAccounts,
-                     AdminAccountsStartedWith, AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments,AuthenticateAgentPhone,
+                     AdminAccountsStartedWith, AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments,AuthenticateAgentPhone,Commercials,
                      CustomerRequestDeposit, UserMobileMoneyAccountsStarted, OTP, FnetGroupMessage,
                      FnetPrivateUserMessage, WithdrawalReference,
                      UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, Notifications, PaymentAtBank,
@@ -34,6 +34,14 @@ from datetime import datetime, date, time
 
 from fnet_api import serializers
 from django.utils import timezone
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_commercials(request):
+    commercials = Commercials.objects.all().order_by('-date_added')
+    serializer = CommercialsSerializer(commercials, many=True)
+    return Response(serializer.data)
 
 # add owner accounts
 @api_view(['POST'])
@@ -625,6 +633,16 @@ def customer_details(request, pk):
     customer = Customer.objects.get(pk=pk)
     serializer = CustomerSerializer(customer, many=False)
     return Response(serializer.data)
+
+@api_view(['GET', 'DELETE'])
+@permission_classes([permissions.AllowAny])
+def delete_customer_account(request, id):
+    try:
+        customer = get_object_or_404(Customer, id=id)
+        customer.delete()
+    except Customer.DoesNotExist:
+        return Http404
+    return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 @api_view(['GET'])

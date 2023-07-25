@@ -846,3 +846,13 @@ class AgentAndOwnerAccounts(models.Model):
 
     def get_agent_username(self):
         return self.agent.username
+
+class Commercials(models.Model):
+    ecobank_youtube_video_link = models.CharField(max_length=500)
+    fidelity_youtube_video_link = models.CharField(max_length=500)
+    calbank_youtube_video_link = models.CharField(max_length=500)
+    mtn_youtube_video_link = models.CharField(max_length=500)
+    date_added = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.ecobank_youtube_video_link
