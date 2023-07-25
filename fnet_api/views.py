@@ -11,9 +11,9 @@ from .serializers import (CustomerSerializer, BankDepositSerializer, ExpenseRequ
                           AddedToApprovedBankDepositsSerializer, PrivateChatIdSerializer, AddToCustomerPointsSerializer,
                           CashRequestSerializer, CashPaymentsSerializer, AddedToApprovedCashPaymentSerializer,
                           AddToCustomerRedeemPointsSerializer, ReferCustomerSerializer, AdminCustomerSerializer,
-                          AddToBlockListSerializer)
+                          AddToBlockListSerializer,AgentAndOwnerAccountsSerializer)
 
-from .models import (Customer, BankDeposit, ExpensesRequest, MobileMoneyDeposit, CustomerWithdrawal, MyPayments,AccountNumberWithPoints,
+from .models import (Customer, BankDeposit, ExpensesRequest, MobileMoneyDeposit, CustomerWithdrawal, MyPayments,AccountNumberWithPoints,AgentAndOwnerAccounts,
                      AdminAccountsStartedWith, AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments,AuthenticateAgentPhone,
                      CustomerRequestDeposit, UserMobileMoneyAccountsStarted, OTP, FnetGroupMessage,
                      FnetPrivateUserMessage, WithdrawalReference,
@@ -35,7 +35,49 @@ from datetime import datetime, date, time
 from fnet_api import serializers
 from django.utils import timezone
 
+# add owner accounts
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def add_to_user_accounts(request):
+    serializer = AgentAndOwnerAccountsSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(agent=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_my_user_accounts(request):
+    my_accounts = AgentAndOwnerAccounts.objects.filter(agent=request.user).order_by('-date_added')
+    serializer = AgentAndOwnerAccountsSerializer(my_accounts, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_my_accounts_detail(request,phone,bank):
+    my_accounts = AgentAndOwnerAccounts.objects.filter(phone=phone).filter(bank=bank).order_by('-date_added')
+    serializer = AgentAndOwnerAccountsSerializer(my_accounts, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET','PUT'])
+@permission_classes([permissions.IsAuthenticated])
+def update_my_accounts_detail(request,pk):
+    account = get_object_or_404(AgentAndOwnerAccounts, pk=pk)
+    serializer = AgentAndOwnerAccountsSerializer(account,data=request.data)
+    if serializer.is_valid():
+        serializer.save(agent=request.user)
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'DELETE'])
+@permission_classes([permissions.AllowAny])
+def delete_owner_bank_account(request, id):
+    try:
+        owner_bank_accounts = get_object_or_404(AgentAndOwnerAccounts, id=id)
+        owner_bank_accounts.delete()
+    except AgentAndOwnerAccounts.DoesNotExist:
+        return Http404
+    return Response(status=status.HTTP_204_NO_CONTENT)
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
 def add_account_points(request):

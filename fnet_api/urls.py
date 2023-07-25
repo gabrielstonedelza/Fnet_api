@@ -347,4 +347,11 @@ urlpatterns = [
     path("get_all_account_number_points/", views.get_all_account_number_points),
     path("get_user_account_points_by_username/<str:username>/", views.get_user_account_points_by_username),
     path("get_agents_account_number_points/<str:username>/<str:d_month>/<str:d_year>/", views.get_agents_account_number_points),
+
+#     add to owner accounts
+    path("add_to_user_accounts/", views.add_to_user_accounts),
+    path("get_my_user_accounts/", views.get_my_user_accounts),
+    path("update_my_accounts_detail/<int:pk>/", views.update_my_accounts_detail),
+    path("delete_owner_bank_account/<int:id>/", views.delete_owner_bank_account),
+    path("get_my_accounts_detail/<str:phone>/<str:bank>/", views.get_my_accounts_detail),
 ]

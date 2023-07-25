@@ -6,7 +6,7 @@ from .models import (Customer, CustomerWithdrawal, MyPayments, AdminAccountsStar
                      UserMobileMoneyAccountsStarted, UserMobileMoneyAccountsClosed, PaymentAtBank, OTP,
                      CustomerPaymentAtBank, AddedToApprovedPayment, AddedToApprovedDeposits, Reports, FnetGroupMessage,CashRequest,MyCashPayments,AddedToApprovedCashPayment,WithdrawalReference,AccountNumberWithPoints,
                      FnetPrivateUserMessage, PrivateChatId, AddToCustomerPoints, AddToCustomerRedeemPoints,
-                     ReferCustomer, AddToBlockList)
+                     ReferCustomer, AddToBlockList,AgentAndOwnerAccounts)
 
 class AdminAccountNumberWithPoints(admin.ModelAdmin):
     list_display = ['id', 'agent', 'account_number', 'account_name', 'customer', 'points', 'date_deposited','time_deposited','bank']
@@ -131,6 +131,7 @@ class AdminPaymentAtBank(admin.ModelAdmin):
 
 
 admin.site.register(AccountNumberWithPoints,AdminAccountNumberWithPoints)
+admin.site.register(AgentAndOwnerAccounts)
 admin.site.register(MyCashPayments)
 admin.site.register(WithdrawalReference)
 admin.site.register(AddedToApprovedCashPayment)

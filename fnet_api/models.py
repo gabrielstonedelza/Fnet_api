@@ -830,3 +830,19 @@ class AccountNumberWithPoints(models.Model):
         self.deposited_month = de_date.month
         self.deposited_year = de_date.year
         super().save(*args, **kwargs)
+
+
+class AgentAndOwnerAccounts(models.Model):
+    agent = models.ForeignKey(User, on_delete=models.CASCADE)
+    phone = models.CharField(max_length=100, blank=True, default="")
+    account_number = models.CharField(max_length=16, blank=True)
+    account_name = models.CharField(max_length=100, blank=True)
+    mtn_linked_number = models.CharField(max_length=100,default="")
+    bank = models.CharField(max_length=100, choices=BANKS, default="GT Bank")
+    date_added = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.agent.username
+
+    def get_agent_username(self):
+        return self.agent.username
