@@ -2504,10 +2504,10 @@ def get_all_add_to_approved_requests_deposits(request):
 @permission_classes([permissions.AllowAny])
 def get_all_users_mobile_money_deposit_requests_deposits(request):
     today_year = timezone.now().year
-
+    today_month = timezone.now().month
     deposits = MobileMoneyDeposit.objects.all().order_by("-date_deposited")
     for deposit in deposits:
-        if deposit.date_deposited.year != today_year:
+        if deposit.date_deposited.month != today_month:
             deposit.delete()
 
     serializer = MobileMoneyDepositSerializer(deposits, many=True)
