@@ -2469,10 +2469,11 @@ def get_all_customers_accounts_registered(request):
 @permission_classes([permissions.AllowAny])
 def get_all_users_expenses(request):
     today_year = timezone.now().year
+    today_month = timezone.now().month
 
     users = ExpensesRequest.objects.all().order_by("-date_requested")
     for user in users:
-        if user.date_requested.year != today_year:
+        if user.date_requested.month != today_month:
             user.delete()
     serializer = ExpenseRequestSerializer(users, many=True)
     return Response(serializer.data)
