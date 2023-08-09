@@ -2483,11 +2483,12 @@ def get_all_users_expenses(request):
 @permission_classes([permissions.AllowAny])
 def get_all_users_bank_requests_deposits(request):
     today_year = timezone.now().year
+    today_month = timezone.now().year
 
     deposits = BankDeposit.objects.all().order_by("-date_requested")
-    # for deposit in deposits:
-    #     if deposit.date_requested.year != today_year:
-    #         deposit.delete()
+    for deposit in deposits:
+        if deposit.date_requested.month != today_month:
+            deposit.delete()
 
     serializer = BankDepositSerializer(deposits, many=True)
     return Response(serializer.data)
