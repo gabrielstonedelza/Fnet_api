@@ -2519,10 +2519,10 @@ def get_all_users_mobile_money_deposit_requests_deposits(request):
 @permission_classes([permissions.AllowAny])
 def get_all_users_mobile_money_withdrawal_requests_deposits(request):
     today_year = timezone.now().year
-
+    today_month = timezone.now().month
     deposits = MobileMoneyWithdraw.objects.all().order_by("-date_of_withdrawal")
     for deposit in deposits:
-        if deposit.date_of_withdrawal.year != today_year:
+        if deposit.date_of_withdrawal.month != today_month:
             deposit.delete()
 
     serializer = MobileMoneyWithdrawalSerializer(deposits, many=True)
@@ -2638,10 +2638,11 @@ def get_all_fnet_notifications(request):
 @permission_classes([permissions.AllowAny])
 def get_all_users_payment_at_bank(request):
     today_year = timezone.now().year
+    today_month = timezone.now().month
 
     payments = PaymentAtBank.objects.all().order_by("-date_added")
     for deposit in payments:
-        if deposit.date_added.year != today_year:
+        if deposit.date_added.month != today_month:
             deposit.delete()
 
     serializer = PaymentAtBankSerializer(payments, many=True)
@@ -2660,9 +2661,10 @@ def get_all_customers_payment_at_bank(request):
 @permission_classes([permissions.AllowAny])
 def get_all_users_reports(request):
     today_year = timezone.now().year
+    today_month = timezone.now().year
     reports = Reports.objects.all().order_by("-date_reported")
     for deposit in reports:
-        if deposit.date_reported.year != today_year:
+        if deposit.date_reported.month != today_month:
             deposit.delete()
     serializer = ReportsSerializer(reports, many=True)
     return Response(serializer.data)
