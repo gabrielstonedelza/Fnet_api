@@ -2411,7 +2411,7 @@ def get_all_customer_requests_deposits(request):
     today_month = timezone.now().month
     request_deposits = CustomerRequestDeposit.objects.all().order_by("-date_requested")
     for notification in request_deposits:
-        if notification.date_requested.month == 7:
+        if notification.date_requested.month != today_month:
             notification.delete()
     serializer = CustomerDepositRequestSerializer(request_deposits, many=True)
     return Response(serializer.data)
