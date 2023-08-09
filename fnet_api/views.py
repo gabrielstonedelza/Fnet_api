@@ -2408,9 +2408,10 @@ def delete_cash_payment(request, id):
 @permission_classes([permissions.AllowAny])
 def get_all_customer_requests_deposits(request):
     today_year = timezone.now().year
+    today_month = timezone.now().month
     request_deposits = CustomerRequestDeposit.objects.all().order_by("-date_requested")
     for notification in request_deposits:
-        if notification.date_requested.month == 8:
+        if notification.date_requested.month == today_month:
             notification.delete()
     serializer = CustomerDepositRequestSerializer(request_deposits, many=True)
     return Response(serializer.data)
