@@ -278,18 +278,18 @@ class CustomerAccounts(models.Model):
         return self.phone
 
 
-class ExpensesRequest(models.Model):
-    guarantor = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
-    agent = models.ForeignKey(User, on_delete=models.CASCADE, related_name="agent_requesting_expense_cash")
-    amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
-    reason = models.TextField(default="")
-    request_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
-    deposit_paid = models.CharField(choices=REQUEST_PAID_OPTIONS, default="Not Paid", blank=True, max_length=20)
-    date_requested = models.DateField(auto_now_add=True)
-    time_requested = models.TimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"Expense request made for {self.amount} by {self.agent.username}"
+# class ExpensesRequest(models.Model):
+#     guarantor = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+#     agent = models.ForeignKey(User, on_delete=models.CASCADE, related_name="agent_requesting_expense_cash")
+#     amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
+#     reason = models.TextField(default="")
+#     request_status = models.CharField(max_length=20, choices=REQUEST_STATUS, default="Pending")
+#     deposit_paid = models.CharField(choices=REQUEST_PAID_OPTIONS, default="Not Paid", blank=True, max_length=20)
+#     date_requested = models.DateField(auto_now_add=True)
+#     time_requested = models.TimeField(auto_now_add=True)
+#
+#     def __str__(self):
+#         return f"Expense request made for {self.amount} by {self.agent.username}"
 
 
 class BankDeposit(models.Model):

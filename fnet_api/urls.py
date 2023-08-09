@@ -357,5 +357,8 @@ urlpatterns = [
     path("get_my_accounts_detail/<str:phone>/<str:bank>/", views.get_my_accounts_detail),
 
 #     commercials
-    path("get_commercials/", views.get_commercials)
+    path("get_commercials/", views.get_commercials),
+
+#    delete notifications
+    path("get_and_delete_notifications/", views.get_and_delete_notifications)
 ]

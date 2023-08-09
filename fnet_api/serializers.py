@@ -2,11 +2,11 @@ from django.db.models import fields
 from rest_framework import serializers
 from .models import (Customer, CustomerWithdrawal, MyPayments, AdminAccountsStartedWith, CashAtPayments,
                      AdminAccountsCompletedWith, CustomerAccounts, CustomerRequestDeposit,WithdrawalReference,
-                     ExpensesRequest, MobileMoneyDeposit, BankDeposit, UserMobileMoneyAccountsStarted,
+                 MobileMoneyDeposit, BankDeposit, UserMobileMoneyAccountsStarted,
                      UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, Notifications, PaymentAtBank, OTP,AccountNumberWithPoints,
                      CustomerPaymentAtBank, AddedToApprovedDeposits, AddedToApprovedPayment, Reports,
                      FnetPrivateUserMessage, FnetGroupMessage, PrivateChatId, AddToCustomerPoints,AddedToApprovedCashPayment,AuthenticateAgentPhone,AgentAndOwnerAccounts,Commercials,
-                     AddToCustomerRedeemPoints, ReferCustomer, AddToBlockList, CashRequest,MyCashPayments)
+                     AddToCustomerRedeemPoints, ReferCustomer, AddToBlockList)
 
 class CommercialsSerializer(serializers.ModelSerializer):
     class Meta:

@@ -2809,3 +2809,13 @@ def delete_auth_phone(request, id):
     except AuthenticateAgentPhone.DoesNotExist:
         return Http404
     return Response(status=status.HTTP_204_NO_CONTENT)
+
+# clear all notifications
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_and_delete_notifications(request):
+    all_notifications = Notifications.objects.all()
+    serializer = NotificationSerializer(all_notifications, many=True)
+    for i in all_notifications:
+        i.delete()
+    return Response(serializer.data)
