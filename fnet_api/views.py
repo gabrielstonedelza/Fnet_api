@@ -2812,7 +2812,7 @@ def delete_auth_phone(request, id):
 
 # clear all notifications
 @api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 def get_and_delete_notifications(request):
     all_notifications = Notifications.objects.all()
     serializer = NotificationSerializer(all_notifications, many=True)
