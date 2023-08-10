@@ -8,6 +8,12 @@ from .models import (Customer, CustomerWithdrawal, MyPayments, AdminAccountsStar
                      FnetPrivateUserMessage, PrivateChatId, AddToCustomerPoints, AddToCustomerRedeemPoints,
                      ReferCustomer, AddToBlockList,AgentAndOwnerAccounts)
 
+class AdminBankDepositRequest(admin.ModelAdmin):
+    list_display = ['id', 'agent', 'customer', 'bank', 'customer', 'account_number', 'account_name','amount','request_status','deposit_paid','date_requested']
+
+    class Meta:
+        model = BankDeposit
+
 class AdminAccountNumberWithPoints(admin.ModelAdmin):
     list_display = ['id', 'agent', 'account_number', 'account_name', 'customer', 'points', 'date_deposited','time_deposited','bank']
     search_fields = ['id', 'agent', 'customer','account_number', 'account_name','bank']
@@ -147,7 +153,7 @@ admin.site.register(FnetGroupMessage)
 admin.site.register(FnetPrivateUserMessage)
 admin.site.register(Customer, AdminCustomer)
 admin.site.register(ExpensesRequest, AdminExpensesRequest)
-admin.site.register(BankDeposit)
+admin.site.register(BankDeposit,AdminBankDepositRequest)
 admin.site.register(MobileMoneyDeposit, AdminMobileMoneyDeposit)
 admin.site.register(MobileMoneyWithdraw, AdminMobileMoneyWithdraw)
 admin.site.register(CustomerWithdrawal, AdminCustomerWithdrawal)
