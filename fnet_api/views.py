@@ -2822,3 +2822,83 @@ def get_and_delete_notifications(request):
     for i in all_notifications:
         i.delete()
     return Response(serializer.data)
+
+# new functions just for admin
+# bank deposits first,
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def admin_get_all_pending_bank_deposits(request):
+    deposits = BankDeposit.objects.filter(request_status="Pending").order_by("-date_requested")
+    serializer = BankDepositSerializer(deposits, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET', 'PUT'])
+@permission_classes([permissions.AllowAny])
+def admin_approve_bank_deposit_paid(request, id):
+    bank_deposit = get_object_or_404(BankDeposit, id=id)
+    serializer = BankDepositSerializer(bank_deposit, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'DELETE'])
+@permission_classes([permissions.AllowAny])
+def admin_delete_bank_request(request, id):
+    try:
+        user_request = get_object_or_404(BankDeposit, id=id)
+        user_request.delete()
+    except User_Request.DoesNotExist:
+        return Http404
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
+@api_view(['GET', 'PUT'])
+@permission_classes([permissions.AllowAny])
+def admin_update_bank_deposit_paid(request, id):
+    bank_deposit = get_object_or_404(BankDeposit, id=id)
+    serializer = BankDepositSerializer(bank_deposit, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# payments
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def admin_get_all_pending_bank_payments(request):
+    payments = MyPayments.objects.filter(payment_status="Pending").order_by("-date_created")
+    serializer = PaymentsSerializer(payments, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET', 'PUT'])
+@permission_classes([permissions.AllowAny])
+def admin_approve_bank_payments_paid(request, id):
+    bank_payments = get_object_or_404(MyPayments, id=id)
+    serializer = PaymentsSerializer(bank_payments, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'DELETE'])
+@permission_classes([permissions.AllowAny])
+def admin_delete_bank_payment(request, id):
+    try:
+        user_payment = get_object_or_404(MyPayments, id=id)
+        user_payment.delete()
+    except User_Payment.DoesNotExist:
+        return Http404
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
+@api_view(['GET', 'PUT'])
+@permission_classes([permissions.AllowAny])
+def admin_update_bank_payment_paid(request, id):
+    bank_payments = get_object_or_404(MyPayments, id=id)
+    serializer = PaymentsSerializer(bank_payments, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

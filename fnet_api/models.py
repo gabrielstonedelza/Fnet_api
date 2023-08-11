@@ -324,6 +324,9 @@ class BankDeposit(models.Model):
         self.slug = slugify(value, allow_unicode=True)
         super().save(*args, **kwargs)
 
+    def get_agent_username(self):
+        return self.agent.username
+
 
 class AddedToApprovedDeposits(models.Model):
     bank_deposit = models.ForeignKey(BankDeposit, on_delete=models.CASCADE)
