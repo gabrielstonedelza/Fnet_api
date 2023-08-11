@@ -360,5 +360,8 @@ urlpatterns = [
     path("get_commercials/", views.get_commercials),
 
 #    delete notifications
-    path("get_and_delete_notifications/", views.get_and_delete_notifications)
+    path("get_and_delete_notifications/", views.get_and_delete_notifications),
+
+#     new admin urls
+    path("admin_get_all_pending_bank_deposits/", views.admin_get_all_pending_bank_deposits)
 ]
