@@ -2833,6 +2833,14 @@ def admin_get_all_pending_bank_deposits(request):
     serializer = BankDepositSerializer(deposits, many=True)
     return Response(serializer.data)
 
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def admin_get_all_bank_deposits(request):
+    deposits = BankDeposit.objects.all().order_by("-date_requested")
+    serializer = BankDepositSerializer(deposits, many=True)
+    return Response(serializer.data)
+
 @api_view(['GET', 'PUT'])
 @permission_classes([permissions.AllowAny])
 def admin_approve_bank_deposit_paid(request, id):
@@ -2869,6 +2877,14 @@ def admin_update_bank_deposit_paid(request, id):
 @permission_classes([permissions.AllowAny])
 def admin_get_all_pending_bank_payments(request):
     payments = MyPayments.objects.filter(payment_status="Pending").order_by("-date_created")
+    serializer = PaymentsSerializer(payments, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def admin_get_all_bank_payments(request):
+    payments = MyPayments.objects.all().order_by("-date_created")
     serializer = PaymentsSerializer(payments, many=True)
     return Response(serializer.data)
 

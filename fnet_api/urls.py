@@ -362,6 +362,17 @@ urlpatterns = [
 #    delete notifications
     path("get_and_delete_notifications/", views.get_and_delete_notifications),
 
-#     new admin urls
-    path("admin_get_all_pending_bank_deposits/", views.admin_get_all_pending_bank_deposits)
+#     new admin urls for bank deposit requests
+    path("admin_get_all_pending_bank_deposits/", views.admin_get_all_pending_bank_deposits),
+    path("admin_get_all_bank_deposits/", views.admin_get_all_bank_deposits),
+    path("admin_approve_bank_deposit_paid/<int:id>/", views.admin_approve_bank_deposit_paid),
+    path("admin_delete_bank_request/<int:id>/", views.admin_delete_bank_request),
+    path("admin_update_bank_deposit_paid/<int:id>/", views.admin_update_bank_deposit_paid),
+
+#     new admin urls for bank deposit payments
+    path("admin_get_all_pending_bank_payments/", views.admin_get_all_pending_bank_deposits),
+    path("admin_get_all_bank_payments/", views.admin_get_all_bank_payments),
+    path("admin_approve_bank_payments_paid/<int:id>/", views.admin_approve_bank_deposit_paid),
+    path("admin_delete_bank_payment/<int:id>/", views.admin_delete_bank_request),
+    path("admin_update_bank_payment_paid/<int:id>/", views.admin_update_bank_deposit_paid),
 ]

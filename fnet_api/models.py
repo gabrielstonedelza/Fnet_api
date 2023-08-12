@@ -324,8 +324,8 @@ class BankDeposit(models.Model):
         self.slug = slugify(value, allow_unicode=True)
         super().save(*args, **kwargs)
 
-    def get_agent_username(self):
-        return self.agent.username
+    # def get_agent_username(self):
+    #     return self.agent.username
 
 
 class AddedToApprovedDeposits(models.Model):
