@@ -428,10 +428,10 @@ class CustomerWithdrawal(models.Model):
 class MyPayments(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
     mode_of_payment1 = models.CharField(max_length=30, choices=MODE_OF_PAYMENT, blank=True)
-    mode_of_payment2 = models.CharField(max_length=30, choices=MODE_OF_PAYMENT, blank=True)
+    mode_of_payment2 = models.CharField(max_length=30, choices=MODE_OF_PAYMENT, blank=True,default="")
     cash_at_location1 = models.CharField(max_length=30, choices=PAYMENT_OFFICES, blank=True, default="")
     cash_at_location2 = models.CharField(max_length=30, choices=PAYMENT_OFFICES, blank=True, default="")
-    bank1 = models.CharField(max_length=50, choices=BANKS, blank=True)
+    bank1 = models.CharField(max_length=50, choices=BANKS, blank=True,default="")
     bank2 = models.CharField(max_length=50, choices=BANKS, blank=True)
     amount = models.DecimalField(max_digits=19, decimal_places=2, default=0.0, blank=True)
     amount1 = models.DecimalField(max_digits=19, decimal_places=2, default=0.0)
