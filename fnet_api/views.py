@@ -2884,7 +2884,7 @@ def admin_get_all_pending_bank_payments(request):
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def admin_get_all_bank_payments(request):
-    payments = MyPayments.objects.all().order_by("-date_created")
+    payments = MyPayments.objects.all().order_by("-date_created")[:50]
     serializer = PaymentsSerializer(payments, many=True)
     return Response(serializer.data)
 
