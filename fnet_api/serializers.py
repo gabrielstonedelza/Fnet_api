@@ -341,7 +341,7 @@ class CustomerPaymentAtBankSerializer(serializers.ModelSerializer):
 class ReportsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reports
-        fields = ['id', 'administrator', 'user', 'report', 'date_reported', 'time_reported', 'read']
+        fields = ['id', 'administrator', 'user', 'report', 'date_reported', 'time_reported', 'read','get_username']
         read_only_fields = ['user']
 
 
