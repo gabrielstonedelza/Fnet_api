@@ -2641,12 +2641,12 @@ def get_all_users_payment_at_bank(request):
     today_year = timezone.now().year
     today_month = timezone.now().month
 
-    payments = PaymentAtBank.objects.all().order_by("-date_added")
+    payments = MyPayments.objects.all().order_by("-PaymentsSerializer")
     for deposit in payments:
         if deposit.date_added.month != today_month:
             deposit.delete()
 
-    serializer = PaymentAtBankSerializer(payments, many=True)
+    serializer = PaymentsSerializer(payments, many=True)
     return Response(serializer.data)
 
 
