@@ -2643,7 +2643,7 @@ def get_all_users_payment_at_bank(request):
 
     payments = MyPayments.objects.all().order_by("-date_created")
     for deposit in payments:
-        if deposit.date_added.month != today_month:
+        if deposit.date_created.month != today_month:
             deposit.delete()
 
     serializer = PaymentsSerializer(payments, many=True)
