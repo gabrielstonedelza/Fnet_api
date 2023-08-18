@@ -175,7 +175,7 @@ class BankDepositSerializer(serializers.ModelSerializer):
         fields = ['id', 'guarantor', 'customer', 'agent', 'guarantor_username', 'customer_username', 'deposit_paid',
                   'agent_username', 'bank', 'account_number', 'account_name', 'amount', 'depositor_name',
                   'request_status','deposited_month','deposited_year',
-                  'date_requested', 'time_requested', 'slug','app_version' ]
+                  'date_requested', 'time_requested', 'slug' ]
         read_only_fields = ['agent']
 
     def get_guarantor_username(self, user):
