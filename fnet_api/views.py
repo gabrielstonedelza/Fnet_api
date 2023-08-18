@@ -2095,6 +2095,16 @@ def get_agents_gt_bank(request, username):
     return Response(serializer.data)
 
 
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_agents_bank_deposits(request, username):
+    user = get_object_or_404(User, username=username)
+    bank = BankDeposit.objects.filter(agent=user).order_by(
+        '-date_requested')
+    serializer = BankDepositSerializer(bank, many=True)
+    return Response(serializer.data)
+
+
 # search user bank transactions by dates and year
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])

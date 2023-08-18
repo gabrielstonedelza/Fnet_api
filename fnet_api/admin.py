@@ -8,6 +8,7 @@ from .models import (Customer, CustomerWithdrawal, MyPayments, AdminAccountsStar
                      FnetPrivateUserMessage, PrivateChatId, AddToCustomerPoints, AddToCustomerRedeemPoints,
                      ReferCustomer, AddToBlockList,AgentAndOwnerAccounts)
 
+
 class AdminBankDepositRequest(admin.ModelAdmin):
     list_display = ['id', 'agent', 'customer', 'bank', 'customer', 'account_number', 'account_name','amount','request_status','deposit_paid','date_requested']
 
