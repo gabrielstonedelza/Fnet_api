@@ -1739,7 +1739,7 @@ def get_user_vodafone_withdrawal(request):
 
 # reports by users and admin
 @api_view(['POST'])
-@permission_classes([permissions.AllowAny])
+@permission_classes([permissions.IsAuthenticated])
 def add_report(request):
     serializer = ReportsSerializer(data=request.data)
     if serializer.is_valid():
