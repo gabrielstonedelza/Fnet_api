@@ -10,7 +10,7 @@ from .models import (Customer, CustomerWithdrawal, MyPayments, AdminAccountsStar
 
 
 class AdminBankDepositRequest(admin.ModelAdmin):
-    list_display = ['id', 'agent', 'customer', 'bank', 'customer', 'account_number', 'account_name','amount','request_status','deposit_paid','date_requested']
+    list_display = ['id', 'agent', 'customer', 'bank', 'customer', 'account_number', 'account_name','amount','request_status','deposit_paid','date_requested','user_location']
 
     class Meta:
         model = BankDeposit
