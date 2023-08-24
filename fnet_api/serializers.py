@@ -172,7 +172,7 @@ class BankDepositSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BankDeposit
-        fields = ['id', 'guarantor', 'customer', 'agent', 'guarantor_username', 'customer_username', 'deposit_paid',
+        fields = ['id', 'guarantor', 'customer', 'agent', 'guarantor_username', 'customer_username', 'deposit_paid','user_location',
                   'agent_username', 'bank', 'account_number', 'account_name', 'amount', 'depositor_name',
                   'request_status','deposited_month','deposited_year',
                   'date_requested', 'time_requested', 'slug' ]

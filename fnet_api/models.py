@@ -307,6 +307,7 @@ class BankDeposit(models.Model):
     deposited_month = models.CharField(max_length=10, blank=True, default="")
     deposited_year = models.CharField(max_length=10, blank=True, default="")
     time_requested = models.TimeField(auto_now_add=True)
+    user_location = models.CharField(max_length=255, blank=True,default="")
     slug = models.SlugField(max_length=100, default='')
 
     def __str__(self):
