@@ -4,6 +4,7 @@ from django.conf import settings
 User = settings.AUTH_USER_MODEL
 
 CASH_LEFT_AT_BRANCHES = (
+    ("Select cash left @","Select cash left @"),
     ("HEAD OFFICE","HEAD OFFICE"),
     ("DVLA BRANCH","DVLA BRANCH"),
     ("KEJETIA BRANCH","KEJETIA BRANCH"),
