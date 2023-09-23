@@ -25,7 +25,7 @@ def get_my_closed_accounts(request):
 
 @api_view(['GET','PUT'])
 @permission_classes([permissions.IsAuthenticated])
-def update_my_accounts_detail(request,pk):
+def update_account_closed_details(request, pk):
     account = get_object_or_404(CloseAccount, pk=pk)
     serializer = CloseAccountSerializer(account,data=request.data)
     if serializer.is_valid():
