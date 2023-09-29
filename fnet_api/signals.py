@@ -9,6 +9,27 @@ from django.conf import settings
 User = settings.AUTH_USER_MODEL
 from users.models import User
 
+# new signals with websocket client
+@receiver(post_save, sender=BankDeposit)
+def send_new_post_notification(sender, instance, **kwargs):
+    from channels.layers import get_channel_layer
+    import json
+
+    channel_layer = get_channel_layer()
+    bank_deposit_data = {
+        'id': instance.id,
+        'title': "New bank deposit",
+        # Include other post data fields as needed
+    }
+
+    # Send a notification to the WebSocket consumer
+    async_to_sync(channel_layer.group_send)(
+        'bank_deposit_group',
+        {
+            'type': 'new_post_notification',
+            'bank_deposit_data': bank_deposit_data,
+        }
+    )
 
 @receiver(post_save,sender=CashRequest)
 def alert_cash_request(sender,created,instance,**kwargs):

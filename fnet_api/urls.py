@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 
+
 urlpatterns = [
     path('admin_user/', views.get_admin),
     path('request_detail/<int:pk>/', views.expense_detail),
@@ -376,4 +377,5 @@ urlpatterns = [
     path("admin_approve_bank_payments_paid/<int:id>/", views.admin_approve_bank_payments_paid),
     path("admin_delete_bank_payment/<int:id>/", views.admin_delete_bank_payment),
     path("admin_update_bank_payment_paid/<int:id>/", views.admin_update_bank_payment_paid),
+
 ]
