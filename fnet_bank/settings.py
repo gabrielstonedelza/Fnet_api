@@ -30,7 +30,7 @@ ALLOWED_HOSTS = ['.fnetghana.xyz', '192.241.134.34', 'localhost', '127.0.0.1']
 
 # Application definition
 INSTALLED_APPS = [
-    'daphne',
+    # 'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -79,14 +79,14 @@ TEMPLATES = [
     },
 ]
 
-# WSGI_APPLICATION = 'fnet_bank.wsgi.application'
-ASGI_APPLICATION = "fnet_bank.asgi.application"
-
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer",
-    },
-}
+WSGI_APPLICATION = 'fnet_bank.wsgi.application'
+# ASGI_APPLICATION = "fnet_bank.asgi.application"
+#
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "channels.layers.InMemoryChannelLayer",
+#     },
+# }
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases

@@ -325,16 +325,16 @@ class BankDeposit(models.Model):
         self.slug = slugify(value, allow_unicode=True)
         super().save(*args, **kwargs)
 
-        if created:
-            # Trigger a notification for new bank deposit creation
-            channel_layer = get_channel_layer()
-            async_to_sync(channel_layer.group_send)(
-                'bank_deposits_group',
-                {
-                    'type': 'notify_new_bank_deposit',
-                    'bank_deposit': self,
-                }
-            )
+        # if created:
+        #     # Trigger a notification for new bank deposit creation
+        #     channel_layer = get_channel_layer()
+        #     async_to_sync(channel_layer.group_send)(
+        #         'bank_deposits_group',
+        #         {
+        #             'type': 'notify_new_bank_deposit',
+        #             'bank_deposit': self,
+        #         }
+        #     )
 
     # def get_agent_username(self):
     #     return self.agent.username
