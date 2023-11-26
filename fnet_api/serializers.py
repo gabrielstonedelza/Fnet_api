@@ -6,7 +6,22 @@ from .models import (Customer, CustomerWithdrawal, MyPayments, AdminAccountsStar
                      UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, Notifications, PaymentAtBank, OTP,AccountNumberWithPoints,
                      CustomerPaymentAtBank, AddedToApprovedDeposits, AddedToApprovedPayment, Reports,
                      FnetPrivateUserMessage, FnetGroupMessage, PrivateChatId, AddToCustomerPoints,AddedToApprovedCashPayment,AuthenticateAgentPhone,AgentAndOwnerAccounts,Commercials,
-                     AddToCustomerRedeemPoints, ReferCustomer, AddToBlockList)
+                     AddToCustomerRedeemPoints, ReferCustomer, AddToBlockList, CashSupportRequest,CashSupport,CashSupportBalance)
+
+class CashSupportRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CashSupportRequest
+        fields = ['id','customer_phone','customer_name','amount','date_requested']
+
+class CashSupportSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CashSupport
+        fields = ['id','customer_phone','customer_name','amount','interest','date_added']
+
+class CashSupportBalanceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CashSupportBalance
+        fields = ['id','customer_phone','amount','date_added']
 
 class CommercialsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -122,7 +137,7 @@ class CustomerDepositRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomerRequestDeposit
         fields = ['id', 'customer_phone', 'agent', 'customer_name', 'agent_username',
-                  'amount', 'request_option', 'request_status', 'date_requested',
+                  'amount', 'bank', 'request_status', 'date_requested',
                   'time_requested', 'slug']
 
     def get_agent_username(self, user):

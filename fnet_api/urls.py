@@ -41,7 +41,7 @@ urlpatterns = [
     path('user_transaction_withdrawals/<str:username>/', views.user_transaction_withdrawals),
 
     path('register_customer_accounts/', views.register_customer_account),
-    path('get_customer_accounts/', views.get_customer_accounts),
+    path('get_customer_accounts/<str:phone>/', views.get_customer_accounts),
     path('customer_account_detail/<int:id>/', views.customer_account_detail),
     path('get_customer_account/<str:phone>/', views.get_customer_account),
     path('update_accounts/<int:id>/', views.update_accounts),
@@ -378,4 +378,12 @@ urlpatterns = [
     path("admin_delete_bank_payment/<int:id>/", views.admin_delete_bank_payment),
     path("admin_update_bank_payment_paid/<int:id>/", views.admin_update_bank_payment_paid),
 
+# customer cash support
+    path("request_cash_support/",views.request_cash_support),
+    path("add_customer_to_cash_support/",views.add_customer_to_cash_support),
+    path("pay_cash_support/",views.pay_cash_support),
+    path("get_all_requested_cash_support/",views.get_all_requested_cash_support),
+    path("get_all_cash_support/",views.get_all_cash_support),
+    path("get_all_customers_cash_support/<str:phone>/",views.get_all_customers_cash_support),
+    path("get_all_customers_cash_support_paid/<str:phone>/",views.get_all_customers_cash_support_paid),
 ]
