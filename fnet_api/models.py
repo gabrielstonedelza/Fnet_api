@@ -250,15 +250,15 @@ class Customer(models.Model):
 class ReferCustomer(models.Model):
     administrator = models.ForeignKey(User, on_delete=models.CASCADE, default=1, related_name="referral_administrator")
     name = models.CharField(max_length=150, blank=True, unique=True)
-    location = models.CharField(max_length=100, blank=True)
-    digital_address = models.CharField(max_length=25, blank=True)
-    id_type = models.CharField(max_length=50, choices=ID_TYPES, blank=True, default="Passport")
-    id_number = models.CharField(max_length=50, blank=True, default="")
+    # location = models.CharField(max_length=100, blank=True)
+    # digital_address = models.CharField(max_length=25, blank=True)
+    # id_type = models.CharField(max_length=50, choices=ID_TYPES, blank=True, default="Passport")
+    # id_number = models.CharField(max_length=50, blank=True, default="")
     phone = models.CharField(max_length=15, unique=True, blank=True, )
     referral = models.CharField(max_length=200, blank=True, default="")
-    status = models.CharField(max_length=100, choices=CUSTOMER_REFERRAL_STATUS, default="Was Referred", blank=True)
-    created = models.BooleanField(default=False)
-    date_of_birth = models.CharField(max_length=15, blank=True)
+    # status = models.CharField(max_length=100, choices=CUSTOMER_REFERRAL_STATUS, default="Was Referred", blank=True)
+    # created = models.BooleanField(default=False)
+    # date_of_birth = models.CharField(max_length=15, blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

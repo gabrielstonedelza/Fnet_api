@@ -113,9 +113,7 @@ class AdminCustomerSerializer(serializers.ModelSerializer):
 class ReferCustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReferCustomer
-        fields = ['id', 'administrator', 'name', 'location', 'digital_address', 'id_type',
-                  'id_number', 'phone', 'status', 'created',
-                  'date_of_birth', 'date_created', 'referral']
+        fields = ['id', 'administrator', 'name', 'phone', 'date_created', 'referral']
 
 
 class CustomerAccountsSerializer(serializers.ModelSerializer):
