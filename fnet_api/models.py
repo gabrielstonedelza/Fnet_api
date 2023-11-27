@@ -892,6 +892,7 @@ class AgentAndOwnerAccounts(models.Model):
         return self.agent.username
 
 class Commercials(models.Model):
+    default_youtube_link = models.CharField(max_length=255,default="https://www.youtube.com/watch?v=fhIEp9iGEE4")
     ecobank_youtube_video_link = models.CharField(max_length=100)
     fidelity_youtube_video_link = models.CharField(max_length=100, default="")
     calbank_youtube_video_link = models.CharField(max_length=100, default="")
