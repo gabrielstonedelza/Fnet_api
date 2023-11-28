@@ -393,8 +393,8 @@ urlpatterns = [
     path("get_all_customer_points/<str:phone>/",views.get_all_customer_points),
     path("redeem_points/<str:phone>/",views.redeem_points),
 
-# #     redem points
-#     path("request_to_redeem_points/",views.request_to_redeem_points),
-#     path("get_all_requests_to_redeem_points/",views.get_all_requests_to_redeem_points),
-#     path("update_request_to_redeem_points/<int:pk>/",views.update_request_to_redeem_points),
+#     redem points
+    path("request_to_redeem_points/",views.request_to_redeem_points),
+    path("get_all_requests_to_redeem_points/",views.get_all_requests_to_redeem_points),
+    path("update_request_to_redeem_points/<int:pk>/",views.update_request_to_redeem_points),
 ]
