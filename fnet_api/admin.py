@@ -8,7 +8,9 @@ from .models import (Customer, CustomerWithdrawal, MyPayments, AdminAccountsStar
                      FnetPrivateUserMessage, PrivateChatId, AddToCustomerPoints, AddToCustomerRedeemPoints,
                      ReferCustomer, AddToBlockList,AgentAndOwnerAccounts,CashSupportRequest,CashSupport,CashSupportBalance)
 
-
+admin.site.register(CashSupportRequest)
+admin.site.register(CashSupport)
+admin.site.register(CashSupportBalance)
 class AdminBankDepositRequest(admin.ModelAdmin):
     list_display = ['id', 'agent', 'customer', 'bank', 'customer', 'account_number', 'account_name','amount','request_status','deposit_paid','date_requested','user_location','user_local_district']
 
