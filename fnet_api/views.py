@@ -39,7 +39,7 @@ from django.utils import timezone
 # add customer points
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])
-def add_to_customer_points(request):
+def add_customer_points(request):
     serializer = CustomerPointsSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
