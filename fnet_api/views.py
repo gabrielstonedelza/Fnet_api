@@ -10,7 +10,7 @@ from .serializers import (CustomerSerializer, BankDepositSerializer, ExpenseRequ
                           CustomerPaymentAtBankSerializer, AddedToApprovedPaymentSerializer,
                           AddedToApprovedBankDepositsSerializer, PrivateChatIdSerializer, AddToCustomerPointsSerializer,
                           CashRequestSerializer, CashPaymentsSerializer, AddedToApprovedCashPaymentSerializer,
-                          AddToCustomerRedeemPointsSerializer, ReferCustomerSerializer, AdminCustomerSerializer,CommercialsSerializer,
+                          AddToCustomerRedeemPointsSerializer, ReferCustomerSerializer, AdminCustomerSerializer,CommercialsSerializer,CustomerPointsSerializer,
                           AddToBlockListSerializer,AgentAndOwnerAccountsSerializer)
 
 from .models import (Customer, BankDeposit, ExpensesRequest, MobileMoneyDeposit, CustomerWithdrawal, MyPayments,AccountNumberWithPoints,AgentAndOwnerAccounts,
@@ -20,7 +20,7 @@ from .models import (Customer, BankDeposit, ExpensesRequest, MobileMoneyDeposit,
                      UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, Notifications, PaymentAtBank,
                      CustomerPaymentAtBank, AddedToApprovedPayment, AddedToApprovedDeposits, Reports, PrivateChatId,
                      CashRequest, MyCashPayments, AddedToApprovedCashPayment,
-                     AddToCustomerPoints, AddToCustomerRedeemPoints, ReferCustomer, AddToBlockList, CashSupportRequest,CashSupport,CashSupportBalance
+                     AddToCustomerPoints, AddToCustomerRedeemPoints, ReferCustomer, AddToBlockList, CashSupportRequest,CashSupport,CashSupportBalance,CustomerPoints
                      )
 from drf_multiple_model.views import ObjectMultipleModelAPIView
 from django.http import Http404
@@ -35,6 +35,33 @@ from datetime import datetime, date, time
 from fnet_api import serializers
 from django.utils import timezone
 
+
+# add customer points
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+def add_to_customer_points(request):
+    serializer = CustomerPointsSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_all_customer_points(request,phone):
+    points = CustomerPoints.objects.filter(phone=phone).order_by('-date_added')
+    serializer = CustomerPointsSerializer(points, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def redeem_points(request,phone):
+    points = CustomerPoints.objects.filter(phone=phone).order_by('-date_added')
+    serializer = CustomerPointsSerializer(points, many=True)
+    for i in points:
+        i.delete()
+    return Response(serializer.data)
 
 # cash support system
 @api_view(['POST'])

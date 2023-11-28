@@ -246,6 +246,15 @@ class Customer(models.Model):
     def get_agents_phone(self):
         return self.agent.phone
 
+class CustomerPoints(models.Model):
+    phone = models.CharField(max_length=15, unique=True, blank=True)
+    points = models.DecimalField(max_digits=19, decimal_places=2, blank=True, default="0.0")
+    date_added = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.phone
+
+
 
 class ReferCustomer(models.Model):
     administrator = models.ForeignKey(User, on_delete=models.CASCADE, default=1, related_name="referral_administrator")
