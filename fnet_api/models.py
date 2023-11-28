@@ -247,7 +247,7 @@ class Customer(models.Model):
         return self.agent.phone
 
 class CustomerPoints(models.Model):
-    phone = models.CharField(max_length=15, unique=True, blank=True)
+    phone = models.CharField(max_length=15, blank=True)
     points = models.DecimalField(max_digits=19, decimal_places=2, blank=True, default="0.0")
     date_added = models.DateTimeField(auto_now_add=True)
 
