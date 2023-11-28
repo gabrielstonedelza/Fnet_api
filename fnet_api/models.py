@@ -263,6 +263,9 @@ class CustomerRequestRedeemPoints(models.Model):
     status = models.CharField(max_length=100,choices=REQUEST_STATUS,default="Pending")
     date_requested = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.phone
+
 
 class ReferCustomer(models.Model):
     administrator = models.ForeignKey(User, on_delete=models.CASCADE, default=1, related_name="referral_administrator")
