@@ -73,6 +73,16 @@ def request_cash_support(request):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['GET','PUT'])
+@permission_classes([permissions.AllowAny])
+def update_request_cash_support(request,pk):
+    cash_support = get_object_or_404(CashSupportRequest, pk=pk)
+    serializer = CashSupportRequestSerializer(cash_support,data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])
 def add_customer_to_cash_support(request):
@@ -94,7 +104,7 @@ def pay_cash_support(request):
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def get_all_requested_cash_support(request):
-    cash_supports = CashSupportRequest.objects.all().order_by('-date_requested')
+    cash_supports = CashSupportRequest.objects.filter(status="Pending").order_by('-date_requested')
     serializer = CashSupportRequestSerializer(cash_supports, many=True)
     return Response(serializer.data)
 

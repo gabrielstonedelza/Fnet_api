@@ -386,6 +386,7 @@ urlpatterns = [
     path("get_all_cash_support/",views.get_all_cash_support),
     path("get_all_customers_cash_support/<str:phone>/",views.get_all_customers_cash_support),
     path("get_all_customers_cash_support_paid/<str:phone>/",views.get_all_customers_cash_support_paid),
+    path("update_request_cash_support/<int:pk>/",views.update_request_cash_support),
 
 #     new customer points,
     path("add_customer_points/",views.add_customer_points),

@@ -16,7 +16,7 @@ class CustomerPointsSerializer(serializers.ModelSerializer):
 class CashSupportRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = CashSupportRequest
-        fields = ['id','customer_phone','customer_name','amount','date_requested']
+        fields = ['id','customer_phone','status','customer_name','amount','date_requested']
 
 class CashSupportSerializer(serializers.ModelSerializer):
     class Meta:
