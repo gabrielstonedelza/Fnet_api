@@ -9,11 +9,11 @@ from .serializers import (CustomerSerializer, BankDepositSerializer, ExpenseRequ
                           MobileMoneyWithdrawalSerializer, PaymentAtBankSerializer, OTPSerializer,
                           CustomerPaymentAtBankSerializer, AddedToApprovedPaymentSerializer,
                           AddedToApprovedBankDepositsSerializer, PrivateChatIdSerializer, AddToCustomerPointsSerializer,
-                          CashRequestSerializer, CashPaymentsSerializer, AddedToApprovedCashPaymentSerializer,
+                          CashRequestSerializer, CashPaymentsSerializer, AddedToApprovedCashPaymentSerializer,CustomerRequestRedeemPointsSerializer,
                           AddToCustomerRedeemPointsSerializer, ReferCustomerSerializer, AdminCustomerSerializer,CommercialsSerializer,CustomerPointsSerializer,
                           AddToBlockListSerializer,AgentAndOwnerAccountsSerializer)
 
-from .models import (Customer, BankDeposit, ExpensesRequest, MobileMoneyDeposit, CustomerWithdrawal, MyPayments,AccountNumberWithPoints,AgentAndOwnerAccounts,
+from .models import (Customer, BankDeposit, ExpensesRequest, MobileMoneyDeposit, CustomerWithdrawal, MyPayments,AccountNumberWithPoints,AgentAndOwnerAccounts,CustomerRequestRedeemPoints,
                      AdminAccountsStartedWith, AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments,AuthenticateAgentPhone,Commercials,
                      CustomerRequestDeposit, UserMobileMoneyAccountsStarted, OTP, FnetGroupMessage,
                      FnetPrivateUserMessage, WithdrawalReference,
@@ -35,7 +35,33 @@ from datetime import datetime, date, time
 from fnet_api import serializers
 from django.utils import timezone
 
+# redeem points
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+def request_to_redeem_points(request):
+    serializer = CustomerRequestRedeemPointsSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_all_requests_to_redeem_points(request):
+    points = CustomerRequestRedeemPoints.objects.filter(status="Pending").order_by('-date_requested')
+    serializer = CustomerRequestRedeemPointsSerializer(points, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET','PUT'])
+@permission_classes([permissions.AllowAny])
+def update_request_to_redeem_points(request,pk):
+    requested_points = get_object_or_404(CustomerRequestRedeemPoints, pk=pk)
+    serializer = CustomerRequestRedeemPointsSerializer(requested_points,data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 # add customer points
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])

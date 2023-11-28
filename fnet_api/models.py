@@ -249,12 +249,19 @@ class Customer(models.Model):
 
 class CustomerPoints(models.Model):
     phone = models.CharField(max_length=15, blank=True)
+    name = models.CharField(max_length=50, blank=True)
     points = models.DecimalField(max_digits=19, decimal_places=2, blank=True, default="0.0")
     date_added = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.phone
 
+class CustomerRequestRedeemPoints(models.Model):
+    phone = models.CharField(max_length=15, blank=True)
+    name = models.CharField(max_length=50, blank=True)
+    points = models.DecimalField(max_digits=19, decimal_places=2, blank=True, default="0.0")
+    status = models.CharField(max_length=100,choices=REQUEST_STATUS,default="Pending")
+    date_requested = models.DateTimeField(auto_now_add=True)
 
 
 class ReferCustomer(models.Model):
