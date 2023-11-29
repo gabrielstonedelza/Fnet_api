@@ -8,10 +8,6 @@ from .models import (Customer, CustomerWithdrawal, MyPayments, AdminAccountsStar
                      FnetPrivateUserMessage, FnetGroupMessage, PrivateChatId, AddToCustomerPoints,AddedToApprovedCashPayment,AuthenticateAgentPhone,AgentAndOwnerAccounts,Commercials,CustomerPoints,
                      AddToCustomerRedeemPoints, ReferCustomer, AddToBlockList, CashSupportRequest,CashSupport,CashSupportBalance)
 
-# class CustomerRequestRedeemPointsSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = CustomerRequestRedeemPoints
-#         fields = ['id','phone','name','points','status','date_requested']
 
 class CustomerPointsSerializer(serializers.ModelSerializer):
     class Meta:
