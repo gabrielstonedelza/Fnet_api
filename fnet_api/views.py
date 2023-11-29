@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from .serializers import (CustomerSerializer, BankDepositSerializer, ExpenseRequestSerializer,AuthenticateAgentPhoneSerializer,AccountNumberWithPointsSerializer,CashSupportRequestSerializer,CashSupportSerializer,CashSupportBalanceSerializer,
+from .serializers import (CustomerSerializer, BankDepositSerializer, ExpenseRequestSerializer, AuthenticateAgentPhoneSerializer, AccountNumberWithPointsSerializer, CashSupportRequestSerializer, CashSupportSerializer, CashSupportBalanceSerializer,
                           MobileMoneyDepositSerializer, WithdrawalReferenceSerializer,
                           CustomerWithdrawalSerializer, PaymentsSerializer, AdminAccountsStartedSerializer, \
                           AdminAccountsCompletedSerializer, CustomerAccountsSerializer, CashAtPaymentSerializer,
@@ -8,10 +8,10 @@ from .serializers import (CustomerSerializer, BankDepositSerializer, ExpenseRequ
                           UserMobileMoneyAccountsClosedSerializer, UserMobileMoneyAccountsStartedSerializer,
                           MobileMoneyWithdrawalSerializer, PaymentAtBankSerializer, OTPSerializer,
                           CustomerPaymentAtBankSerializer, AddedToApprovedPaymentSerializer,
-                          AddedToApprovedBankDepositsSerializer, PrivateChatIdSerializer, AddToCustomerPointsSerializer,
+                          AddedToApprovedBankDepositsSerializer, PrivateChatIdSerializer, AddToCustomerRequestToRedeemPointsSerializer,
                           CashRequestSerializer, CashPaymentsSerializer, AddedToApprovedCashPaymentSerializer,
-                          AddToCustomerRedeemPointsSerializer, ReferCustomerSerializer, AdminCustomerSerializer,CommercialsSerializer,CustomerPointsSerializer,
-                          AddToBlockListSerializer,AgentAndOwnerAccountsSerializer)
+                          AddToCustomerRedeemPointsSerializer, ReferCustomerSerializer, AdminCustomerSerializer, CommercialsSerializer, CustomerPointsSerializer,
+                          AddToBlockListSerializer, AgentAndOwnerAccountsSerializer)
 
 from .models import (Customer, BankDeposit, ExpensesRequest, MobileMoneyDeposit, CustomerWithdrawal, MyPayments, AccountNumberWithPoints, AgentAndOwnerAccounts,
                      AdminAccountsStartedWith, AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments, AuthenticateAgentPhone, Commercials,
@@ -1954,7 +1954,7 @@ def private_message_detail(request, user1, user2):
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
 def add_to_customer_points(request):
-    serializer = AddToCustomerPointsSerializer(data=request.data)
+    serializer = AddToCustomerRequestToRedeemPointsSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -1974,11 +1974,8 @@ def customer_request_to_redeem_points(request):
 @permission_classes([permissions.AllowAny])
 def update_customer_request_to_redeem_points(request,pk):
     customer_points = get_object_or_404(AddToCustomerRequestToRedeemPoints,pk=pk)
-    serializer = AddToCustomerRedeemPointsSerializer(customer_points,data=request.data)
+    serializer = AddToCustomerRequestToRedeemPointsSerializer(customer_points,data=request.data)
     if serializer.is_valid():
-        if customer_points:
-            i.redeemed = True
-            i.save()
         serializer.save()
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -2002,7 +1999,7 @@ def get_all_redeemed_points(request):
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
-def get_all_customers_redeeming_requests(request, customer_phone):
+def get_all_customers_redeeming_requests(request):
     points = AddToCustomerRequestToRedeemPoints.objects.filter(redeemed=False).order_by('-date_created')
     serializer = CustomerSerializer(points, many=True)
     return Response(serializer.data)
@@ -2566,7 +2563,7 @@ def get_all_referred_customers(request):
 @permission_classes([permissions.AllowAny])
 def get_all_add_to_customers_points(request):
     customers = AddToCustomerRequestToRedeemPoints.objects.all().order_by("-date_created")
-    serializer = AddToCustomerPointsSerializer(customers, many=True)
+    serializer = AddToCustomerRequestToRedeemPointsSerializer(customers, many=True)
     return Response(serializer.data)
 
 

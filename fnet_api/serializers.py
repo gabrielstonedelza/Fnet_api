@@ -386,10 +386,10 @@ class PrivateChatIdSerializer(serializers.ModelSerializer):
         fields = ['id', 'chat_id', 'date_created']
 
 
-class AddToCustomerPointsSerializer(serializers.ModelSerializer):
+class AddToCustomerRequestToRedeemPointsSerializer(serializers.ModelSerializer):
     class Meta:
         model = AddToCustomerRequestToRedeemPoints
-        fields = ['id', 'customer', 'customer_phone', 'points','redeemed', 'date_created']
+        fields = ['id', 'customer', 'customer_phone','customer_name', 'points','redeemed', 'date_created']
 
 
 class AddToCustomerRedeemPointsSerializer(serializers.ModelSerializer):

@@ -384,7 +384,7 @@ urlpatterns = [
     path("update_request_cash_support/<int:pk>/",views.update_request_cash_support),
 
 #   customer points
-    path("get_all_customers_redeeming_requests/<str:customer_phone>/", views.get_all_customers_redeeming_requests),
+    path("get_all_customers_redeeming_requests/", views.get_all_customers_redeeming_requests),
     path("get_customer_redeemed_points/<str:customer_phone>/", views.get_customer_redeemed_points),
     path("get_all_redeemed_points/", views.get_all_redeemed_points),
     path("customer_request_to_redeem_points/", views.customer_request_to_redeem_points),
