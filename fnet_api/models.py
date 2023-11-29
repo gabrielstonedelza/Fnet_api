@@ -285,7 +285,7 @@ class AddToCustomerRequestToRedeemPoints(models.Model):
 
     def __str__(self):
         c_points = str(self.points)
-        return f"{self.customer.name} has {c_points} points"
+        return f"{self.customer_name} has {c_points} points"
 
 
 class AddToCustomerRedeemPoints(models.Model):
