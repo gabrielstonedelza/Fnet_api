@@ -8,11 +8,7 @@ from .models import (Customer, CustomerWithdrawal, MyPayments, AdminAccountsStar
                      FnetPrivateUserMessage, PrivateChatId, AddToCustomerPoints, AddToCustomerRedeemPoints,CustomerPoints,CustomerRequestRedeemPoints,
                      ReferCustomer, AddToBlockList,AgentAndOwnerAccounts,CashSupportRequest,CashSupport,CashSupportBalance)
 
-admin.site.register(CustomerRequestRedeemPoints)
-admin.site.register(CustomerPoints)
-admin.site.register(CashSupportRequest)
-admin.site.register(CashSupport)
-admin.site.register(CashSupportBalance)
+
 class AdminBankDepositRequest(admin.ModelAdmin):
     list_display = ['id', 'agent', 'customer', 'bank', 'customer', 'account_number', 'account_name','amount','request_status','deposit_paid','date_requested','user_location','user_local_district']
 
@@ -66,15 +62,6 @@ class AdminExpensesRequest(admin.ModelAdmin):
 
     class Meta:
         model = ExpensesRequest
-
-
-# class AdminBankDeposit(admin.ModelAdmin):
-#     list_display = ['id', 'agent', 'customer', 'bank', 'account_number', 'account_name', 'amount', 'depositor_name',
-#                     'request_status', 'deposit_paid', '']
-#     search_fields = ['id', 'agent', ]
-#
-#     class Meta:
-#         model = BankDeposit
 
 
 class AdminMobileMoneyDeposit(admin.ModelAdmin):
@@ -176,3 +163,8 @@ admin.site.register(OTP)
 admin.site.register(CustomerPaymentAtBank)
 admin.site.register(AddedToApprovedPayment)
 admin.site.register(AddedToApprovedDeposits)
+admin.site.register(CustomerRequestRedeemPoints)
+admin.site.register(CustomerPoints)
+admin.site.register(CashSupportRequest)
+admin.site.register(CashSupport)
+admin.site.register(CashSupportBalance)

@@ -85,8 +85,6 @@ def get_all_customer_points(request,phone):
 def redeem_points(request,phone):
     points = CustomerPoints.objects.filter(phone=phone).order_by('-date_added')
     serializer = CustomerPointsSerializer(points, many=True)
-    for i in points:
-        i.delete()
     return Response(serializer.data)
 
 # cash support system
