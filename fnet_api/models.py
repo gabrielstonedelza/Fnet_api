@@ -277,7 +277,6 @@ class ReferCustomer(models.Model):
 
 
 class AddToCustomerRequestToRedeemPoints(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     customer_phone = models.CharField(max_length=20, blank=True)
     customer_name = models.CharField(max_length=50, blank=True)
     points = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
