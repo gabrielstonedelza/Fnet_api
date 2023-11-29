@@ -248,17 +248,17 @@ def alert_private_message(sender, created, instance, **kwargs):
 
 
 # customer points
-@receiver(post_save, sender=AddToCustomerRequestToRedeemPoints)
-def alert_points_created(sender, created, instance, **kwargs):
-    title = f"Points Updated"
-    message = f"hi {instance.customer.name} your points was updated"
-    transaction_type = "Points Updated"
-
-    if created:
-        Notifications.objects.create(item_id=instance.id, transaction_type=transaction_type,
-                                     notification_title=title, notification_message=message,
-                                     notification_to_customer=instance.customer
-                                     )
+# @receiver(post_save, sender=AddToCustomerRequestToRedeemPoints)
+# def alert_points_created(sender, created, instance, **kwargs):
+#     title = f"Points Updated"
+#     message = f"hi {instance.customer_name} your points was updated"
+#     transaction_type = "Points Updated"
+#
+#     if created:
+#         Notifications.objects.create(item_id=instance.id, transaction_type=transaction_type,
+#                                      notification_title=title, notification_message=message,
+#                                      notification_to_customer=instance.customer
+#                                      )
 
 
 @receiver(post_save, sender=AddToCustomerRedeemPoints)
