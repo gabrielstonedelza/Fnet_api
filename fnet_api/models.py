@@ -300,12 +300,6 @@ class AddToCustomerRedeemPoints(models.Model):
         c_points = str(self.points)
         return f"{self.customer.name} has redeemed {c_points} points"
 
-    def get_customer_name(self):
-        return self.customer.name
-
-    def get_customer_phone(self):
-        return self.customer.phone
-
 
 class CustomerAccounts(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)

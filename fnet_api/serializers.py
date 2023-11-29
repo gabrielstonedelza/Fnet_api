@@ -395,7 +395,7 @@ class AddToCustomerRequestToRedeemPointsSerializer(serializers.ModelSerializer):
 class AddToCustomerRedeemPointsSerializer(serializers.ModelSerializer):
     class Meta:
         model = AddToCustomerRedeemPoints
-        fields = ['id', 'customer', 'customer_phone', 'points', 'date_created', 'redeem_option', 'get_customer_name','get_customer_phone']
+        fields = ['id', 'customer', 'customer_phone', 'points', 'date_created', 'redeem_option']
 
 
 class CashRequestSerializer(serializers.ModelSerializer):
