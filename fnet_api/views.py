@@ -1964,7 +1964,7 @@ def add_to_customer_points(request):
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])
 def customer_request_to_redeem_points(request):
-    serializer = AddToCustomerRedeemPointsSerializer(data=request.data)
+    serializer = AddToCustomerRequestToRedeemPointsSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -1984,16 +1984,16 @@ def update_customer_request_to_redeem_points(request,pk):
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def get_customer_redeemed_points(request, customer_phone):
-    redeemedPoints = AddToCustomerRedeemPoints.objects.filter(customer_phone=customer_phone).filter(redeemed=True).order_by('-date_created')
-    serializer = AddToCustomerRedeemPointsSerializer(redeemedPoints, many=True)
+    redeemedPoints = AddToCustomerRequestToRedeemPoints.objects.filter(customer_phone=customer_phone).filter(redeemed=True).order_by('-date_created')
+    serializer = AddToCustomerRequestToRedeemPointsSerializer(redeemedPoints, many=True)
     return Response(serializer.data)
 
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def get_all_redeemed_points(request):
-    redeemedPoints = AddToCustomerRedeemPoints.objects.filter(redeemed=True).order_by('-date_created')
-    serializer = AddToCustomerRedeemPointsSerializer(redeemedPoints, many=True)
+    redeemedPoints = AddToCustomerRequestToRedeemPoints.objects.filter(redeemed=True).order_by('-date_created')
+    serializer = AddToCustomerRequestToRedeemPointsSerializer(redeemedPoints, many=True)
     return Response(serializer.data)
 
 
@@ -2001,7 +2001,7 @@ def get_all_redeemed_points(request):
 @permission_classes([permissions.AllowAny])
 def get_all_customers_redeeming_requests(request):
     points = AddToCustomerRequestToRedeemPoints.objects.filter(redeemed=False).order_by('-date_created')
-    serializer = CustomerSerializer(points, many=True)
+    serializer = AddToCustomerRequestToRedeemPointsSerializer(points, many=True)
     return Response(serializer.data)
 
 
