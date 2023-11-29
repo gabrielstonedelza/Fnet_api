@@ -2,8 +2,8 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from .models import (CustomerRequestDeposit, ExpensesRequest, BankDeposit, MyPayments, Notifications, OTP, \
                      CustomerPaymentAtBank, Customer, AddedToApprovedDeposits, AddedToApprovedPayment, Reports,
-                     FnetGroupMessage, CashRequest,MyCashPayments,AddedToApprovedCashPayment,
-                     FnetPrivateUserMessage, AddToCustomerPoints, AddToCustomerRedeemPoints, ReferCustomer)
+                     FnetGroupMessage, CashRequest, MyCashPayments, AddedToApprovedCashPayment,
+                     FnetPrivateUserMessage, AddToCustomerRequestToRedeemPoints, AddToCustomerRedeemPoints, ReferCustomer)
 from django.conf import settings
 
 User = settings.AUTH_USER_MODEL
@@ -248,7 +248,7 @@ def alert_private_message(sender, created, instance, **kwargs):
 
 
 # customer points
-@receiver(post_save, sender=AddToCustomerPoints)
+@receiver(post_save, sender=AddToCustomerRequestToRedeemPoints)
 def alert_points_created(sender, created, instance, **kwargs):
     title = f"Points Updated"
     message = f"hi {instance.customer.name} your points was updated"

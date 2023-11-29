@@ -13,14 +13,14 @@ from .serializers import (CustomerSerializer, BankDepositSerializer, ExpenseRequ
                           AddToCustomerRedeemPointsSerializer, ReferCustomerSerializer, AdminCustomerSerializer,CommercialsSerializer,CustomerPointsSerializer,
                           AddToBlockListSerializer,AgentAndOwnerAccountsSerializer)
 
-from .models import (Customer, BankDeposit, ExpensesRequest, MobileMoneyDeposit, CustomerWithdrawal, MyPayments,AccountNumberWithPoints,AgentAndOwnerAccounts,
-                     AdminAccountsStartedWith, AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments,AuthenticateAgentPhone,Commercials,
+from .models import (Customer, BankDeposit, ExpensesRequest, MobileMoneyDeposit, CustomerWithdrawal, MyPayments, AccountNumberWithPoints, AgentAndOwnerAccounts,
+                     AdminAccountsStartedWith, AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments, AuthenticateAgentPhone, Commercials,
                      CustomerRequestDeposit, UserMobileMoneyAccountsStarted, OTP, FnetGroupMessage,
                      FnetPrivateUserMessage, WithdrawalReference,
                      UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, Notifications, PaymentAtBank,
                      CustomerPaymentAtBank, AddedToApprovedPayment, AddedToApprovedDeposits, Reports, PrivateChatId,
                      CashRequest, MyCashPayments, AddedToApprovedCashPayment,
-                     AddToCustomerPoints, AddToCustomerRedeemPoints, ReferCustomer, AddToBlockList, CashSupportRequest,CashSupport,CashSupportBalance,CustomerPoints
+                     AddToCustomerRequestToRedeemPoints, AddToCustomerRedeemPoints, ReferCustomer, AddToBlockList, CashSupportRequest, CashSupport, CashSupportBalance, CustomerPoints
                      )
 from drf_multiple_model.views import ObjectMultipleModelAPIView
 from django.http import Http404
@@ -46,18 +46,24 @@ def add_customer_points(request):
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
-def get_all_customer_points(request,phone):
-    points = CustomerPoints.objects.filter(phone=phone).order_by('-date_added')
+def get_all_customer_active_points(request,phone):
+    points = CustomerPoints.objects.filter(phone=phone).filter(points_active=True).order_by('-date_added')
     serializer = CustomerPointsSerializer(points, many=True)
     return Response(serializer.data)
 
-
-@api_view(['GET'])
+@api_view(['GET','PUT'])
 @permission_classes([permissions.AllowAny])
-def redeem_points(request,phone):
-    points = CustomerPoints.objects.filter(phone=phone).order_by('-date_added')
-    serializer = CustomerPointsSerializer(points, many=True)
-    return Response(serializer.data)
+def update_customer_active_points(request,phone):
+    customer_points = CustomerPoints.objects.filter(phone=phone)
+    serializer = CustomerPointsSerializer(customer_points,data=request.data)
+    if serializer.is_valid():
+        for i in customer_points:
+            i.points_active = False
+            i.save()
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 # cash support system
 @api_view(['POST'])
@@ -1957,18 +1963,31 @@ def add_to_customer_points(request):
 
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])
-def add_to_customer_redeemed_points(request):
+def customer_request_to_redeem_points(request):
     serializer = AddToCustomerRedeemPointsSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['GET','PUT'])
+@permission_classes([permissions.AllowAny])
+def update_customer_request_to_redeem_points(request,pk):
+    customer_points = get_object_or_404(AddToCustomerRequestToRedeemPoints,pk=pk)
+    serializer = AddToCustomerRedeemPointsSerializer(customer_points,data=request.data)
+    if serializer.is_valid():
+        if customer_points:
+            i.redeemed = True
+            i.save()
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def get_customer_redeemed_points(request, customer_phone):
-    redeemedPoints = AddToCustomerRedeemPoints.objects.filter(customer_phone=customer_phone).order_by('-date_created')
+    redeemedPoints = AddToCustomerRedeemPoints.objects.filter(customer_phone=customer_phone).filter(redeemed=True).order_by('-date_created')
     serializer = AddToCustomerRedeemPointsSerializer(redeemedPoints, many=True)
     return Response(serializer.data)
 
@@ -1976,15 +1995,15 @@ def get_customer_redeemed_points(request, customer_phone):
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def get_all_redeemed_points(request):
-    redeemedPoints = AddToCustomerRedeemPoints.objects.all().order_by('-date_created')
+    redeemedPoints = AddToCustomerRedeemPoints.objects.filter(redeemed=True).order_by('-date_created')
     serializer = AddToCustomerRedeemPointsSerializer(redeemedPoints, many=True)
     return Response(serializer.data)
 
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
-def get_customer_points(request, customer_phone):
-    points = Customer.objects.filter(phone=customer_phone).order_by('-date_created')
+def get_all_customers_redeeming_requests(request, customer_phone):
+    points = AddToCustomerRequestToRedeemPoints.objects.filter(redeemed=False).order_by('-date_created')
     serializer = CustomerSerializer(points, many=True)
     return Response(serializer.data)
 
@@ -2546,7 +2565,7 @@ def get_all_referred_customers(request):
 @api_view(["GET"])
 @permission_classes([permissions.AllowAny])
 def get_all_add_to_customers_points(request):
-    customers = AddToCustomerPoints.objects.all().order_by("-date_created")
+    customers = AddToCustomerRequestToRedeemPoints.objects.all().order_by("-date_created")
     serializer = AddToCustomerPointsSerializer(customers, many=True)
     return Response(serializer.data)
 

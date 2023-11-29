@@ -4,9 +4,9 @@ from .models import (Customer, CustomerWithdrawal, MyPayments, AdminAccountsStar
                      AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments, CustomerRequestDeposit,
                      Notifications, ExpensesRequest, BankDeposit, MobileMoneyDeposit, MobileMoneyWithdraw,
                      UserMobileMoneyAccountsStarted, UserMobileMoneyAccountsClosed, PaymentAtBank, OTP,
-                     CustomerPaymentAtBank, AddedToApprovedPayment, AddedToApprovedDeposits, Reports, FnetGroupMessage,CashRequest,MyCashPayments,AddedToApprovedCashPayment,WithdrawalReference,AccountNumberWithPoints,Commercials,
-                     FnetPrivateUserMessage, PrivateChatId, AddToCustomerPoints, AddToCustomerRedeemPoints,CustomerPoints,
-                     ReferCustomer, AddToBlockList,AgentAndOwnerAccounts,CashSupportRequest,CashSupport,CashSupportBalance)
+                     CustomerPaymentAtBank, AddedToApprovedPayment, AddedToApprovedDeposits, Reports, FnetGroupMessage, CashRequest, MyCashPayments, AddedToApprovedCashPayment, WithdrawalReference, AccountNumberWithPoints, Commercials,
+                     FnetPrivateUserMessage, PrivateChatId, AddToCustomerRequestToRedeemPoints, AddToCustomerRedeemPoints, CustomerPoints,
+                     ReferCustomer, AddToBlockList, AgentAndOwnerAccounts, CashSupportRequest, CashSupport, CashSupportBalance)
 
 
 class AdminBankDepositRequest(admin.ModelAdmin):
@@ -137,7 +137,7 @@ admin.site.register(AddedToApprovedCashPayment)
 admin.site.register(ReferCustomer)
 admin.site.register(CashRequest)
 admin.site.register(AddToBlockList)
-admin.site.register(AddToCustomerPoints)
+admin.site.register(AddToCustomerRequestToRedeemPoints)
 admin.site.register(AddToCustomerRedeemPoints)
 admin.site.register(Reports)
 admin.site.register(PrivateChatId)

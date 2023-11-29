@@ -251,6 +251,7 @@ class CustomerPoints(models.Model):
     phone = models.CharField(max_length=15, blank=True)
     name = models.CharField(max_length=50, blank=True)
     points = models.DecimalField(max_digits=19, decimal_places=2, blank=True, default="0.0")
+    points_active = models.BooleanField(default=True)
     date_added = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -275,10 +276,11 @@ class ReferCustomer(models.Model):
         return self.name
 
 
-class AddToCustomerPoints(models.Model):
+class AddToCustomerRequestToRedeemPoints(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     customer_phone = models.CharField(max_length=20, blank=True)
     points = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
+    redeemed = models.BooleanField(default=False)
     date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

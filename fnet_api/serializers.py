@@ -1,18 +1,18 @@
 from django.db.models import fields
 from rest_framework import serializers
-from .models import (Customer, CustomerWithdrawal, MyPayments, AdminAccountsStartedWith, CashAtPayments,ExpensesRequest,CashRequest,MyCashPayments,
-                     AdminAccountsCompletedWith, CustomerAccounts, CustomerRequestDeposit,WithdrawalReference,
-                 MobileMoneyDeposit, BankDeposit, UserMobileMoneyAccountsStarted,
-                     UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, Notifications, PaymentAtBank, OTP,AccountNumberWithPoints,
+from .models import (Customer, CustomerWithdrawal, MyPayments, AdminAccountsStartedWith, CashAtPayments, ExpensesRequest, CashRequest, MyCashPayments,
+                     AdminAccountsCompletedWith, CustomerAccounts, CustomerRequestDeposit, WithdrawalReference,
+                     MobileMoneyDeposit, BankDeposit, UserMobileMoneyAccountsStarted,
+                     UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, Notifications, PaymentAtBank, OTP, AccountNumberWithPoints,
                      CustomerPaymentAtBank, AddedToApprovedDeposits, AddedToApprovedPayment, Reports,
-                     FnetPrivateUserMessage, FnetGroupMessage, PrivateChatId, AddToCustomerPoints,AddedToApprovedCashPayment,AuthenticateAgentPhone,AgentAndOwnerAccounts,Commercials,CustomerPoints,
-                     AddToCustomerRedeemPoints, ReferCustomer, AddToBlockList, CashSupportRequest,CashSupport,CashSupportBalance)
+                     FnetPrivateUserMessage, FnetGroupMessage, PrivateChatId, AddToCustomerRequestToRedeemPoints, AddedToApprovedCashPayment, AuthenticateAgentPhone, AgentAndOwnerAccounts, Commercials, CustomerPoints,
+                     AddToCustomerRedeemPoints, ReferCustomer, AddToBlockList, CashSupportRequest, CashSupport, CashSupportBalance)
 
 
 class CustomerPointsSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomerPoints
-        fields = ['id','phone','name','points','date_added']
+        fields = ['id','phone','name','points','points_active','date_added']
 
 class CashSupportRequestSerializer(serializers.ModelSerializer):
     class Meta:
@@ -388,8 +388,8 @@ class PrivateChatIdSerializer(serializers.ModelSerializer):
 
 class AddToCustomerPointsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = AddToCustomerPoints
-        fields = ['id', 'customer', 'customer_phone', 'points', 'date_created']
+        model = AddToCustomerRequestToRedeemPoints
+        fields = ['id', 'customer', 'customer_phone', 'points','redeemed', 'date_created']
 
 
 class AddToCustomerRedeemPointsSerializer(serializers.ModelSerializer):
