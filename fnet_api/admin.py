@@ -6,7 +6,7 @@ from .models import (Customer, CustomerWithdrawal, MyPayments, AdminAccountsStar
                      UserMobileMoneyAccountsStarted, UserMobileMoneyAccountsClosed, PaymentAtBank, OTP,
                      CustomerPaymentAtBank, AddedToApprovedPayment, AddedToApprovedDeposits, Reports, FnetGroupMessage, CashRequest, MyCashPayments, AddedToApprovedCashPayment, WithdrawalReference, AccountNumberWithPoints, Commercials,
                      FnetPrivateUserMessage, PrivateChatId, AddToCustomerRequestToRedeemPoints, AddToCustomerRedeemPoints, CustomerPoints,
-                     ReferCustomer, AddToBlockList, AgentAndOwnerAccounts, CashSupportRequest, CashSupport, CashSupportBalance)
+                     ReferCustomer, AddToBlockList, AgentAndOwnerAccounts)
 
 
 class AdminBankDepositRequest(admin.ModelAdmin):
@@ -164,6 +164,3 @@ admin.site.register(CustomerPaymentAtBank)
 admin.site.register(AddedToApprovedPayment)
 admin.site.register(AddedToApprovedDeposits)
 admin.site.register(CustomerPoints)
-admin.site.register(CashSupportRequest)
-admin.site.register(CashSupport)
-admin.site.register(CashSupportBalance)

@@ -161,35 +161,6 @@ CUSTOMER_REFERRAL_STATUS = (
     ("User Registration", "User Registration"),
 )
 
-class CashSupportRequest(models.Model):
-    customer_phone = models.CharField(max_length=20,blank=True)
-    customer_name = models.CharField(max_length=50,blank=True)
-    amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
-    status = models.CharField(max_length=100,choices=REQUEST_STATUS,default="Pending")
-    date_requested = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.customer_phone
-
-
-class CashSupport(models.Model):
-    customer_phone = models.CharField(max_length=20)
-    customer_name = models.CharField(max_length=50)
-    amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True,default="0.0")
-    interest = models.DecimalField(max_digits=19, decimal_places=2, blank=True,default="0.0")
-    date_added = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.customer_phone
-
-
-class CashSupportBalance(models.Model):
-    customer_phone = models.CharField(max_length=20)
-    amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True)
-    date_added = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.customer_phone
 
 #
 class CustomerRequestDeposit(models.Model):

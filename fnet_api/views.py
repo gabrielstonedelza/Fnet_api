@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from .serializers import (CustomerSerializer, BankDepositSerializer, ExpenseRequestSerializer, AuthenticateAgentPhoneSerializer, AccountNumberWithPointsSerializer, CashSupportRequestSerializer, CashSupportSerializer, CashSupportBalanceSerializer,
+from .serializers import (CustomerSerializer, BankDepositSerializer, ExpenseRequestSerializer, AuthenticateAgentPhoneSerializer, AccountNumberWithPointsSerializer,
                           MobileMoneyDepositSerializer, WithdrawalReferenceSerializer,
                           CustomerWithdrawalSerializer, PaymentsSerializer, AdminAccountsStartedSerializer, \
                           AdminAccountsCompletedSerializer, CustomerAccountsSerializer, CashAtPaymentSerializer,
@@ -20,7 +20,7 @@ from .models import (Customer, BankDeposit, ExpensesRequest, MobileMoneyDeposit,
                      UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, Notifications, PaymentAtBank,
                      CustomerPaymentAtBank, AddedToApprovedPayment, AddedToApprovedDeposits, Reports, PrivateChatId,
                      CashRequest, MyCashPayments, AddedToApprovedCashPayment,
-                     AddToCustomerRequestToRedeemPoints, AddToCustomerRedeemPoints, ReferCustomer, AddToBlockList, CashSupportRequest, CashSupport, CashSupportBalance, CustomerPoints
+                     AddToCustomerRequestToRedeemPoints, AddToCustomerRedeemPoints, ReferCustomer, AddToBlockList, CustomerPoints
                      )
 from drf_multiple_model.views import ObjectMultipleModelAPIView
 from django.http import Http404
@@ -63,75 +63,6 @@ def update_customer_active_points(request,phone):
         serializer.save()
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-# cash support system
-@api_view(['POST'])
-@permission_classes([permissions.AllowAny])
-def request_cash_support(request):
-    serializer = CashSupportRequestSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-@api_view(['GET','PUT'])
-@permission_classes([permissions.AllowAny])
-def update_request_cash_support(request,pk):
-    cash_support = get_object_or_404(CashSupportRequest, pk=pk)
-    serializer = CashSupportRequestSerializer(cash_support,data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-@api_view(['POST'])
-@permission_classes([permissions.AllowAny])
-def add_customer_to_cash_support(request):
-    serializer = CashSupportSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-@api_view(['POST'])
-@permission_classes([permissions.AllowAny])
-def pay_cash_support(request):
-    serializer = CashSupportBalanceSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-@api_view(['GET'])
-@permission_classes([permissions.AllowAny])
-def get_all_requested_cash_support(request):
-    cash_supports = CashSupportRequest.objects.filter(status="Pending").order_by('-date_requested')
-    serializer = CashSupportRequestSerializer(cash_supports, many=True)
-    return Response(serializer.data)
-
-@api_view(['GET'])
-@permission_classes([permissions.AllowAny])
-def get_all_cash_support(request):
-    cash_supports = CashSupport.objects.all().order_by('-date_added')
-    serializer = CashSupportSerializer(cash_supports, many=True)
-    return Response(serializer.data)
-
-@api_view(['GET'])
-@permission_classes([permissions.AllowAny])
-def get_all_customers_cash_support(request,phone):
-    cash_supports = CashSupport.objects.filter(customer_phone=phone).order_by('-date_added')
-    serializer = CashSupportSerializer(cash_supports, many=True)
-    return Response(serializer.data)
-
-@api_view(['GET'])
-@permission_classes([permissions.AllowAny])
-def get_all_customers_cash_support_paid(request,phone):
-    cash_supports = CashSupportBalance.objects.filter(customer_phone=phone).order_by('-date_added')
-    serializer = CashSupportBalanceSerializer(cash_supports, many=True)
-    return Response(serializer.data)
-
-
 
 
 @api_view(['GET'])

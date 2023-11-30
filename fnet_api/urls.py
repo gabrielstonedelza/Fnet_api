@@ -373,15 +373,6 @@ urlpatterns = [
     path("admin_delete_bank_payment/<int:id>/", views.admin_delete_bank_payment),
     path("admin_update_bank_payment_paid/<int:id>/", views.admin_update_bank_payment_paid),
 
-# customer cash support
-    path("request_cash_support/",views.request_cash_support),
-    path("add_customer_to_cash_support/",views.add_customer_to_cash_support),
-    path("pay_cash_support/",views.pay_cash_support),
-    path("get_all_requested_cash_support/",views.get_all_requested_cash_support),
-    path("get_all_cash_support/",views.get_all_cash_support),
-    path("get_all_customers_cash_support/<str:phone>/",views.get_all_customers_cash_support),
-    path("get_all_customers_cash_support_paid/<str:phone>/",views.get_all_customers_cash_support_paid),
-    path("update_request_cash_support/<int:pk>/",views.update_request_cash_support),
 
 #   customer points
     path("get_all_customers_redeeming_requests/", views.get_all_customers_redeeming_requests),

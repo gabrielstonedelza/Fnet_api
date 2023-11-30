@@ -6,7 +6,7 @@ from .models import (Customer, CustomerWithdrawal, MyPayments, AdminAccountsStar
                      UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, Notifications, PaymentAtBank, OTP, AccountNumberWithPoints,
                      CustomerPaymentAtBank, AddedToApprovedDeposits, AddedToApprovedPayment, Reports,
                      FnetPrivateUserMessage, FnetGroupMessage, PrivateChatId, AddToCustomerRequestToRedeemPoints, AddedToApprovedCashPayment, AuthenticateAgentPhone, AgentAndOwnerAccounts, Commercials, CustomerPoints,
-                     AddToCustomerRedeemPoints, ReferCustomer, AddToBlockList, CashSupportRequest, CashSupport, CashSupportBalance)
+                     AddToCustomerRedeemPoints, ReferCustomer, AddToBlockList)
 
 
 class CustomerPointsSerializer(serializers.ModelSerializer):
@@ -14,20 +14,6 @@ class CustomerPointsSerializer(serializers.ModelSerializer):
         model = CustomerPoints
         fields = ['id','phone','name','points','points_active','date_added']
 
-class CashSupportRequestSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CashSupportRequest
-        fields = ['id','customer_phone','status','customer_name','amount','date_requested']
-
-class CashSupportSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CashSupport
-        fields = ['id','customer_phone','customer_name','amount','interest','date_added']
-
-class CashSupportBalanceSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CashSupportBalance
-        fields = ['id','customer_phone','amount','date_added']
 
 class CommercialsSerializer(serializers.ModelSerializer):
     class Meta:
