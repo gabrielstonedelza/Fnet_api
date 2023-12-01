@@ -2967,3 +2967,12 @@ def admin_update_bank_payment_paid(request, id):
         serializer.save()
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_all_customer_completed_transaction(request):
+    transactions = BankDeposit.objects.all().order_by('customer')
+    serializer = BankDepositSerializer(transactions, many=True)
+    return Response(serializer.data)
