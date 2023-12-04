@@ -39,7 +39,7 @@ from django.utils import timezone
 
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])
-def request_to_points(request):
+def customer_request_to_redeem_points(request):
     serializer = CustomerRedeemPointsRequestSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()

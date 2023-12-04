@@ -380,7 +380,7 @@ urlpatterns = [
     path("update_customer_active_points/<str:phone>/",views.update_customer_active_points),
 
 #     customer request to redeem points
-    path("request_to_points/",views.request_to_points),
+    path("customer_request_to_redeem_points/", views.customer_request_to_redeem_points),
     path("get_all_customer_request_to_redeem_points/",views.get_all_customer_request_to_redeem_points),
     path("update_customer_request_to_redeem_points/<str:phone>/",views.update_customer_request_to_redeem_points),
 ]
