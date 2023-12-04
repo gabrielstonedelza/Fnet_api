@@ -2,37 +2,29 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from .models import (CustomerRequestDeposit, ExpensesRequest, BankDeposit, MyPayments, Notifications, OTP, \
                      CustomerPaymentAtBank, Customer, AddedToApprovedDeposits, AddedToApprovedPayment, Reports,
-                     FnetGroupMessage, CashRequest, MyCashPayments, AddedToApprovedCashPayment,
-                     FnetPrivateUserMessage, AddToCustomerRequestToRedeemPoints, AddToCustomerRedeemPoints, ReferCustomer)
+                     FnetGroupMessage, CashRequest, MyCashPayments, AddedToApprovedCashPayment,CustomerRedeemPointsRequest,
+                     FnetPrivateUserMessage, ReferCustomer)
 from django.conf import settings
 
 User = settings.AUTH_USER_MODEL
 from users.models import User
 
-# new signals with websocket client
-# @receiver(post_save, sender=BankDeposit)
-# def send_new_post_notification(sender, instance, **kwargs):
-#     from channels.layers import get_channel_layer
-#     import json
-#
-#     channel_layer = get_channel_layer()
-#     bank_deposit_data = {
-#         'id': instance.id,
-#         'title': "New bank deposit",
-#         # Include other post data fields as needed
-#     }
-#
-#     # Send a notification to the WebSocket consumer
-#     async_to_sync(channel_layer.group_send)(
-#         'bank_deposit_group',
-#         {
-#             'type': 'new_post_notification',
-#             'bank_deposit_data': bank_deposit_data,
-#         }
-#     )
+@receiver(post_save,sender=CustomerRedeemPointsRequest)
+def alert_redeem_points_request(sender,created,instance,**kwargs):
+    admin_user = User.objects.get(id=1)
+    title = "New points redeem request"
+    message1 = f"{instance.phone} is requesting requesting to redeem his points"
+    transaction_type = "Redeem Request"
+    if created:
+        Notifications.objects.create(user=instance.agent1, transaction_type=transaction_type,
+                                     item_id=instance.id,
+                                     notification_title=title, notification_message=message1,
+                                     user2=admin_user,
+                                     )
 
 @receiver(post_save,sender=CashRequest)
 def alert_cash_request(sender,created,instance,**kwargs):
+
     title = "New Cash Request"
     message1 = f"{instance.agent1.username} is requesting cash worth of {instance.amount} from you."
     message2 = f"{instance.agent1.username} is requesting cash worth of {instance.amount} from  {instance.agent2.username}."
@@ -246,32 +238,6 @@ def alert_private_message(sender, created, instance, **kwargs):
                                          notification_message=message, transaction_type=transaction_type,
                                          user2=instance.sender)
 
-
-# customer points
-# @receiver(post_save, sender=AddToCustomerRequestToRedeemPoints)
-# def alert_points_created(sender, created, instance, **kwargs):
-#     title = f"Points Updated"
-#     message = f"hi {instance.customer_name} your points was updated"
-#     transaction_type = "Points Updated"
-#
-#     if created:
-#         Notifications.objects.create(item_id=instance.id, transaction_type=transaction_type,
-#                                      notification_title=title, notification_message=message,
-#                                      notification_to_customer=instance.customer
-#                                      )
-
-
-@receiver(post_save, sender=AddToCustomerRedeemPoints)
-def alert_points_redeemed(sender, created, instance, **kwargs):
-    title = f"Points Redeemed"
-    message = f"{instance.customer.name} wants to redeem his points for {instance.redeem_option}"
-    transaction_type = "Points Redeemed"
-
-    if created:
-        Notifications.objects.create(item_id=instance.id, transaction_type=transaction_type,
-                                     notification_title=title, notification_message=message,
-                                     user2=instance.administrator
-                                     )
 
 
 @receiver(post_save, sender=ReferCustomer)

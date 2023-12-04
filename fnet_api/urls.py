@@ -374,16 +374,13 @@ urlpatterns = [
     path("admin_delete_bank_payment/<int:id>/", views.admin_delete_bank_payment),
     path("admin_update_bank_payment_paid/<int:id>/", views.admin_update_bank_payment_paid),
 
-
-#   customer points
-    path("get_all_customers_redeeming_requests/", views.get_all_customers_redeeming_requests),
-    path("get_customer_redeemed_points/<str:customer_phone>/", views.get_customer_redeemed_points),
-    path("get_all_redeemed_points/", views.get_all_redeemed_points),
-    path("customer_request_to_redeem_points/", views.customer_request_to_redeem_points),
-    path("update_customer_request_to_redeem_points/<int:pk>/", views.update_customer_request_to_redeem_points),
-
 #     new customer points,
     path("add_customer_points/",views.add_customer_points),
     path("get_all_customer_points/<str:phone>/",views.get_all_customer_active_points),
     path("update_customer_active_points/<str:phone>/",views.update_customer_active_points),
+
+#     customer request to redeem points
+    path("request_to_points/",views.request_to_points),
+    path("get_all_customer_request_to_redeem_points/",views.get_all_customer_request_to_redeem_points),
+    path("update_customer_request_to_redeem_points/<str:phone>/",views.update_customer_request_to_redeem_points),
 ]

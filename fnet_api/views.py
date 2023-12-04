@@ -8,19 +8,18 @@ from .serializers import (CustomerSerializer, BankDepositSerializer, ExpenseRequ
                           UserMobileMoneyAccountsClosedSerializer, UserMobileMoneyAccountsStartedSerializer,
                           MobileMoneyWithdrawalSerializer, PaymentAtBankSerializer, OTPSerializer,
                           CustomerPaymentAtBankSerializer, AddedToApprovedPaymentSerializer,
-                          AddedToApprovedBankDepositsSerializer, PrivateChatIdSerializer, AddToCustomerRequestToRedeemPointsSerializer,
+                          AddedToApprovedBankDepositsSerializer, PrivateChatIdSerializer,
                           CashRequestSerializer, CashPaymentsSerializer, AddedToApprovedCashPaymentSerializer,
-                          AddToCustomerRedeemPointsSerializer, ReferCustomerSerializer, AdminCustomerSerializer, CommercialsSerializer, CustomerPointsSerializer,
+                          AddToCustomerRedeemPointsSerializer, ReferCustomerSerializer, AdminCustomerSerializer, CommercialsSerializer, CustomerPointsSerializer,CustomerRedeemPointsRequestSerializer,
                           AddToBlockListSerializer, AgentAndOwnerAccountsSerializer)
 
-from .models import (Customer, BankDeposit, ExpensesRequest, MobileMoneyDeposit, CustomerWithdrawal, MyPayments, AccountNumberWithPoints, AgentAndOwnerAccounts,
+from .models import (Customer, BankDeposit, ExpensesRequest, MobileMoneyDeposit, CustomerWithdrawal, MyPayments, AccountNumberWithPoints, AgentAndOwnerAccounts,CustomerRedeemPointsRequest,
                      AdminAccountsStartedWith, AdminAccountsCompletedWith, CustomerAccounts, CashAtPayments, AuthenticateAgentPhone, Commercials,
                      CustomerRequestDeposit, UserMobileMoneyAccountsStarted, OTP, FnetGroupMessage,
                      FnetPrivateUserMessage, WithdrawalReference,
                      UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, Notifications, PaymentAtBank,
                      CustomerPaymentAtBank, AddedToApprovedPayment, AddedToApprovedDeposits, Reports, PrivateChatId,
-                     CashRequest, MyCashPayments, AddedToApprovedCashPayment,
-                     AddToCustomerRequestToRedeemPoints, AddToCustomerRedeemPoints, ReferCustomer, AddToBlockList, CustomerPoints
+                     CashRequest, MyCashPayments, AddedToApprovedCashPayment, AddToCustomerRedeemPoints, ReferCustomer, AddToBlockList, CustomerPoints
                      )
 from drf_multiple_model.views import ObjectMultipleModelAPIView
 from django.http import Http404
@@ -35,6 +34,35 @@ from datetime import datetime, date, time
 from fnet_api import serializers
 from django.utils import timezone
 
+
+# customer request to redeem points
+
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+def request_to_points(request):
+    serializer = CustomerRedeemPointsRequestSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_all_customer_request_to_redeem_points(request,phone):
+    points = CustomerRedeemPointsRequest.objects.filter(redeemed=False).order_by('-date_requested')
+    serializer = CustomerRedeemPointsRequestSerializer(points, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET','PUT'])
+@permission_classes([permissions.AllowAny])
+def update_customer_request_to_redeem_points(request,phone):
+    customer_points = CustomerRedeemPointsRequest.objects.filter(phone=phone)
+    serializer = CustomerRedeemPointsRequestSerializer(customer_points,data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+# customer request to redeem points
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])
 def add_customer_points(request):
@@ -1879,62 +1907,6 @@ def private_message_detail(request, user1, user2):
         message.save()
     serializer = FnetPrivateUserMessageSerializer(message, many=False)
     return Response(serializer.data)
-
-
-# customer points
-@api_view(['POST'])
-@permission_classes([permissions.IsAuthenticated])
-def add_to_customer_points(request):
-    serializer = AddToCustomerRequestToRedeemPointsSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-@api_view(['POST'])
-@permission_classes([permissions.AllowAny])
-def customer_request_to_redeem_points(request):
-    serializer = AddToCustomerRequestToRedeemPointsSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-@api_view(['GET','PUT'])
-@permission_classes([permissions.AllowAny])
-def update_customer_request_to_redeem_points(request,pk):
-    customer_points = get_object_or_404(AddToCustomerRequestToRedeemPoints,pk=pk)
-    serializer = AddToCustomerRequestToRedeemPointsSerializer(customer_points,data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-@api_view(['GET'])
-@permission_classes([permissions.AllowAny])
-def get_customer_redeemed_points(request, customer_phone):
-    redeemedPoints = AddToCustomerRequestToRedeemPoints.objects.filter(customer_phone=customer_phone).filter(redeemed=True).order_by('-date_created')
-    serializer = AddToCustomerRequestToRedeemPointsSerializer(redeemedPoints, many=True)
-    return Response(serializer.data)
-
-
-@api_view(['GET'])
-@permission_classes([permissions.AllowAny])
-def get_all_redeemed_points(request):
-    redeemedPoints = AddToCustomerRequestToRedeemPoints.objects.filter(redeemed=True).order_by('-date_created')
-    serializer = AddToCustomerRequestToRedeemPointsSerializer(redeemedPoints, many=True)
-    return Response(serializer.data)
-
-
-@api_view(['GET'])
-@permission_classes([permissions.AllowAny])
-def get_all_customers_redeeming_requests(request):
-    points = AddToCustomerRequestToRedeemPoints.objects.filter(redeemed=False).order_by('-date_created')
-    serializer = AddToCustomerRequestToRedeemPointsSerializer(points, many=True)
-    return Response(serializer.data)
-
 
 # customer referral
 @api_view(['POST'])

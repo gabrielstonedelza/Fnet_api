@@ -5,9 +5,13 @@ from .models import (Customer, CustomerWithdrawal, MyPayments, AdminAccountsStar
                      MobileMoneyDeposit, BankDeposit, UserMobileMoneyAccountsStarted,
                      UserMobileMoneyAccountsClosed, MobileMoneyWithdraw, Notifications, PaymentAtBank, OTP, AccountNumberWithPoints,
                      CustomerPaymentAtBank, AddedToApprovedDeposits, AddedToApprovedPayment, Reports,
-                     FnetPrivateUserMessage, FnetGroupMessage, PrivateChatId, AddToCustomerRequestToRedeemPoints, AddedToApprovedCashPayment, AuthenticateAgentPhone, AgentAndOwnerAccounts, Commercials, CustomerPoints,
+                     FnetPrivateUserMessage, FnetGroupMessage, PrivateChatId, AddedToApprovedCashPayment, AuthenticateAgentPhone, AgentAndOwnerAccounts, Commercials, CustomerPoints,CustomerRedeemPointsRequest,
                      AddToCustomerRedeemPoints, ReferCustomer, AddToBlockList)
 
+class CustomerRedeemPointsRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomerRedeemPointsRequest
+        fields = ['id','phone','name','points','date_requested']
 
 class CustomerPointsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -370,12 +374,6 @@ class PrivateChatIdSerializer(serializers.ModelSerializer):
     class Meta:
         model = PrivateChatId
         fields = ['id', 'chat_id', 'date_created']
-
-
-class AddToCustomerRequestToRedeemPointsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = AddToCustomerRequestToRedeemPoints
-        fields = ['id', 'customer_phone','customer_name', 'points','redeemed', 'date_created']
 
 
 class AddToCustomerRedeemPointsSerializer(serializers.ModelSerializer):
