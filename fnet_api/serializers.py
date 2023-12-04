@@ -11,7 +11,7 @@ from .models import (Customer, CustomerWithdrawal, MyPayments, AdminAccountsStar
 class CustomerRedeemPointsRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomerRedeemPointsRequest
-        fields = ['id','phone','name','points','date_requested']
+        fields = ['id','phone','name','points','redeemed','date_requested']
 
 class CustomerPointsSerializer(serializers.ModelSerializer):
     class Meta:
