@@ -16,7 +16,7 @@ def alert_redeem_points_request(sender,created,instance,**kwargs):
     message1 = f"{instance.phone} is requesting requesting to redeem his points"
     transaction_type = "Redeem Request"
     if created:
-        Notifications.objects.create(user=instance.agent1, transaction_type=transaction_type,
+        Notifications.objects.create(user=admin_user, transaction_type=transaction_type,
                                      item_id=instance.id,
                                      notification_title=title, notification_message=message1,
                                      user2=admin_user,
