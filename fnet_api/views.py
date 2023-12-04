@@ -48,7 +48,7 @@ def request_to_points(request):
 
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
-def get_all_customer_request_to_redeem_points(request,phone):
+def get_all_customer_request_to_redeem_points(request):
     points = CustomerRedeemPointsRequest.objects.filter(redeemed=False).order_by('-date_requested')
     serializer = CustomerRedeemPointsRequestSerializer(points, many=True)
     return Response(serializer.data)
