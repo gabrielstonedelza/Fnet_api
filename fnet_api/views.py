@@ -35,6 +35,14 @@ from fnet_api import serializers
 from django.utils import timezone
 
 
+# get customers total transaction from monthly to yearly
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_customer_transaction_by_date(request,d_customer,d_month,d_year,d_bank):
+    transactions = BankDeposit.objects.filter(customer=d_customer).filter(deposited_month=d_month).filter(deposited_year=d_year,bank=d_bank).order_by('-date_requested')
+    serializer = BankDepositSerializer(transactions, many=True)
+    return Response(serializer.data)
+
 # customer request to redeem points
 
 @api_view(['POST'])
