@@ -39,7 +39,21 @@ from django.utils import timezone
 @api_view(['GET'])
 @permission_classes([permissions.AllowAny])
 def get_customer_transaction_by_date(request,d_customer,d_month,d_year,d_bank):
-    transactions = BankDeposit.objects.filter(customer=d_customer).filter(deposited_month=d_month).filter(deposited_year=d_year,bank=d_bank).filter(request_status="Approved").order_by('-date_requested')
+    transactions = BankDeposit.objects.filter(customer=d_customer).filter(deposited_month=d_month).filter(deposited_year=d_year).filter(bank=d_bank).filter(request_status="Approved").order_by('-date_requested')
+    serializer = BankDepositSerializer(transactions, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_customer_transaction_by_year(request,d_customer,d_year,d_bank):
+    transactions = BankDeposit.objects.filter(customer=d_customer).filter(deposited_year=d_year).filter(bank=d_bank).filter(request_status="Approved").order_by('-date_requested')
+    serializer = BankDepositSerializer(transactions, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_customer_transaction_overall_year(request,d_customer,d_year):
+    transactions = BankDeposit.objects.filter(customer=d_customer).filter(deposited_year=d_year).filter(request_status="Approved").order_by('-date_requested')
     serializer = BankDepositSerializer(transactions, many=True)
     return Response(serializer.data)
 
