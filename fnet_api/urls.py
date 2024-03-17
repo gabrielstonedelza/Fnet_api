@@ -104,7 +104,7 @@ urlpatterns = [
     path("momo_accounts_started_detail/<int:pk>/", views.momo_accounts_started_detail),
 
     path('update_customers_details/<int:id>/', views.update_customers_details),
-    path('update_customers_accounts_details/<int:id>/', views.update_report),
+    path('update_customers_accounts_details/<int:id>/', views.update_customers_accounts_details),
     path('delete_customer_accounts/<int:id>/', views.delete_customer_accounts),
     path("customers_account_detail/<int:pk>/", views.customers_account_detail),
     path('search_customers_accounts/', views.GetAllCustomersAccounts.as_view()),
