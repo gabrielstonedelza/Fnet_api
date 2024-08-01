@@ -211,6 +211,12 @@ class Customer(models.Model):
     status = models.CharField(max_length=100, choices=CUSTOMER_REFERRAL_STATUS, default="User Registration", blank=True)
     date_of_birth = models.CharField(max_length=15, blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
+    customer_pic = models.ImageField(blank=True,default="",upload_to="customerPics")
+
+    def get_customer_pic(self):
+        if self.customer_pic:
+            return "https://fnetghana.xyz" + self.customer_pic.url
+        return ''
 
     def __str__(self):
         return self.name
