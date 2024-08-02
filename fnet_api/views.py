@@ -914,8 +914,7 @@ class GetAllUserCustomers(generics.ListAPIView):
     search_fields = ['name', 'phone']
 
     def get_queryset(self):
-        agent = self.request.user
-        return Customer.objects.filter(agent=agent)
+        return Customer.objects.all().order_by('-date_created')
 
 
 class GetAllCustomers(generics.ListAPIView):
