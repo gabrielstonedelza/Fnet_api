@@ -20,13 +20,13 @@ class SubscriptionPlan(models.Model):
 
     # Limits
     max_users = models.PositiveIntegerField(
-        help_text="Maximum number of users (staff) the company can have."
+        help_text="Maximum number of staff users the company can have."
     )
     max_customers = models.PositiveIntegerField(
         help_text="Maximum number of customers the company can register."
     )
     max_transactions_per_month = models.PositiveIntegerField(
-        help_text="Maximum transactions per month. 0 means unlimited.",
+        help_text="Maximum transactions per month. 0 = unlimited.",
         default=0,
     )
 
@@ -105,7 +105,7 @@ class Company(models.Model):
     )
     is_verified = models.BooleanField(default=False)
 
-    # Owner (the person who registered the company) - set after user creation
+    # Owner
     owner = models.ForeignKey(
         "accounts.User",
         on_delete=models.PROTECT,

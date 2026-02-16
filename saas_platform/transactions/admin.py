@@ -1,11 +1,7 @@
 from django.contrib import admin
 from .models import (
-    Transaction,
-    BankDeposit,
-    MobileMoneyTransaction,
-    CashTransaction,
-    ExpenseRequest,
-    DailyClosing,
+    Transaction, BankDeposit, MobileMoneyTransaction,
+    CashTransaction, ExpenseRequest, DailyClosing,
 )
 
 

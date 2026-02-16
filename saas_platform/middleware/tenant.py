@@ -2,7 +2,7 @@
 Tenant Context Middleware.
 
 Attaches the user's active membership (and thus company) to every request.
-All views can then access `request.membership` to scope queries.
+All views can then access request.membership to scope queries.
 
 The company is resolved from the X-Company-ID header or falls back to the
 user's only active membership.
@@ -18,7 +18,7 @@ class TenantMiddleware:
         request.company = None
 
         if request.user and request.user.is_authenticated:
-            from saas_platform.accounts.models import Membership
+            from accounts.models import Membership
 
             company_id = request.META.get("HTTP_X_COMPANY_ID")
 
@@ -27,16 +27,13 @@ class TenantMiddleware:
                     membership = Membership.objects.select_related(
                         "company", "company__subscription_plan", "branch"
                     ).get(
-                        user=request.user,
-                        company_id=company_id,
-                        is_active=True,
+                        user=request.user, company_id=company_id, is_active=True,
                     )
                     request.membership = membership
                     request.company = membership.company
                 except Membership.DoesNotExist:
                     pass
             else:
-                # Fall back to the user's only active membership
                 memberships = Membership.objects.select_related(
                     "company", "company__subscription_plan", "branch"
                 ).filter(user=request.user, is_active=True)

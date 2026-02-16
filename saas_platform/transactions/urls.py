@@ -4,7 +4,6 @@ from . import views
 app_name = "transactions"
 
 urlpatterns = [
-    # Transactions
     path("", views.transactions, name="transaction-list"),
     path("<uuid:transaction_id>/", views.transaction_detail, name="transaction-detail"),
 

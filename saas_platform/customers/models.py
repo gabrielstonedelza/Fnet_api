@@ -120,9 +120,7 @@ class CustomerAccount(models.Model):
         "core.Company", on_delete=models.CASCADE, related_name="customer_accounts"
     )
 
-    account_type = models.CharField(
-        max_length=20, choices=AccountType.choices
-    )
+    account_type = models.CharField(max_length=20, choices=AccountType.choices)
     account_number = models.CharField(max_length=50)
     account_name = models.CharField(max_length=255)
     bank_or_network = models.CharField(

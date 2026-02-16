@@ -21,40 +21,24 @@ class AuditEntry(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     company = models.ForeignKey(
-        "core.Company",
-        on_delete=models.CASCADE,
-        related_name="audit_entries",
-        null=True,
-        blank=True,
+        "core.Company", on_delete=models.CASCADE,
+        related_name="audit_entries", null=True, blank=True,
     )
     actor = models.ForeignKey(
-        "accounts.User",
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name="audit_entries",
+        "accounts.User", on_delete=models.SET_NULL,
+        null=True, blank=True, related_name="audit_entries",
     )
     action = models.CharField(max_length=20, choices=Action.choices)
 
-    # What was affected
-    resource_type = models.CharField(
-        max_length=50, help_text="Model name, e.g. 'Transaction', 'Customer'"
-    )
+    resource_type = models.CharField(max_length=50, help_text="Model name, e.g. 'Transaction'")
     resource_id = models.CharField(max_length=50, blank=True)
-    resource_repr = models.CharField(
-        max_length=255,
-        blank=True,
-        help_text="Human-readable representation of the resource.",
-    )
+    resource_repr = models.CharField(max_length=255, blank=True)
 
-    # Change details
     changes = models.JSONField(
-        default=dict,
-        blank=True,
+        default=dict, blank=True,
         help_text="JSON of changed fields: {field: {old: x, new: y}}",
     )
 
-    # Context
     ip_address = models.GenericIPAddressField(null=True, blank=True)
     user_agent = models.TextField(blank=True)
     endpoint = models.CharField(max_length=500, blank=True)

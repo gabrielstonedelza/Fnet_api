@@ -5,6 +5,8 @@ Role Hierarchy:
     Owner (4) > Admin (3) > Manager (2) > Teller (1)
 
 Usage in views:
+    from permissions import IsCompanyMember, IsAdminOrAbove
+
     @api_view(["GET"])
     @permission_classes([IsAuthenticated, IsCompanyMember])
     def my_view(request):

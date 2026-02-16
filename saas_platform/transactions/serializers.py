@@ -1,11 +1,7 @@
 from rest_framework import serializers
 from .models import (
-    Transaction,
-    BankDeposit,
-    MobileMoneyTransaction,
-    CashTransaction,
-    ExpenseRequest,
-    DailyClosing,
+    Transaction, BankDeposit, MobileMoneyTransaction,
+    CashTransaction, ExpenseRequest, DailyClosing,
 )
 
 
@@ -53,8 +49,6 @@ class TransactionSerializer(serializers.ModelSerializer):
     branch_name = serializers.CharField(
         source="branch.name", read_only=True, default=None
     )
-
-    # Nested details (populated based on channel)
     bank_deposit_detail = BankDepositDetailSerializer(read_only=True)
     momo_detail = MoMoDetailSerializer(read_only=True)
     cash_detail = CashDetailSerializer(read_only=True)
@@ -83,16 +77,10 @@ class TransactionSerializer(serializers.ModelSerializer):
         ]
 
 
-# ---------------------------------------------------------------------------
-# Creation serializers per channel
-# ---------------------------------------------------------------------------
 class CreateBankDepositSerializer(serializers.Serializer):
-    """Create a bank deposit transaction."""
     customer = serializers.UUIDField(required=False, allow_null=True)
     amount = serializers.DecimalField(max_digits=14, decimal_places=2)
     description = serializers.CharField(required=False, allow_blank=True)
-
-    # Bank-specific
     bank_name = serializers.CharField(max_length=100)
     account_number = serializers.CharField(max_length=50)
     account_name = serializers.CharField(max_length=255)
@@ -101,15 +89,12 @@ class CreateBankDepositSerializer(serializers.Serializer):
 
 
 class CreateMoMoTransactionSerializer(serializers.Serializer):
-    """Create a mobile money transaction (deposit or withdrawal)."""
     customer = serializers.UUIDField(required=False, allow_null=True)
     transaction_type = serializers.ChoiceField(
         choices=[("deposit", "Deposit"), ("withdrawal", "Withdrawal")]
     )
     amount = serializers.DecimalField(max_digits=14, decimal_places=2)
     description = serializers.CharField(required=False, allow_blank=True)
-
-    # MoMo-specific
     network = serializers.ChoiceField(choices=MobileMoneyTransaction.Network.choices)
     service_type = serializers.ChoiceField(
         choices=MobileMoneyTransaction.ServiceType.choices
@@ -120,15 +105,12 @@ class CreateMoMoTransactionSerializer(serializers.Serializer):
 
 
 class CreateCashTransactionSerializer(serializers.Serializer):
-    """Create a cash deposit or withdrawal."""
     customer = serializers.UUIDField(required=False, allow_null=True)
     transaction_type = serializers.ChoiceField(
         choices=[("deposit", "Deposit"), ("withdrawal", "Withdrawal")]
     )
     amount = serializers.DecimalField(max_digits=14, decimal_places=2)
     description = serializers.CharField(required=False, allow_blank=True)
-
-    # Denomination breakdown (optional)
     d_200 = serializers.IntegerField(default=0)
     d_100 = serializers.IntegerField(default=0)
     d_50 = serializers.IntegerField(default=0)
@@ -148,9 +130,6 @@ class ReverseTransactionSerializer(serializers.Serializer):
     reason = serializers.CharField()
 
 
-# ---------------------------------------------------------------------------
-# Expense Request
-# ---------------------------------------------------------------------------
 class ExpenseRequestSerializer(serializers.ModelSerializer):
     requested_by_name = serializers.CharField(
         source="requested_by.full_name", read_only=True
@@ -181,9 +160,6 @@ class ExpenseRequestCreateSerializer(serializers.Serializer):
     receipt_image = serializers.ImageField(required=False)
 
 
-# ---------------------------------------------------------------------------
-# Daily Closing
-# ---------------------------------------------------------------------------
 class DailyClosingSerializer(serializers.ModelSerializer):
     closed_by_name = serializers.CharField(
         source="closed_by.full_name", read_only=True

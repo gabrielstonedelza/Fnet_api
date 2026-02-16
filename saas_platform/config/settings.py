@@ -1,18 +1,20 @@
 """
 Django settings for the SaaS Financial Platform.
 
-This is a standalone settings module for the new SaaS platform.
-It can be used alongside the existing fnet_bank settings or independently.
-
-Usage:
-    DJANGO_SETTINGS_MODULE=saas_platform.config.settings python manage_saas.py runserver
+For local development:
+    1. Copy .env.example to .env
+    2. Fill in your database credentials
+    3. python manage.py migrate
+    4. python manage.py seed_plans
+    5. python manage.py createsuperuser
+    6. python manage.py runserver
 """
 
 import os
 from pathlib import Path
 from decouple import config, Csv
 
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = config("SECRET_KEY", default="change-me-in-production")
 DEBUG = config("DEBUG", default=True, cast=bool)
@@ -35,14 +37,14 @@ INSTALLED_APPS = [
     "corsheaders",
     "django_filters",
 
-    # SaaS Platform apps
-    "saas_platform.core",
-    "saas_platform.accounts",
-    "saas_platform.customers",
-    "saas_platform.transactions",
-    "saas_platform.notifications",
-    "saas_platform.reports",
-    "saas_platform.audit",
+    # Project apps
+    "core",
+    "accounts",
+    "customers",
+    "transactions",
+    "notifications",
+    "reports",
+    "audit",
 ]
 
 MIDDLEWARE = [
@@ -56,11 +58,11 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 
     # Custom middleware
-    "saas_platform.middleware.tenant.TenantMiddleware",
-    "saas_platform.middleware.audit.AuditMiddleware",
+    "middleware.tenant.TenantMiddleware",
+    "middleware.audit.AuditMiddleware",
 ]
 
-ROOT_URLCONF = "saas_platform.config.urls"
+ROOT_URLCONF = "config.urls"
 
 TEMPLATES = [
     {
@@ -78,7 +80,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "saas_platform.config.wsgi.application"
+WSGI_APPLICATION = "config.wsgi.application"
 
 # ---------------------------------------------------------------------------
 # Database
@@ -149,7 +151,7 @@ CORS_ALLOW_HEADERS = [
     "content-type",
     "origin",
     "user-agent",
-    "x-company-id",  # Custom header for tenant selection
+    "x-company-id",
 ]
 
 # ---------------------------------------------------------------------------

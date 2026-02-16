@@ -7,9 +7,6 @@ from .models import Notification, ActivityLog
 from .serializers import NotificationSerializer, ActivityLogSerializer
 
 
-# ---------------------------------------------------------------------------
-# Notifications
-# ---------------------------------------------------------------------------
 @api_view(["GET"])
 def my_notifications(request):
     """Get current user's notifications."""
@@ -17,12 +14,8 @@ def my_notifications(request):
     if not membership:
         return Response(status=status.HTTP_403_FORBIDDEN)
 
-    qs = Notification.objects.filter(
-        company=membership.company,
-        user=request.user,
-    )
+    qs = Notification.objects.filter(company=membership.company, user=request.user)
 
-    # Filter unread only
     unread_only = request.query_params.get("unread")
     if unread_only == "true":
         qs = qs.filter(is_read=False)
@@ -42,11 +35,8 @@ def unread_count(request):
         return Response(status=status.HTTP_403_FORBIDDEN)
 
     count = Notification.objects.filter(
-        company=membership.company,
-        user=request.user,
-        is_read=False,
+        company=membership.company, user=request.user, is_read=False,
     ).count()
-
     return Response({"unread_count": count})
 
 
@@ -59,9 +49,7 @@ def mark_read(request, notification_id):
 
     try:
         notification = Notification.objects.get(
-            id=notification_id,
-            company=membership.company,
-            user=request.user,
+            id=notification_id, company=membership.company, user=request.user,
         )
     except Notification.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
@@ -80,30 +68,19 @@ def mark_all_read(request):
         return Response(status=status.HTTP_403_FORBIDDEN)
 
     Notification.objects.filter(
-        company=membership.company,
-        user=request.user,
-        is_read=False,
+        company=membership.company, user=request.user, is_read=False,
     ).update(is_read=True, read_at=timezone.now())
-
     return Response({"message": "All notifications marked as read."})
 
 
-# ---------------------------------------------------------------------------
-# Activity Log (admin view)
-# ---------------------------------------------------------------------------
 @api_view(["GET"])
 def activity_feed(request):
-    """
-    Get the company activity feed.
-    Only visible to owner, admin, and manager roles.
-    """
+    """Get the company activity feed. Manager+ only."""
     membership = getattr(request, "membership", None)
     if not membership or membership.role not in ("owner", "admin", "manager"):
         return Response(status=status.HTTP_403_FORBIDDEN)
 
-    qs = ActivityLog.objects.filter(
-        company=membership.company
-    ).select_related("actor")
+    qs = ActivityLog.objects.filter(company=membership.company).select_related("actor")
 
     action_type = request.query_params.get("action_type")
     if action_type:

@@ -40,7 +40,7 @@ def register_company(request):
     Register a new company and its owner in one step.
     Creates: Company, Owner User, CompanySettings, default HQ Branch.
     """
-    from saas_platform.accounts.models import User, Membership
+    from accounts.models import User, Membership
 
     serializer = CompanyRegistrationSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)

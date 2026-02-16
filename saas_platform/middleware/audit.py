@@ -1,8 +1,8 @@
 """
 Audit Middleware.
 
-Automatically logs write operations (POST, PUT, PATCH, DELETE) to the audit trail.
-This captures the request context (IP, user agent, endpoint) for every mutating request.
+Stores the current request in thread-local storage so that audit utilities
+can access it from anywhere (views, signals, etc.).
 """
 
 import threading

@@ -8,10 +8,7 @@ from .serializers import AuditEntrySerializer
 
 @api_view(["GET"])
 def audit_log(request):
-    """
-    View the company audit trail. Owner/Admin only.
-    Requires the has_audit_trail feature on the subscription plan.
-    """
+    """View the company audit trail. Owner/Admin only."""
     membership = getattr(request, "membership", None)
     if not membership or membership.role not in ("owner", "admin"):
         return Response(status=status.HTTP_403_FORBIDDEN)
@@ -22,11 +19,8 @@ def audit_log(request):
             status=status.HTTP_403_FORBIDDEN,
         )
 
-    qs = AuditEntry.objects.filter(
-        company=membership.company
-    ).select_related("actor")
+    qs = AuditEntry.objects.filter(company=membership.company).select_related("actor")
 
-    # Filters
     action = request.query_params.get("action")
     if action:
         qs = qs.filter(action=action)
@@ -62,9 +56,7 @@ def audit_entry_detail(request, entry_id):
         return Response(status=status.HTTP_403_FORBIDDEN)
 
     try:
-        entry = AuditEntry.objects.get(
-            id=entry_id, company=membership.company
-        )
+        entry = AuditEntry.objects.get(id=entry_id, company=membership.company)
     except AuditEntry.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 

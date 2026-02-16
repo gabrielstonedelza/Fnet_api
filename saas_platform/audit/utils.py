@@ -1,24 +1,15 @@
-"""
-Utility functions for creating audit entries from anywhere in the codebase.
-"""
+"""Utility functions for creating audit entries from anywhere."""
 
 from .models import AuditEntry
-from saas_platform.middleware.audit import get_current_request
+from middleware.audit import get_current_request
 
 
 def log_audit(
-    action,
-    resource_type,
-    resource_id="",
-    resource_repr="",
-    changes=None,
-    company=None,
-    actor=None,
+    action, resource_type, resource_id="", resource_repr="",
+    changes=None, company=None, actor=None,
 ):
     """
     Create an audit entry.
-
-    Can be called from views, signals, or anywhere else.
     Automatically picks up IP/user-agent from the current request if available.
     """
     request = get_current_request()
@@ -38,14 +29,8 @@ def log_audit(
         endpoint = f"{request.method} {request.path}"
 
     AuditEntry.objects.create(
-        company=company,
-        actor=actor,
-        action=action,
-        resource_type=resource_type,
-        resource_id=str(resource_id),
-        resource_repr=resource_repr,
-        changes=changes or {},
-        ip_address=ip,
-        user_agent=user_agent,
-        endpoint=endpoint,
+        company=company, actor=actor, action=action,
+        resource_type=resource_type, resource_id=str(resource_id),
+        resource_repr=resource_repr, changes=changes or {},
+        ip_address=ip, user_agent=user_agent, endpoint=endpoint,
     )

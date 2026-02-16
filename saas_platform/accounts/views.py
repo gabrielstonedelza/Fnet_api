@@ -57,7 +57,6 @@ def login(request):
 
     company_id = data.get("company_id")
     if active_memberships.count() > 1 and not company_id:
-        # Return list of companies for user to choose
         companies = [
             {
                 "company_id": str(m.company_id),
@@ -148,7 +147,6 @@ def change_password(request):
         )
     request.user.set_password(serializer.validated_data["new_password"])
     request.user.save()
-    # Regenerate token
     Token.objects.filter(user=request.user).delete()
     token = Token.objects.create(user=request.user)
     return Response({"message": "Password changed.", "token": token.key})
@@ -181,7 +179,6 @@ def team_members(request):
         company=membership.company
     ).select_related("user", "branch")
 
-    # Tellers can only see active members
     if membership.role == "teller":
         members = members.filter(is_active=True)
 
@@ -196,9 +193,7 @@ def team_member_detail(request, member_id):
         return Response(status=status.HTTP_403_FORBIDDEN)
 
     try:
-        target = Membership.objects.get(
-            id=member_id, company=membership.company
-        )
+        target = Membership.objects.get(id=member_id, company=membership.company)
     except Membership.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -216,20 +211,16 @@ def update_team_member(request, member_id):
         )
 
     try:
-        target = Membership.objects.get(
-            id=member_id, company=membership.company
-        )
+        target = Membership.objects.get(id=member_id, company=membership.company)
     except Membership.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    # Cannot modify someone with higher role
     if target.role_level >= membership.role_level and target.user != request.user:
         return Response(
             {"error": "Cannot modify a member with equal or higher role."},
             status=status.HTTP_403_FORBIDDEN,
         )
 
-    # Cannot promote above your own role
     new_role = request.data.get("role")
     if new_role:
         new_level = Membership.ROLE_HIERARCHY.get(new_role, 0)
@@ -241,13 +232,11 @@ def update_team_member(request, member_id):
         target.role = new_role
 
     if "branch" in request.data:
-        from saas_platform.core.models import Branch
+        from core.models import Branch
         branch_id = request.data["branch"]
         if branch_id:
             try:
-                branch = Branch.objects.get(
-                    id=branch_id, company=membership.company
-                )
+                branch = Branch.objects.get(id=branch_id, company=membership.company)
                 target.branch = branch
             except Branch.DoesNotExist:
                 return Response(
@@ -274,9 +263,7 @@ def deactivate_team_member(request, member_id):
         return Response(status=status.HTTP_403_FORBIDDEN)
 
     try:
-        target = Membership.objects.get(
-            id=member_id, company=membership.company
-        )
+        target = Membership.objects.get(id=member_id, company=membership.company)
     except Membership.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -312,7 +299,6 @@ def invitations(request):
         qs = Invitation.objects.filter(company=membership.company)
         return Response(InvitationSerializer(qs, many=True).data)
 
-    # POST
     serializer = InvitationCreateSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
     data = serializer.validated_data
@@ -331,7 +317,6 @@ def invitations(request):
             status=status.HTTP_403_FORBIDDEN,
         )
 
-    # Cannot invite role equal to or above own
     invited_role_level = Membership.ROLE_HIERARCHY.get(data["role"], 0)
     if invited_role_level >= membership.role_level:
         return Response(
@@ -339,7 +324,6 @@ def invitations(request):
             status=status.HTTP_403_FORBIDDEN,
         )
 
-    # Check if already a member
     if Membership.objects.filter(
         company=membership.company, user__email=data["email"], is_active=True
     ).exists():
@@ -348,11 +332,10 @@ def invitations(request):
             status=status.HTTP_400_BAD_REQUEST,
         )
 
-    # Resolve branch
     branch = None
     branch_id = data.get("branch")
     if branch_id:
-        from saas_platform.core.models import Branch
+        from core.models import Branch
         try:
             branch = Branch.objects.get(id=branch_id, company=membership.company)
         except Branch.DoesNotExist:
@@ -419,7 +402,6 @@ def accept_invitation(request):
             status=status.HTTP_400_BAD_REQUEST,
         )
 
-    # Create or get user
     user, created = User.objects.get_or_create(
         email=invitation.email,
         defaults={
@@ -431,7 +413,6 @@ def accept_invitation(request):
         user.set_password(data["password"])
         user.save()
 
-    # Create membership
     Membership.objects.create(
         user=user,
         company=invitation.company,
@@ -440,12 +421,10 @@ def accept_invitation(request):
         is_active=True,
     )
 
-    # Mark invitation as accepted
     invitation.status = "accepted"
     invitation.accepted_at = timezone.now()
     invitation.save(update_fields=["status", "accepted_at"])
 
-    # Generate token
     token, _ = Token.objects.get_or_create(user=user)
 
     return Response({

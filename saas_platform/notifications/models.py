@@ -18,20 +18,14 @@ class Notification(models.Model):
         "core.Company", on_delete=models.CASCADE, related_name="notifications"
     )
     user = models.ForeignKey(
-        "accounts.User",
-        on_delete=models.CASCADE,
-        related_name="notifications",
+        "accounts.User", on_delete=models.CASCADE, related_name="notifications",
     )
-
     category = models.CharField(max_length=20, choices=Category.choices)
     title = models.CharField(max_length=255)
     message = models.TextField()
     is_read = models.BooleanField(default=False)
     read_at = models.DateTimeField(null=True, blank=True)
-
-    # Optional link to related object
     related_object_id = models.CharField(max_length=50, blank=True)
-
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -46,10 +40,7 @@ class Notification(models.Model):
 
 
 class ActivityLog(models.Model):
-    """
-    Company-wide activity feed visible to admins.
-    Records all significant actions for the admin dashboard.
-    """
+    """Company-wide activity feed visible to admins."""
 
     class ActionType(models.TextChoices):
         CUSTOMER_CREATED = "customer_created", "Customer Created"
@@ -72,16 +63,13 @@ class ActivityLog(models.Model):
         "core.Company", on_delete=models.CASCADE, related_name="activity_logs"
     )
     actor = models.ForeignKey(
-        "accounts.User",
-        on_delete=models.SET_NULL,
-        null=True,
+        "accounts.User", on_delete=models.SET_NULL, null=True,
         related_name="activity_logs",
     )
     action_type = models.CharField(max_length=30, choices=ActionType.choices)
     description = models.TextField()
     metadata = models.JSONField(default=dict, blank=True)
     ip_address = models.GenericIPAddressField(null=True, blank=True)
-
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

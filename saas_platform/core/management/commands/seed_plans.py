@@ -2,11 +2,11 @@
 Management command to create default subscription plans.
 
 Usage:
-    python manage_saas.py seed_plans
+    python manage.py seed_plans
 """
 
 from django.core.management.base import BaseCommand
-from saas_platform.core.models import SubscriptionPlan
+from core.models import SubscriptionPlan
 
 
 PLANS = [
@@ -48,7 +48,7 @@ PLANS = [
         "description": "For growing businesses that need advanced features and multiple branches.",
         "max_users": 25,
         "max_customers": 5000,
-        "max_transactions_per_month": 0,  # unlimited
+        "max_transactions_per_month": 0,
         "has_reports": True,
         "has_audit_trail": True,
         "has_api_access": True,
@@ -64,7 +64,7 @@ PLANS = [
         "description": "For large organizations with custom requirements and unlimited scale.",
         "max_users": 100,
         "max_customers": 50000,
-        "max_transactions_per_month": 0,  # unlimited
+        "max_transactions_per_month": 0,
         "has_reports": True,
         "has_audit_trail": True,
         "has_api_access": True,

@@ -31,22 +31,18 @@ def customers(request):
             "registered_by", "branch"
         )
 
-        # Filter by status
         status_filter = request.query_params.get("status")
         if status_filter:
             qs = qs.filter(status=status_filter)
 
-        # Filter by branch
         branch_filter = request.query_params.get("branch")
         if branch_filter:
             qs = qs.filter(branch_id=branch_filter)
 
-        # Filter by KYC status
         kyc_filter = request.query_params.get("kyc_status")
         if kyc_filter:
             qs = qs.filter(kyc_status=kyc_filter)
 
-        # Search by name or phone
         search = request.query_params.get("search")
         if search:
             qs = qs.filter(
@@ -57,7 +53,6 @@ def customers(request):
         return Response(CustomerSerializer(qs, many=True).data)
 
     # POST - register new customer
-    # Check customer limit
     plan = company.subscription_plan
     current_count = Customer.objects.filter(company=company).count()
     if plan.max_customers and current_count >= plan.max_customers:
@@ -69,7 +64,6 @@ def customers(request):
     serializer = CustomerCreateSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
 
-    # Check phone uniqueness within company
     if Customer.objects.filter(
         company=company, phone=serializer.validated_data["phone"]
     ).exists():
@@ -119,7 +113,6 @@ def customer_detail(request, customer_id):
                 {"error": "Only owners and admins can delete customers."},
                 status=status.HTTP_403_FORBIDDEN,
             )
-        # Soft delete by setting status to inactive
         customer.status = Customer.Status.INACTIVE
         customer.save(update_fields=["status"])
         return Response({"message": "Customer deactivated."})

@@ -6,12 +6,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from .models import (
-    Transaction,
-    BankDeposit,
-    MobileMoneyTransaction,
-    CashTransaction,
-    ExpenseRequest,
-    DailyClosing,
+    Transaction, BankDeposit, MobileMoneyTransaction,
+    CashTransaction, ExpenseRequest, DailyClosing,
 )
 from .serializers import (
     TransactionSerializer,
@@ -27,11 +23,9 @@ from .serializers import (
 
 
 def _calculate_fee(company, transaction_type, amount):
-    """Calculate fee based on company settings."""
     settings = getattr(company, "settings", None)
     if not settings:
         return Decimal("0")
-
     if transaction_type == "deposit":
         return (settings.deposit_fee_percentage / 100) * amount
     elif transaction_type == "withdrawal":
@@ -42,7 +36,6 @@ def _calculate_fee(company, transaction_type, amount):
 
 
 def _needs_approval(company, amount):
-    """Check if transaction requires approval based on company settings."""
     settings = getattr(company, "settings", None)
     if not settings:
         return False
@@ -54,10 +47,7 @@ def _needs_approval(company, amount):
 # ---------------------------------------------------------------------------
 @api_view(["GET"])
 def transactions(request):
-    """
-    List transactions for the current company.
-    Supports filtering by status, type, channel, customer, date range.
-    """
+    """List transactions. Supports filtering by status, type, channel, customer, date range."""
     membership = getattr(request, "membership", None)
     if not membership:
         return Response(status=status.HTTP_403_FORBIDDEN)
@@ -69,11 +59,9 @@ def transactions(request):
         "bank_deposit_detail", "momo_detail", "cash_detail",
     )
 
-    # Tellers only see their own transactions
     if membership.role == "teller":
         qs = qs.filter(initiated_by=request.user)
 
-    # Filters
     tx_status = request.query_params.get("status")
     if tx_status:
         qs = qs.filter(status=tx_status)
@@ -102,13 +90,9 @@ def transactions(request):
     if date_to:
         qs = qs.filter(created_at__date__lte=date_to)
 
-    # Search by reference
     search = request.query_params.get("search")
     if search:
-        qs = qs.filter(
-            Q(reference__icontains=search)
-            | Q(description__icontains=search)
-        )
+        qs = qs.filter(Q(reference__icontains=search) | Q(description__icontains=search))
 
     return Response(TransactionSerializer(qs[:200], many=True).data)
 
@@ -128,7 +112,6 @@ def transaction_detail(request, transaction_id):
     except Transaction.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    # Tellers can only view their own
     if membership.role == "teller" and tx.initiated_by != request.user:
         return Response(status=status.HTTP_403_FORBIDDEN)
 
@@ -155,33 +138,22 @@ def create_bank_deposit(request):
     requires_approval = _needs_approval(company, amount)
 
     tx = Transaction.objects.create(
-        company=company,
-        branch=membership.branch,
-        customer_id=data.get("customer"),
-        initiated_by=request.user,
+        company=company, branch=membership.branch,
+        customer_id=data.get("customer"), initiated_by=request.user,
         transaction_type=Transaction.Type.DEPOSIT,
         channel=Transaction.Channel.BANK,
         status=Transaction.Status.PENDING if requires_approval else Transaction.Status.COMPLETED,
-        amount=amount,
-        fee=fee,
-        net_amount=amount - fee,
+        amount=amount, fee=fee, net_amount=amount - fee,
         description=data.get("description", ""),
         requires_approval=requires_approval,
     )
-
     BankDeposit.objects.create(
-        transaction=tx,
-        bank_name=data["bank_name"],
-        account_number=data["account_number"],
-        account_name=data["account_name"],
+        transaction=tx, bank_name=data["bank_name"],
+        account_number=data["account_number"], account_name=data["account_name"],
         depositor_name=data["depositor_name"],
         slip_number=data.get("slip_number", ""),
     )
-
-    return Response(
-        TransactionSerializer(tx).data,
-        status=status.HTTP_201_CREATED,
-    )
+    return Response(TransactionSerializer(tx).data, status=status.HTTP_201_CREATED)
 
 
 @api_view(["POST"])
@@ -208,33 +180,22 @@ def create_momo_transaction(request):
     requires_approval = _needs_approval(company, amount)
 
     tx = Transaction.objects.create(
-        company=company,
-        branch=membership.branch,
-        customer_id=data.get("customer"),
-        initiated_by=request.user,
-        transaction_type=tx_type,
-        channel=Transaction.Channel.MOBILE_MONEY,
+        company=company, branch=membership.branch,
+        customer_id=data.get("customer"), initiated_by=request.user,
+        transaction_type=tx_type, channel=Transaction.Channel.MOBILE_MONEY,
         status=Transaction.Status.PENDING if requires_approval else Transaction.Status.COMPLETED,
-        amount=amount,
-        fee=fee,
-        net_amount=amount - fee,
+        amount=amount, fee=fee, net_amount=amount - fee,
         description=data.get("description", ""),
         requires_approval=requires_approval,
     )
-
     MobileMoneyTransaction.objects.create(
-        transaction=tx,
-        network=data["network"],
+        transaction=tx, network=data["network"],
         service_type=data["service_type"],
         sender_number=data["sender_number"],
         receiver_number=data.get("receiver_number", ""),
         momo_reference=data.get("momo_reference", ""),
     )
-
-    return Response(
-        TransactionSerializer(tx).data,
-        status=status.HTTP_201_CREATED,
-    )
+    return Response(TransactionSerializer(tx).data, status=status.HTTP_201_CREATED)
 
 
 @api_view(["POST"])
@@ -255,36 +216,22 @@ def create_cash_transaction(request):
     requires_approval = _needs_approval(company, amount)
 
     tx = Transaction.objects.create(
-        company=company,
-        branch=membership.branch,
-        customer_id=data.get("customer"),
-        initiated_by=request.user,
-        transaction_type=tx_type,
-        channel=Transaction.Channel.CASH,
+        company=company, branch=membership.branch,
+        customer_id=data.get("customer"), initiated_by=request.user,
+        transaction_type=tx_type, channel=Transaction.Channel.CASH,
         status=Transaction.Status.PENDING if requires_approval else Transaction.Status.COMPLETED,
-        amount=amount,
-        fee=fee,
-        net_amount=amount - fee,
+        amount=amount, fee=fee, net_amount=amount - fee,
         description=data.get("description", ""),
         requires_approval=requires_approval,
     )
-
     CashTransaction.objects.create(
         transaction=tx,
-        d_200=data.get("d_200", 0),
-        d_100=data.get("d_100", 0),
-        d_50=data.get("d_50", 0),
-        d_20=data.get("d_20", 0),
-        d_10=data.get("d_10", 0),
-        d_5=data.get("d_5", 0),
-        d_2=data.get("d_2", 0),
-        d_1=data.get("d_1", 0),
+        d_200=data.get("d_200", 0), d_100=data.get("d_100", 0),
+        d_50=data.get("d_50", 0), d_20=data.get("d_20", 0),
+        d_10=data.get("d_10", 0), d_5=data.get("d_5", 0),
+        d_2=data.get("d_2", 0), d_1=data.get("d_1", 0),
     )
-
-    return Response(
-        TransactionSerializer(tx).data,
-        status=status.HTTP_201_CREATED,
-    )
+    return Response(TransactionSerializer(tx).data, status=status.HTTP_201_CREATED)
 
 
 # ---------------------------------------------------------------------------
@@ -298,14 +245,12 @@ def pending_approvals(request):
         return Response(status=status.HTTP_403_FORBIDDEN)
 
     qs = Transaction.objects.filter(
-        company=membership.company,
-        requires_approval=True,
+        company=membership.company, requires_approval=True,
         status=Transaction.Status.PENDING,
     ).select_related(
         "initiated_by", "customer", "branch",
         "bank_deposit_detail", "momo_detail", "cash_detail",
     )
-
     return Response(TransactionSerializer(qs, many=True).data)
 
 
@@ -318,14 +263,12 @@ def approve_transaction(request, transaction_id):
 
     try:
         tx = Transaction.objects.get(
-            id=transaction_id,
-            company=membership.company,
+            id=transaction_id, company=membership.company,
             status=Transaction.Status.PENDING,
         )
     except Transaction.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    # Cannot approve own transaction
     if tx.initiated_by == request.user:
         return Response(
             {"error": "Cannot approve your own transaction."},
@@ -338,14 +281,12 @@ def approve_transaction(request, transaction_id):
 
     if action == "approve":
         tx.status = Transaction.Status.COMPLETED
-        tx.approved_by = request.user
-        tx.approved_at = timezone.now()
     else:
         tx.status = Transaction.Status.REJECTED
-        tx.approved_by = request.user
-        tx.approved_at = timezone.now()
         tx.rejection_reason = serializer.validated_data.get("rejection_reason", "")
 
+    tx.approved_by = request.user
+    tx.approved_at = timezone.now()
     tx.save()
     return Response(TransactionSerializer(tx).data)
 
@@ -362,8 +303,7 @@ def reverse_transaction(request, transaction_id):
 
     try:
         tx = Transaction.objects.get(
-            id=transaction_id,
-            company=membership.company,
+            id=transaction_id, company=membership.company,
             status=Transaction.Status.COMPLETED,
         )
     except Transaction.DoesNotExist:
@@ -372,26 +312,17 @@ def reverse_transaction(request, transaction_id):
     serializer = ReverseTransactionSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
 
-    # Create reversal transaction
     reversal = Transaction.objects.create(
-        company=tx.company,
-        branch=tx.branch,
-        customer=tx.customer,
+        company=tx.company, branch=tx.branch, customer=tx.customer,
         initiated_by=request.user,
         transaction_type=Transaction.Type.REVERSAL,
-        channel=tx.channel,
-        status=Transaction.Status.COMPLETED,
-        amount=tx.amount,
-        fee=Decimal("0"),
-        net_amount=tx.amount,
+        channel=tx.channel, status=Transaction.Status.COMPLETED,
+        amount=tx.amount, fee=Decimal("0"), net_amount=tx.amount,
         description=f"Reversal of {tx.reference}: {serializer.validated_data['reason']}",
         reversed_transaction=tx,
     )
-
-    # Mark original as reversed
     tx.status = Transaction.Status.REVERSED
     tx.save(update_fields=["status"])
-
     return Response(TransactionSerializer(reversal).data, status=status.HTTP_201_CREATED)
 
 
@@ -414,16 +345,12 @@ def expense_requests(request):
     serializer = ExpenseRequestCreateSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
     expense = ExpenseRequest.objects.create(
-        company=membership.company,
-        requested_by=request.user,
+        company=membership.company, requested_by=request.user,
         amount=serializer.validated_data["amount"],
         reason=serializer.validated_data["reason"],
         receipt_image=serializer.validated_data.get("receipt_image"),
     )
-    return Response(
-        ExpenseRequestSerializer(expense).data,
-        status=status.HTTP_201_CREATED,
-    )
+    return Response(ExpenseRequestSerializer(expense).data, status=status.HTTP_201_CREATED)
 
 
 @api_view(["POST"])
@@ -435,8 +362,7 @@ def approve_expense(request, expense_id):
 
     try:
         expense = ExpenseRequest.objects.get(
-            id=expense_id,
-            company=membership.company,
+            id=expense_id, company=membership.company,
             status=ExpenseRequest.Status.PENDING,
         )
     except ExpenseRequest.DoesNotExist:
@@ -445,19 +371,16 @@ def approve_expense(request, expense_id):
     action = request.data.get("action")
     if action == "approve":
         expense.status = ExpenseRequest.Status.APPROVED
-        expense.approved_by = request.user
-        expense.approved_at = timezone.now()
     elif action == "reject":
         expense.status = ExpenseRequest.Status.REJECTED
-        expense.approved_by = request.user
-        expense.approved_at = timezone.now()
         expense.rejection_reason = request.data.get("rejection_reason", "")
     else:
         return Response(
             {"error": "Action must be 'approve' or 'reject'."},
             status=status.HTTP_400_BAD_REQUEST,
         )
-
+    expense.approved_by = request.user
+    expense.approved_at = timezone.now()
     expense.save()
     return Response(ExpenseRequestSerializer(expense).data)
 
@@ -476,18 +399,15 @@ def daily_closings(request):
         qs = DailyClosing.objects.filter(company=membership.company)
         if membership.role == "teller":
             qs = qs.filter(closed_by=request.user)
-
         date_filter = request.query_params.get("date")
         if date_filter:
             qs = qs.filter(date=date_filter)
-
         return Response(DailyClosingSerializer(qs, many=True).data)
 
     serializer = DailyClosingSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
     serializer.save(
-        company=membership.company,
-        closed_by=request.user,
+        company=membership.company, closed_by=request.user,
         branch=membership.branch,
     )
     return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -501,16 +421,13 @@ def daily_closing_detail(request, closing_id):
         return Response(status=status.HTTP_403_FORBIDDEN)
 
     try:
-        closing = DailyClosing.objects.get(
-            id=closing_id, company=membership.company
-        )
+        closing = DailyClosing.objects.get(id=closing_id, company=membership.company)
     except DailyClosing.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == "GET":
         return Response(DailyClosingSerializer(closing).data)
 
-    # Only the creator or admin+ can update
     if closing.closed_by != request.user and membership.role not in ("owner", "admin"):
         return Response(status=status.HTTP_403_FORBIDDEN)
 

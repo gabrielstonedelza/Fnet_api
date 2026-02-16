@@ -17,24 +17,15 @@ class SavedReport(models.Model):
         "core.Company", on_delete=models.CASCADE, related_name="saved_reports"
     )
     created_by = models.ForeignKey(
-        "accounts.User",
-        on_delete=models.CASCADE,
-        related_name="saved_reports",
+        "accounts.User", on_delete=models.CASCADE, related_name="saved_reports",
     )
     name = models.CharField(max_length=255)
     report_type = models.CharField(max_length=30, choices=ReportType.choices)
-    filters = models.JSONField(
-        default=dict,
-        help_text="Saved filter configuration (date range, branch, etc.)",
-    )
+    filters = models.JSONField(default=dict, help_text="Saved filter configuration.")
     is_scheduled = models.BooleanField(default=False)
     schedule_frequency = models.CharField(
         max_length=20,
-        choices=[
-            ("daily", "Daily"),
-            ("weekly", "Weekly"),
-            ("monthly", "Monthly"),
-        ],
+        choices=[("daily", "Daily"), ("weekly", "Weekly"), ("monthly", "Monthly")],
         blank=True,
     )
     created_at = models.DateTimeField(auto_now_add=True)

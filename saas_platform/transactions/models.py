@@ -73,7 +73,6 @@ class Transaction(models.Model):
     )
     currency = models.CharField(max_length=3, default="GHS")
 
-    # Description / notes
     description = models.TextField(blank=True)
     internal_notes = models.TextField(
         blank=True, help_text="Notes visible only to company staff."
@@ -181,7 +180,6 @@ class CashTransaction(models.Model):
     transaction = models.OneToOneField(
         Transaction, on_delete=models.CASCADE, related_name="cash_detail"
     )
-    # Cash denomination breakdown
     d_200 = models.PositiveIntegerField(default=0, verbose_name="200 GHS notes")
     d_100 = models.PositiveIntegerField(default=0, verbose_name="100 GHS notes")
     d_50 = models.PositiveIntegerField(default=0, verbose_name="50 GHS notes")
@@ -194,14 +192,9 @@ class CashTransaction(models.Model):
     @property
     def denomination_total(self):
         return (
-            self.d_200 * 200
-            + self.d_100 * 100
-            + self.d_50 * 50
-            + self.d_20 * 20
-            + self.d_10 * 10
-            + self.d_5 * 5
-            + self.d_2 * 2
-            + self.d_1 * 1
+            self.d_200 * 200 + self.d_100 * 100 + self.d_50 * 50 +
+            self.d_20 * 20 + self.d_10 * 10 + self.d_5 * 5 +
+            self.d_2 * 2 + self.d_1 * 1
         )
 
     def __str__(self):
@@ -222,9 +215,7 @@ class ExpenseRequest(models.Model):
         "core.Company", on_delete=models.CASCADE, related_name="expense_requests"
     )
     requested_by = models.ForeignKey(
-        "accounts.User",
-        on_delete=models.CASCADE,
-        related_name="expense_requests",
+        "accounts.User", on_delete=models.CASCADE, related_name="expense_requests",
     )
     amount = models.DecimalField(max_digits=12, decimal_places=2)
     reason = models.TextField()
@@ -232,11 +223,8 @@ class ExpenseRequest(models.Model):
         max_length=20, choices=Status.choices, default=Status.PENDING
     )
     approved_by = models.ForeignKey(
-        "accounts.User",
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name="approved_expenses",
+        "accounts.User", on_delete=models.SET_NULL,
+        null=True, blank=True, related_name="approved_expenses",
     )
     approved_at = models.DateTimeField(null=True, blank=True)
     rejection_reason = models.TextField(blank=True)
@@ -263,28 +251,21 @@ class DailyClosing(models.Model):
         "core.Company", on_delete=models.CASCADE, related_name="daily_closings"
     )
     branch = models.ForeignKey(
-        "core.Branch",
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name="daily_closings",
+        "core.Branch", on_delete=models.SET_NULL,
+        null=True, blank=True, related_name="daily_closings",
     )
     closed_by = models.ForeignKey(
-        "accounts.User",
-        on_delete=models.CASCADE,
-        related_name="daily_closings",
+        "accounts.User", on_delete=models.CASCADE, related_name="daily_closings",
     )
 
     date = models.DateField()
 
-    # Balances
     physical_cash = models.DecimalField(max_digits=14, decimal_places=2, default=0)
     mtn_ecash = models.DecimalField(max_digits=14, decimal_places=2, default=0)
     vodafone_ecash = models.DecimalField(max_digits=14, decimal_places=2, default=0)
     airteltigo_ecash = models.DecimalField(max_digits=14, decimal_places=2, default=0)
     total_ecash = models.DecimalField(max_digits=14, decimal_places=2, default=0)
 
-    # Discrepancies
     overage = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     shortage = models.DecimalField(max_digits=12, decimal_places=2, default=0)
 
