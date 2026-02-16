@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import (
     Transaction, BankDeposit, MobileMoneyTransaction,
-    CashTransaction, ExpenseRequest, DailyClosing,
+    CashTransaction, ExpenseRequest, DailyClosing, ProviderBalance,
 )
 
 
@@ -179,3 +179,34 @@ class DailyClosingSerializer(serializers.ModelSerializer):
             "created_at",
         ]
         read_only_fields = ["id", "company", "closed_by", "created_at"]
+
+
+class ProviderBalanceSerializer(serializers.ModelSerializer):
+    user_name = serializers.CharField(source="user.full_name", read_only=True)
+    provider_display = serializers.CharField(
+        source="get_provider_display", read_only=True
+    )
+
+    class Meta:
+        model = ProviderBalance
+        fields = [
+            "id", "company", "user", "user_name",
+            "provider", "provider_display",
+            "starting_balance", "balance",
+            "last_updated", "created_at",
+        ]
+        read_only_fields = ["id", "company", "last_updated", "created_at"]
+
+
+class SetProviderBalanceSerializer(serializers.Serializer):
+    """Used by admins to set starting balances for a user."""
+    user = serializers.UUIDField()
+    provider = serializers.ChoiceField(choices=ProviderBalance.Provider.choices)
+    starting_balance = serializers.DecimalField(max_digits=14, decimal_places=2)
+
+
+class AdjustProviderBalanceSerializer(serializers.Serializer):
+    """Used to adjust a provider balance (deposit adds, withdrawal subtracts)."""
+    provider = serializers.ChoiceField(choices=ProviderBalance.Provider.choices)
+    amount = serializers.DecimalField(max_digits=14, decimal_places=2)
+    operation = serializers.ChoiceField(choices=[("add", "Add"), ("subtract", "Subtract")])

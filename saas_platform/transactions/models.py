@@ -278,3 +278,50 @@ class DailyClosing(models.Model):
 
     def __str__(self):
         return f"Closing {self.date} by {self.closed_by.full_name}"
+
+
+class ProviderBalance(models.Model):
+    """
+    Tracks agent float balances per provider for each user in a company.
+    Each user starts with a configured amount for each provider (MTN, Vodafone,
+    Airtel, Tigo, Ecobank, Fidelity, Cal Bank) and the balance changes as
+    they process deposits and withdrawals.
+    """
+
+    class Provider(models.TextChoices):
+        MTN = "mtn", "MTN"
+        VODAFONE = "vodafone", "Vodafone"
+        AIRTEL = "airtel", "Airtel"
+        TIGO = "tigo", "Tigo"
+        ECOBANK = "ecobank", "Ecobank"
+        FIDELITY = "fidelity", "Fidelity"
+        CAL_BANK = "cal_bank", "Cal Bank"
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    company = models.ForeignKey(
+        "core.Company", on_delete=models.CASCADE, related_name="provider_balances"
+    )
+    user = models.ForeignKey(
+        "accounts.User", on_delete=models.CASCADE, related_name="provider_balances"
+    )
+    provider = models.CharField(max_length=20, choices=Provider.choices)
+    starting_balance = models.DecimalField(
+        max_digits=14, decimal_places=2, default=0,
+        help_text="The float amount the agent started with for this provider.",
+    )
+    balance = models.DecimalField(
+        max_digits=14, decimal_places=2, default=0,
+        help_text="Current running balance for this provider.",
+    )
+    last_updated = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = [["company", "user", "provider"]]
+        ordering = ["provider"]
+        indexes = [
+            models.Index(fields=["company", "user"]),
+        ]
+
+    def __str__(self):
+        return f"{self.user.full_name} - {self.get_provider_display()}: {self.balance}"

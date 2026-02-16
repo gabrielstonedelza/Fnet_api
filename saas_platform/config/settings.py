@@ -24,6 +24,7 @@ ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="*", cast=Csv())
 # Application definition
 # ---------------------------------------------------------------------------
 INSTALLED_APPS = [
+    "daphne",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -36,6 +37,7 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     "corsheaders",
     "django_filters",
+    "channels",
 
     # Project apps
     "core",
@@ -81,20 +83,29 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "config.wsgi.application"
+ASGI_APPLICATION = "config.asgi.application"
 
 # ---------------------------------------------------------------------------
-# Database
+# Database – SQLite for development, PostgreSQL for production
 # ---------------------------------------------------------------------------
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": config("DB_NAME", default="saas_financial_platform"),
-        "USER": config("DB_USER", default="postgres"),
-        "PASSWORD": config("DB_PASSWORD", default="postgres"),
-        "HOST": config("DB_HOST", default="localhost"),
-        "PORT": config("DB_PORT", default="5432"),
+if DEBUG:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": config("DB_NAME", default="saas_financial_platform"),
+            "USER": config("DB_USER", default="postgres"),
+            "PASSWORD": config("DB_PASSWORD", default="postgres"),
+            "HOST": config("DB_HOST", default="localhost"),
+            "PORT": config("DB_PORT", default="5432"),
+        }
+    }
 
 # ---------------------------------------------------------------------------
 # Auth
@@ -189,6 +200,25 @@ EMAIL_USE_TLS = config("EMAIL_USE_TLS", default=True, cast=bool)
 EMAIL_HOST_USER = config("EMAIL_HOST_USER", default="")
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="")
 DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default="noreply@saasfinance.com")
+
+# ---------------------------------------------------------------------------
+# Django Channels – WebSocket support
+# ---------------------------------------------------------------------------
+if DEBUG:
+    CHANNEL_LAYERS = {
+        "default": {
+            "BACKEND": "channels.layers.InMemoryChannelLayer",
+        }
+    }
+else:
+    CHANNEL_LAYERS = {
+        "default": {
+            "BACKEND": "channels_redis.core.RedisChannelLayer",
+            "CONFIG": {
+                "hosts": [(config("REDIS_HOST", default="localhost"), 6379)],
+            },
+        }
+    }
 
 # ---------------------------------------------------------------------------
 # Security (production)

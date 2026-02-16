@@ -7,7 +7,7 @@ from rest_framework.response import Response
 
 from .models import (
     Transaction, BankDeposit, MobileMoneyTransaction,
-    CashTransaction, ExpenseRequest, DailyClosing,
+    CashTransaction, ExpenseRequest, DailyClosing, ProviderBalance,
 )
 from .serializers import (
     TransactionSerializer,
@@ -19,6 +19,9 @@ from .serializers import (
     ExpenseRequestSerializer,
     ExpenseRequestCreateSerializer,
     DailyClosingSerializer,
+    ProviderBalanceSerializer,
+    SetProviderBalanceSerializer,
+    AdjustProviderBalanceSerializer,
 )
 
 
@@ -435,3 +438,135 @@ def daily_closing_detail(request, closing_id):
     serializer.is_valid(raise_exception=True)
     serializer.save()
     return Response(serializer.data)
+
+
+# ---------------------------------------------------------------------------
+# Provider Balances
+# ---------------------------------------------------------------------------
+@api_view(["GET"])
+def provider_balances(request):
+    """List all provider balances for the company. Admin+ can see all users."""
+    membership = getattr(request, "membership", None)
+    if not membership:
+        return Response(status=status.HTTP_403_FORBIDDEN)
+
+    qs = ProviderBalance.objects.filter(
+        company=membership.company
+    ).select_related("user")
+
+    # Non-admins only see their own balances
+    if membership.role not in ("owner", "admin"):
+        qs = qs.filter(user=request.user)
+
+    user_filter = request.query_params.get("user")
+    if user_filter:
+        qs = qs.filter(user_id=user_filter)
+
+    provider_filter = request.query_params.get("provider")
+    if provider_filter:
+        qs = qs.filter(provider=provider_filter)
+
+    return Response(ProviderBalanceSerializer(qs, many=True).data)
+
+
+@api_view(["POST"])
+def set_provider_balance(request):
+    """Set starting balance for a user's provider. Admin+ only."""
+    membership = getattr(request, "membership", None)
+    if not membership or membership.role not in ("owner", "admin"):
+        return Response(status=status.HTTP_403_FORBIDDEN)
+
+    serializer = SetProviderBalanceSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    data = serializer.validated_data
+
+    balance, created = ProviderBalance.objects.update_or_create(
+        company=membership.company,
+        user_id=data["user"],
+        provider=data["provider"],
+        defaults={
+            "starting_balance": data["starting_balance"],
+            "balance": data["starting_balance"],
+        },
+    )
+    return Response(
+        ProviderBalanceSerializer(balance).data,
+        status=status.HTTP_201_CREATED if created else status.HTTP_200_OK,
+    )
+
+
+@api_view(["POST"])
+def initialize_all_balances(request):
+    """
+    Set starting balances for ALL providers at once for a user. Admin+ only.
+    Expects: { "user": "<uuid>", "balances": { "mtn": 1000, "vodafone": 500, ... } }
+    """
+    membership = getattr(request, "membership", None)
+    if not membership or membership.role not in ("owner", "admin"):
+        return Response(status=status.HTTP_403_FORBIDDEN)
+
+    user_id = request.data.get("user")
+    balances = request.data.get("balances", {})
+    if not user_id or not balances:
+        return Response(
+            {"error": "Provide 'user' and 'balances' fields."},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    valid_providers = dict(ProviderBalance.Provider.choices)
+    results = []
+    for provider, amount in balances.items():
+        if provider not in valid_providers:
+            continue
+        balance, _ = ProviderBalance.objects.update_or_create(
+            company=membership.company,
+            user_id=user_id,
+            provider=provider,
+            defaults={
+                "starting_balance": Decimal(str(amount)),
+                "balance": Decimal(str(amount)),
+            },
+        )
+        results.append(balance)
+
+    return Response(ProviderBalanceSerializer(results, many=True).data)
+
+
+@api_view(["POST"])
+def adjust_provider_balance(request):
+    """
+    Adjust a provider balance (add or subtract). Used when processing transactions.
+    """
+    membership = getattr(request, "membership", None)
+    if not membership:
+        return Response(status=status.HTTP_403_FORBIDDEN)
+
+    serializer = AdjustProviderBalanceSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    data = serializer.validated_data
+
+    try:
+        balance = ProviderBalance.objects.get(
+            company=membership.company,
+            user=request.user,
+            provider=data["provider"],
+        )
+    except ProviderBalance.DoesNotExist:
+        return Response(
+            {"error": f"No balance record found for provider '{data['provider']}'."},
+            status=status.HTTP_404_NOT_FOUND,
+        )
+
+    amount = data["amount"]
+    if data["operation"] == "add":
+        balance.balance += amount
+    else:
+        if balance.balance < amount:
+            return Response(
+                {"error": "Insufficient balance."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        balance.balance -= amount
+
+    balance.save()
+    return Response(ProviderBalanceSerializer(balance).data)

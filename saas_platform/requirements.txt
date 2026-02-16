@@ -5,6 +5,10 @@ Django>=4.2,<5.0
 djangorestframework>=3.14,<4.0
 psycopg2-binary>=2.9
 
+# Real-time WebSockets
+channels[daphne]>=4.0
+channels-redis>=4.1
+
 # Filtering & Search
 django-filter>=23.0
 

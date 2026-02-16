@@ -26,4 +26,10 @@ urlpatterns = [
     # Daily closings
     path("daily-closings/", views.daily_closings, name="daily-closing-list-create"),
     path("daily-closings/<uuid:closing_id>/", views.daily_closing_detail, name="daily-closing-detail"),
+
+    # Provider balances
+    path("balances/", views.provider_balances, name="provider-balance-list"),
+    path("balances/set/", views.set_provider_balance, name="set-provider-balance"),
+    path("balances/initialize/", views.initialize_all_balances, name="initialize-all-balances"),
+    path("balances/adjust/", views.adjust_provider_balance, name="adjust-provider-balance"),
 ]
