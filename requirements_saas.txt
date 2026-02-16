@@ -1,0 +1,27 @@
+# SaaS Financial Platform Dependencies
+
+# Core framework
+Django>=4.2,<5.0
+djangorestframework>=3.14,<4.0
+psycopg2-binary>=2.9
+
+# Authentication
+djangorestframework-simplejwt>=5.3
+
+# Filtering & Search
+django-filter>=23.0
+
+# CORS
+django-cors-headers>=4.0
+
+# Environment variables
+python-decouple>=3.8
+
+# Image handling
+Pillow>=10.0
+
+# Production server
+gunicorn>=21.0
+
+# Utilities
+pytz>=2023.3
