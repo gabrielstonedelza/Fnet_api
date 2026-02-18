@@ -213,16 +213,19 @@ export default function DashboardPage() {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           <KPICard
             label="Today's Transactions"
-            value={dashboard.today_transactions}
+            value={dashboard.total_transactions_today}
           />
           <KPICard
-            label="Today's Volume"
-            value={`GHS ${Number(dashboard.today_volume || 0).toLocaleString()}`}
+            label="Deposits Today"
+            value={`GHS ${Number(dashboard.total_deposits_today || 0).toLocaleString()}`}
           />
-          <KPICard label="Deposits Today" value={dashboard.today_deposits} />
           <KPICard
             label="Withdrawals Today"
-            value={dashboard.today_withdrawals}
+            value={`GHS ${Number(dashboard.total_withdrawals_today || 0).toLocaleString()}`}
+          />
+          <KPICard
+            label="Fees Today"
+            value={`GHS ${Number(dashboard.total_fees_today || 0).toLocaleString()}`}
           />
           <KPICard label="Total Customers" value={dashboard.total_customers} />
           <KPICard

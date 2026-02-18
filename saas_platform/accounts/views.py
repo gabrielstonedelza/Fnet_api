@@ -48,26 +48,33 @@ def login(request):
         )
 
     # Resolve company membership
-    active_memberships = Membership.objects.filter(user=user, is_active=True)
+    active_memberships = Membership.objects.filter(
+        user=user, is_active=True,
+    ).select_related("company", "branch")
     if not active_memberships.exists():
         return Response(
             {"error": "You are not a member of any active company."},
             status=status.HTTP_403_FORBIDDEN,
         )
 
+    # Build companies list for the frontend
+    companies = [
+        {
+            "id": str(m.company_id),
+            "name": m.company.name,
+            "role": m.role,
+        }
+        for m in active_memberships
+    ]
+
     company_id = data.get("company_id")
+
+    # Multiple companies and no selection → ask user to choose
     if active_memberships.count() > 1 and not company_id:
-        companies = [
-            {
-                "company_id": str(m.company_id),
-                "company_name": m.company.name,
-                "role": m.role,
-            }
-            for m in active_memberships
-        ]
         return Response(
             {
-                "message": "Multiple companies found. Provide company_id.",
+                "requires_company_selection": True,
+                "message": "Multiple companies found. Please select one.",
                 "companies": companies,
             },
             status=status.HTTP_200_OK,
@@ -103,6 +110,7 @@ def login(request):
         "token": token.key,
         "user": UserSerializer(user).data,
         "membership": MembershipSerializer(membership).data,
+        "companies": companies,
     })
 
 
