@@ -59,7 +59,8 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 
-    # Custom middleware
+    # Custom middleware — OWASP security headers
+    "middleware.security.SecurityHeadersMiddleware",
     "middleware.tenant.TenantMiddleware",
     "middleware.audit.AuditMiddleware",
 ]
@@ -199,7 +200,7 @@ EMAIL_PORT = config("EMAIL_PORT", default=587, cast=int)
 EMAIL_USE_TLS = config("EMAIL_USE_TLS", default=True, cast=bool)
 EMAIL_HOST_USER = config("EMAIL_HOST_USER", default="")
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="")
-DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default="noreply@saasfinance.com")
+DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default="noreply@merchantplusgh.com")
 
 # ---------------------------------------------------------------------------
 # Django Channels – WebSocket support
@@ -221,14 +222,35 @@ else:
     }
 
 # ---------------------------------------------------------------------------
-# Security (production)
+# Session hardening (Security+ 4.0 — Secure session management)
+# ---------------------------------------------------------------------------
+SESSION_COOKIE_HTTPONLY = True        # Prevent JS access to session cookie
+SESSION_COOKIE_SAMESITE = "Lax"      # CSRF mitigation
+SESSION_COOKIE_AGE = 3600            # 1 hour session expiry
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_ENGINE = "django.contrib.sessions.backends.db"
+
+# Token expiry is handled by DRF token auth — tokens are long-lived.
+# For production, consider knox or simplejwt with short-lived access tokens.
+
+# ---------------------------------------------------------------------------
+# Security (production) — OWASP Top 10 hardening
 # ---------------------------------------------------------------------------
 if not DEBUG:
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
-    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_SECONDS = 31536000       # 1 year HSTS
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
-    SESSION_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = True          # Cookies only over HTTPS
     CSRF_COOKIE_SECURE = True
-    SECURE_SSL_REDIRECT = True
+    SECURE_SSL_REDIRECT = True            # Force HTTPS
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
+    CORS_ALLOW_ALL_ORIGINS = False        # Restrict CORS in production
+    CORS_ALLOWED_ORIGINS = config(
+        "CORS_ALLOWED_ORIGINS",
+        default="https://merchantplusgh.com",
+        cast=Csv(),
+    )
+    ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="merchantplusgh.com,www.merchantplusgh.com", cast=Csv())

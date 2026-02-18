@@ -11,7 +11,6 @@ export default function CustomerActivity({ customers }: Props) {
   const prevCountRef = useRef(customers.length);
   const [newIds, setNewIds] = useState<Set<string>>(new Set());
 
-  // Track new customers for highlight animation
   useEffect(() => {
     if (customers.length > prevCountRef.current) {
       const newCustIds = new Set(
@@ -29,14 +28,14 @@ export default function CustomerActivity({ customers }: Props) {
 
   return (
     <div className="card">
-      <h2 className="text-lg font-semibold text-gray-900 mb-4">
+      <h2 className="text-lg font-semibold text-dark-50 mb-4">
         Customer Activity
-        <span className="text-sm font-normal text-gray-500 ml-2">(live)</span>
+        <span className="text-sm font-normal text-dark-200 ml-2">(live)</span>
       </h2>
 
       <div className="space-y-2 max-h-[500px] overflow-y-auto">
         {customers.length === 0 ? (
-          <p className="text-gray-400 text-center py-8">No customers yet</p>
+          <p className="text-dark-300 text-center py-8">No customers yet</p>
         ) : (
           customers.slice(0, 30).map((cust) => (
             <CustomerRow
@@ -48,8 +47,8 @@ export default function CustomerActivity({ customers }: Props) {
         )}
       </div>
 
-      <div className="mt-4 pt-3 border-t border-gray-100">
-        <p className="text-xs text-gray-500 text-center">
+      <div className="mt-4 pt-3 border-t border-dark-400">
+        <p className="text-xs text-dark-300 text-center">
           {customers.length} total customer{customers.length !== 1 ? "s" : ""}
         </p>
       </div>
@@ -65,27 +64,27 @@ function CustomerRow({
   isNew: boolean;
 }) {
   const kycBadge = {
-    verified: "bg-green-100 text-green-800",
-    pending: "bg-yellow-100 text-yellow-800",
-    rejected: "bg-red-100 text-red-800",
-  }[cust.kyc_status] || "bg-gray-100 text-gray-800";
+    verified: "bg-emerald-900/40 text-emerald-400 border border-emerald-800/30",
+    pending: "bg-amber-900/40 text-amber-400 border border-amber-800/30",
+    rejected: "bg-red-900/40 text-red-400 border border-red-800/30",
+  }[cust.kyc_status] || "bg-dark-500 text-dark-200 border border-dark-400";
 
   const statusColor = {
-    active: "bg-green-500",
-    inactive: "bg-gray-400",
+    active: "bg-emerald-500",
+    inactive: "bg-dark-300",
     blocked: "bg-red-500",
-  }[cust.status] || "bg-gray-400";
+  }[cust.status] || "bg-dark-300";
 
   return (
     <div
       className={`flex items-center justify-between p-3 rounded-lg border transition-all ${
         isNew
-          ? "animate-slide-in bg-green-50 border-green-200"
-          : "bg-white border-gray-100 hover:bg-gray-50"
+          ? "animate-slide-in bg-gold/10 border-gold/30"
+          : "bg-dark-500/50 border-dark-400 hover:bg-dark-500"
       }`}
     >
       <div className="flex items-center gap-3">
-        <div className="w-9 h-9 rounded-full bg-gray-200 flex items-center justify-center text-sm font-bold text-gray-600">
+        <div className="w-9 h-9 rounded-full bg-dark-500 flex items-center justify-center text-sm font-bold text-gold">
           {cust.full_name
             .split(" ")
             .map((n) => n[0])
@@ -95,12 +94,12 @@ function CustomerRow({
         </div>
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-sm font-medium text-gray-900">
+            <span className="text-sm font-medium text-dark-50">
               {cust.full_name}
             </span>
             <div className={`w-2 h-2 rounded-full ${statusColor}`} />
           </div>
-          <p className="text-xs text-gray-500">{cust.phone}</p>
+          <p className="text-xs text-dark-300">{cust.phone}</p>
         </div>
       </div>
       <div className="text-right">
@@ -110,7 +109,7 @@ function CustomerRow({
           KYC: {cust.kyc_status}
         </span>
         {cust.created_at && (
-          <p className="text-[10px] text-gray-400 mt-1">
+          <p className="text-[10px] text-dark-300 mt-1">
             {new Date(cust.created_at).toLocaleDateString()}
           </p>
         )}

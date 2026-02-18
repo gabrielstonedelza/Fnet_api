@@ -24,7 +24,6 @@ export default function LoginPage() {
     localStorage.setItem("token", data.token);
     localStorage.setItem("user", JSON.stringify(data.user));
     localStorage.setItem("membership", JSON.stringify(data.membership));
-    // Store the active company ID from the membership
     localStorage.setItem("companyId", data.membership.company);
     localStorage.setItem("companyName", data.membership.company_name);
     localStorage.setItem("role", data.membership.role);
@@ -42,13 +41,11 @@ export default function LoginPage() {
       const data = await login(email, password);
 
       if (isCompanySelection(data)) {
-        // User belongs to multiple companies — show the selector
         setCompanies(data.companies);
         setSelectedCompanyId(data.companies[0]?.id || "");
         return;
       }
 
-      // Single company — go straight to dashboard
       storeLoginData(data);
       router.push("/dashboard");
     } catch (err) {
@@ -81,28 +78,35 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
-      <div className="w-full max-w-md">
-        <div className="card">
+    <div className="min-h-screen flex items-center justify-center bg-dark">
+      {/* Subtle radial gold glow */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gold/5 rounded-full blur-3xl" />
+      </div>
+
+      <div className="w-full max-w-md relative z-10">
+        <div className="card glow-gold">
           <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold text-gray-900">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gold mb-4">
+              <span className="text-dark text-2xl font-black">M+</span>
+            </div>
+            <h1 className="text-2xl font-bold text-dark-50">
               Merchant+
             </h1>
-            <p className="text-gray-500 mt-2">
+            <p className="text-dark-200 mt-2">
               {companies ? "Select your company" : "Sign in to your dashboard"}
             </p>
           </div>
 
           {error && (
-            <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm mb-4">
+            <div className="bg-red-900/30 text-red-400 border border-red-800/30 p-3 rounded-lg text-sm mb-4">
               {error}
             </div>
           )}
 
-          {/* Company Selection Step */}
           {companies ? (
             <form onSubmit={handleCompanySelect} className="space-y-4">
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-dark-200">
                 You belong to multiple companies. Choose which one to sign into:
               </p>
 
@@ -112,8 +116,8 @@ export default function LoginPage() {
                     key={c.id}
                     className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${
                       selectedCompanyId === c.id
-                        ? "border-blue-500 bg-blue-50"
-                        : "border-gray-200 hover:bg-gray-50"
+                        ? "border-gold bg-gold/10"
+                        : "border-dark-400 hover:bg-dark-500"
                     }`}
                   >
                     <input
@@ -122,13 +126,13 @@ export default function LoginPage() {
                       value={c.id}
                       checked={selectedCompanyId === c.id}
                       onChange={() => setSelectedCompanyId(c.id)}
-                      className="text-blue-600"
+                      className="accent-gold"
                     />
                     <div>
-                      <p className="text-sm font-medium text-gray-900">
+                      <p className="text-sm font-medium text-dark-50">
                         {c.name}
                       </p>
-                      <p className="text-xs text-gray-500 capitalize">
+                      <p className="text-xs text-dark-300 capitalize">
                         Role: {c.role}
                       </p>
                     </div>
@@ -156,10 +160,9 @@ export default function LoginPage() {
               </button>
             </form>
           ) : (
-            /* Login Form */
             <form onSubmit={handleLogin} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-dark-200 mb-1">
                   Email
                 </label>
                 <input
@@ -173,7 +176,7 @@ export default function LoginPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-dark-200 mb-1">
                   Password
                 </label>
                 <input

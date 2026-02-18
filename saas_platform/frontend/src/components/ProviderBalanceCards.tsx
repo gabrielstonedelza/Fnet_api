@@ -3,18 +3,18 @@
 import { useState, useEffect, useRef } from "react";
 import { ProviderBalance } from "@/lib/api";
 
-// Provider branding
+// Provider branding — adapted for dark theme
 const PROVIDER_CONFIG: Record<
   string,
   { color: string; bgColor: string; icon: string }
 > = {
-  mtn: { color: "text-yellow-700", bgColor: "bg-yellow-50 border-yellow-200", icon: "M" },
-  vodafone: { color: "text-red-700", bgColor: "bg-red-50 border-red-200", icon: "V" },
-  airtel: { color: "text-red-600", bgColor: "bg-orange-50 border-orange-200", icon: "A" },
-  tigo: { color: "text-blue-700", bgColor: "bg-blue-50 border-blue-200", icon: "T" },
-  ecobank: { color: "text-blue-800", bgColor: "bg-sky-50 border-sky-200", icon: "E" },
-  fidelity: { color: "text-green-700", bgColor: "bg-green-50 border-green-200", icon: "F" },
-  cal_bank: { color: "text-purple-700", bgColor: "bg-purple-50 border-purple-200", icon: "C" },
+  mtn: { color: "text-yellow-400", bgColor: "bg-yellow-900/30 border-yellow-800/30", icon: "M" },
+  vodafone: { color: "text-red-400", bgColor: "bg-red-900/30 border-red-800/30", icon: "V" },
+  airtel: { color: "text-orange-400", bgColor: "bg-orange-900/30 border-orange-800/30", icon: "A" },
+  tigo: { color: "text-blue-400", bgColor: "bg-blue-900/30 border-blue-800/30", icon: "T" },
+  ecobank: { color: "text-sky-400", bgColor: "bg-sky-900/30 border-sky-800/30", icon: "E" },
+  fidelity: { color: "text-emerald-400", bgColor: "bg-emerald-900/30 border-emerald-800/30", icon: "F" },
+  cal_bank: { color: "text-purple-400", bgColor: "bg-purple-900/30 border-purple-800/30", icon: "C" },
 };
 
 interface Props {
@@ -22,7 +22,6 @@ interface Props {
 }
 
 export default function ProviderBalanceCards({ balances }: Props) {
-  // Group balances by user
   const userBalances: Record<
     string,
     { user_name: string; providers: ProviderBalance[] }
@@ -37,7 +36,7 @@ export default function ProviderBalanceCards({ balances }: Props) {
 
   if (balances.length === 0) {
     return (
-      <div className="card text-center text-gray-500 py-8">
+      <div className="card text-center text-dark-200 py-8">
         <p className="text-lg font-medium">No Provider Balances Set</p>
         <p className="text-sm mt-1">
           Use the API to initialize starting balances for agents
@@ -48,16 +47,16 @@ export default function ProviderBalanceCards({ balances }: Props) {
 
   return (
     <div className="space-y-4">
-      <h2 className="text-lg font-semibold text-gray-900">
+      <h2 className="text-lg font-semibold text-dark-50">
         Provider Balances
-        <span className="text-sm font-normal text-gray-500 ml-2">
+        <span className="text-sm font-normal text-dark-200 ml-2">
           (live updating)
         </span>
       </h2>
 
       {Object.entries(userBalances).map(([userId, { user_name, providers }]) => (
         <div key={userId} className="card">
-          <h3 className="text-sm font-semibold text-gray-700 mb-3">
+          <h3 className="text-sm font-semibold text-gold mb-3">
             {user_name}
           </h3>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3">
@@ -73,15 +72,14 @@ export default function ProviderBalanceCards({ balances }: Props) {
 
 function BalanceCard({ balance }: { balance: ProviderBalance }) {
   const config = PROVIDER_CONFIG[balance.provider] || {
-    color: "text-gray-700",
-    bgColor: "bg-gray-50 border-gray-200",
+    color: "text-dark-200",
+    bgColor: "bg-dark-500 border-dark-400",
     icon: "?",
   };
 
   const [flash, setFlash] = useState(false);
   const prevBalance = useRef(balance.balance);
 
-  // Flash animation when balance changes
   useEffect(() => {
     if (prevBalance.current !== balance.balance) {
       setFlash(true);
@@ -101,13 +99,11 @@ function BalanceCard({ balance }: { balance: ProviderBalance }) {
     <div
       className={`rounded-lg border p-3 transition-all duration-300 ${
         config.bgColor
-      } ${flash ? "ring-2 ring-blue-400 scale-105" : ""}`}
+      } ${flash ? "ring-2 ring-gold scale-105" : ""}`}
     >
       <div className="flex items-center gap-2 mb-2">
         <div
-          className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-white ${
-            config.color.replace("text-", "bg-")
-          }`}
+          className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold bg-dark-500 ${config.color}`}
         >
           {config.icon}
         </div>
@@ -119,13 +115,13 @@ function BalanceCard({ balance }: { balance: ProviderBalance }) {
         GHS {currentBal.toLocaleString(undefined, { minimumFractionDigits: 2 })}
       </p>
       <div className="flex items-center justify-between mt-1">
-        <span className="text-[10px] text-gray-500">
+        <span className="text-[10px] text-dark-300">
           Start: {startBal.toLocaleString()}
         </span>
         {diff !== 0 && (
           <span
             className={`text-[10px] font-medium ${
-              isUp ? "text-green-600" : isDown ? "text-red-600" : ""
+              isUp ? "text-emerald-400" : isDown ? "text-red-400" : ""
             }`}
           >
             {isUp ? "+" : ""}

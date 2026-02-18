@@ -29,7 +29,6 @@ export default function DashboardPage() {
   const token = typeof window !== "undefined" ? localStorage.getItem("token") || "" : "";
   const companyId = typeof window !== "undefined" ? localStorage.getItem("companyId") || "" : "";
 
-  // Fetch initial data
   const fetchInitialData = useCallback(async () => {
     if (!token || !companyId) return;
 
@@ -51,18 +50,15 @@ export default function DashboardPage() {
     }
   }, [token, companyId]);
 
-  // Handle WebSocket events
   const handleTransactionUpdate = useCallback((data: WebSocketMessage) => {
     const tx = data.transaction as Transaction;
     setTransactions((prev) => {
-      // Check if transaction already exists (update) or is new
       const existing = prev.findIndex((t) => t.id === tx.id);
       if (existing >= 0) {
         const updated = [...prev];
         updated[existing] = tx;
         return updated;
       }
-      // New transaction — prepend
       return [tx, ...prev];
     });
   }, []);
@@ -104,7 +100,6 @@ export default function DashboardPage() {
         };
         return updated;
       }
-      // New balance entry
       return [
         ...prev,
         {
@@ -124,7 +119,6 @@ export default function DashboardPage() {
 
   const handleInitialState = useCallback(
     (data: WebSocketMessage) => {
-      // Server sends all balances on connect
       const serverBalances = data.balances as Array<{
         user_id: string;
         user_name: string;
@@ -154,7 +148,6 @@ export default function DashboardPage() {
     [companyId]
   );
 
-  // WebSocket setup
   useEffect(() => {
     if (!token || !companyId) return;
 
@@ -190,18 +183,18 @@ export default function DashboardPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gold" />
       </div>
     );
   }
 
   return (
     <div className="space-y-6">
-      {/* Header with connection status */}
+      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
-          <p className="text-gray-500 text-sm mt-1">
+          <h1 className="text-2xl font-bold text-dark-50">Admin Dashboard</h1>
+          <p className="text-dark-200 text-sm mt-1">
             Real-time overview of all operations
           </p>
         </div>
@@ -236,10 +229,8 @@ export default function DashboardPage() {
         </div>
       )}
 
-      {/* Provider Balances — live updating */}
       <ProviderBalanceCards balances={balances} />
 
-      {/* Two-column layout: Transactions + Customers */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
           <TransactionFeed transactions={transactions} />
@@ -262,11 +253,11 @@ function KPICard({
   highlight?: boolean;
 }) {
   return (
-    <div
-      className={`card ${highlight ? "border-amber-300 bg-amber-50" : ""}`}
-    >
-      <p className="text-xs text-gray-500 uppercase tracking-wide">{label}</p>
-      <p className="text-2xl font-bold mt-1">{value}</p>
+    <div className={`card ${highlight ? "border-gold/50 glow-gold" : ""}`}>
+      <p className="text-xs text-dark-200 uppercase tracking-wide">{label}</p>
+      <p className={`text-2xl font-bold mt-1 ${highlight ? "text-gold" : "text-dark-50"}`}>
+        {value}
+      </p>
     </div>
   );
 }

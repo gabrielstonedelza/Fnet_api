@@ -13,13 +13,13 @@ export default function ConnectionStatus({ status }: Props) {
       <div
         className={`w-2.5 h-2.5 rounded-full ${
           isConnected
-            ? "bg-green-500 animate-pulse"
+            ? "bg-emerald-500 animate-pulse"
             : isError
             ? "bg-red-500"
-            : "bg-yellow-500 animate-pulse"
+            : "bg-amber-500 animate-pulse"
         }`}
       />
-      <span className="text-gray-600">
+      <span className="text-dark-200">
         {isConnected
           ? "Live"
           : isError

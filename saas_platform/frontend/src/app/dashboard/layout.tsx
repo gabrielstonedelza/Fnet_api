@@ -42,30 +42,33 @@ export default function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-dark">
       {/* Top Navbar */}
-      <nav className="bg-white border-b border-gray-200 px-6 py-3">
+      <nav className="bg-dark-600 border-b border-dark-400 px-6 py-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-6">
-            <Link href="/dashboard" className="text-xl font-bold text-blue-600">
-              Merchant+
+            <Link href="/dashboard" className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-gold flex items-center justify-center">
+                <span className="text-dark text-sm font-black">M+</span>
+              </div>
+              <span className="text-xl font-bold text-gold">Merchant+</span>
             </Link>
             {companyName && (
-              <span className="hidden md:inline text-sm text-gray-500 border-l border-gray-200 pl-4">
+              <span className="hidden md:inline text-sm text-dark-200 border-l border-dark-400 pl-4">
                 {companyName}
               </span>
             )}
           </div>
           <div className="flex items-center gap-4">
             <div className="text-right">
-              <p className="text-sm font-medium text-gray-700">{userName}</p>
+              <p className="text-sm font-medium text-dark-50">{userName}</p>
               {role && (
-                <p className="text-xs text-gray-400 capitalize">{role}</p>
+                <p className="text-xs text-dark-300 capitalize">{role}</p>
               )}
             </div>
             <button
               onClick={handleLogout}
-              className="text-sm text-red-600 hover:text-red-700 font-medium"
+              className="text-sm text-red-400 hover:text-red-300 font-medium transition-colors"
             >
               Logout
             </button>
