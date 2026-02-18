@@ -86,7 +86,7 @@ export default function LoginPage() {
         <div className="card">
           <div className="text-center mb-8">
             <h1 className="text-2xl font-bold text-gray-900">
-              SaaS Financial Platform
+              Merchant+
             </h1>
             <p className="text-gray-500 mt-2">
               {companies ? "Select your company" : "Sign in to your dashboard"}

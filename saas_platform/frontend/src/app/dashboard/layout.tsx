@@ -48,7 +48,7 @@ export default function DashboardLayout({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-6">
             <Link href="/dashboard" className="text-xl font-bold text-blue-600">
-              FNet Finance
+              Merchant+
             </Link>
             {companyName && (
               <span className="hidden md:inline text-sm text-gray-500 border-l border-gray-200 pl-4">
