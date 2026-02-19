@@ -24,7 +24,6 @@ ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="*", cast=Csv())
 # Application definition
 # ---------------------------------------------------------------------------
 INSTALLED_APPS = [
-    "daphne",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -50,6 +49,13 @@ INSTALLED_APPS = [
     "reports",
     "audit",
 ]
+
+# Daphne must be first in INSTALLED_APPS when available (ASGI server)
+try:
+    import daphne  # noqa: F401
+    INSTALLED_APPS.insert(0, "daphne")
+except ImportError:
+    pass
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
