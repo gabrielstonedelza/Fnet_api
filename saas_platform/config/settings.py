@@ -286,6 +286,14 @@ if not DEBUG:
     ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="merchantplusgh.com,www.merchantplusgh.com", cast=Csv())
 
 # ---------------------------------------------------------------------------
+# SMS — Ghana gateway (Hubtel / Arkesel)
+# ---------------------------------------------------------------------------
+SMS_PROVIDER = config("SMS_PROVIDER", default="hubtel")           # hubtel | arkesel
+SMS_API_KEY = config("SMS_API_KEY", default="")
+SMS_API_SECRET = config("SMS_API_SECRET", default="")             # Hubtel only
+SMS_SENDER_ID = config("SMS_SENDER_ID", default="MerchantPlus")
+
+# ---------------------------------------------------------------------------
 # Celery — Background task processing
 # ---------------------------------------------------------------------------
 CELERY_BROKER_URL = config("CELERY_BROKER_URL", default="redis://localhost:6379/0")

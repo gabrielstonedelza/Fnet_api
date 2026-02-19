@@ -41,6 +41,9 @@ requests>=2.31
 pytest>=7.4
 pytest-django>=4.7
 
+# Two-Factor Authentication (TOTP)
+pyotp>=2.9
+
 # Utilities
 pytz>=2023.3
 

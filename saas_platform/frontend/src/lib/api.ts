@@ -64,12 +64,27 @@ export interface CompanySelectionResponse {
   companies: Company[];
 }
 
-export type LoginResponse = LoginSuccessResponse | CompanySelectionResponse;
+export interface TwoFactorRequiredResponse {
+  requires_2fa: true;
+  temp_token: string;
+  message: string;
+}
+
+export type LoginResponse =
+  | LoginSuccessResponse
+  | CompanySelectionResponse
+  | TwoFactorRequiredResponse;
 
 export function isCompanySelection(
   resp: LoginResponse
 ): resp is CompanySelectionResponse {
   return "requires_company_selection" in resp && resp.requires_company_selection === true;
+}
+
+export function isTwoFactorRequired(
+  resp: LoginResponse
+): resp is TwoFactorRequiredResponse {
+  return "requires_2fa" in resp && resp.requires_2fa === true;
 }
 
 export async function login(
@@ -80,6 +95,16 @@ export async function login(
   return apiRequest<LoginResponse>("/api/v1/auth/login/", {
     method: "POST",
     body: { email, password, ...(companyId && { company_id: companyId }) },
+  });
+}
+
+export async function verify2FA(
+  tempToken: string,
+  code: string
+): Promise<LoginSuccessResponse> {
+  return apiRequest<LoginSuccessResponse>("/api/v1/auth/2fa/verify/", {
+    method: "POST",
+    body: { temp_token: tempToken, code },
   });
 }
 

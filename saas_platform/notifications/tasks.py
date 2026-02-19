@@ -70,6 +70,27 @@ def send_transaction_alert_task(user_email: str, user_name: str, tx_data: dict):
     send_transaction_alert(user_email, user_name, tx_data)
 
 
+@shared_task(name="notifications.send_transaction_sms_task")
+def send_transaction_sms_task(phone: str, tx_data: dict):
+    """Async wrapper for transaction SMS alerts."""
+    from .sms import send_transaction_sms
+    send_transaction_sms(phone, tx_data)
+
+
+@shared_task(name="notifications.send_security_sms_task")
+def send_security_sms_task(phone: str, event: str):
+    """Async wrapper for security SMS alerts."""
+    from .sms import send_security_sms
+    send_security_sms(phone, event)
+
+
+@shared_task(name="notifications.send_approval_sms_task")
+def send_approval_sms_task(phone: str, reference: str, amount: str):
+    """Async wrapper for approval SMS alerts."""
+    from .sms import send_approval_sms
+    send_approval_sms(phone, reference, amount)
+
+
 @shared_task(name="notifications.cleanup_old_notifications")
 def cleanup_old_notifications(days: int = 90):
     """Remove read notifications older than N days."""

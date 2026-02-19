@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .models import User, Membership, Invitation, UserProfile
+from .two_factor import TwoFactorAuth
 
 
 @admin.register(User)
@@ -45,3 +46,11 @@ class InvitationAdmin(admin.ModelAdmin):
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ["user", "national_id", "id_type"]
     search_fields = ["user__full_name", "user__email"]
+
+
+@admin.register(TwoFactorAuth)
+class TwoFactorAuthAdmin(admin.ModelAdmin):
+    list_display = ["user", "is_enabled", "is_verified", "created_at"]
+    list_filter = ["is_enabled", "is_verified"]
+    search_fields = ["user__email", "user__full_name"]
+    readonly_fields = ["id", "secret", "backup_codes", "created_at", "updated_at"]

@@ -106,6 +106,18 @@ def login(request):
 
     token, _ = Token.objects.get_or_create(user=user)
 
+    # Check if 2FA is enabled — require TOTP verification before issuing token
+    try:
+        tfa = user.two_factor
+        if tfa.is_enabled:
+            return Response({
+                "requires_2fa": True,
+                "temp_token": token.key,
+                "message": "Enter your authenticator code to complete login.",
+            })
+    except Exception:
+        pass  # No 2FA configured — proceed normally
+
     return Response({
         "token": token.key,
         "user": UserSerializer(user).data,
