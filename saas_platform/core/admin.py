@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import SubscriptionPlan, Company, Branch, APIKey, CompanySettings
+from .webhooks import WebhookEndpoint, WebhookDelivery
 
 
 @admin.register(SubscriptionPlan)
@@ -38,3 +39,18 @@ class APIKeyAdmin(admin.ModelAdmin):
 class CompanySettingsAdmin(admin.ModelAdmin):
     list_display = ["company", "default_currency", "require_approval_above"]
     search_fields = ["company__name"]
+
+
+@admin.register(WebhookEndpoint)
+class WebhookEndpointAdmin(admin.ModelAdmin):
+    list_display = ["url", "company", "is_active", "failure_count", "last_triggered_at"]
+    list_filter = ["is_active"]
+    search_fields = ["url", "company__name"]
+    readonly_fields = ["id", "secret", "created_at"]
+
+
+@admin.register(WebhookDelivery)
+class WebhookDeliveryAdmin(admin.ModelAdmin):
+    list_display = ["event_type", "endpoint", "status", "response_status_code", "attempts", "created_at"]
+    list_filter = ["status", "event_type"]
+    readonly_fields = ["id", "payload", "response_body", "created_at"]

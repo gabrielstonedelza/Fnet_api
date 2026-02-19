@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     "corsheaders",
     "django_filters",
     "channels",
+    "drf_spectacular",
+    "django_celery_beat",
 
     # Project apps
     "core",
@@ -59,7 +61,8 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 
-    # Custom middleware — OWASP security headers
+    # Custom middleware
+    "middleware.lockout.AccountLockoutMiddleware",
     "middleware.security.SecurityHeadersMiddleware",
     "middleware.tenant.TenantMiddleware",
     "middleware.audit.AuditMiddleware",
@@ -150,6 +153,33 @@ REST_FRAMEWORK = {
         "anon": "30/minute",
         "user": "120/minute",
     },
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+# ---------------------------------------------------------------------------
+# API Documentation (drf-spectacular)
+# ---------------------------------------------------------------------------
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Merchant+ API",
+    "DESCRIPTION": (
+        "Multi-tenant SaaS financial platform API for payment agents in Ghana. "
+        "Supports bank deposits, mobile money, cash transactions, real-time "
+        "WebSocket updates, role-based access control, and comprehensive reporting."
+    ),
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    "CONTACT": {"name": "Merchant+ Support", "email": "support@merchantplusgh.com"},
+    "LICENSE": {"name": "Proprietary"},
+    "TAGS": [
+        {"name": "Auth", "description": "Authentication & team management"},
+        {"name": "Customers", "description": "Customer CRUD & KYC"},
+        {"name": "Transactions", "description": "Financial transactions"},
+        {"name": "Reports", "description": "Financial reporting & exports"},
+        {"name": "Notifications", "description": "In-app notifications"},
+        {"name": "Audit", "description": "Compliance audit trail"},
+        {"name": "Webhooks", "description": "Webhook management"},
+        {"name": "Health", "description": "Health check endpoints"},
+    ],
 }
 
 # ---------------------------------------------------------------------------
@@ -254,3 +284,44 @@ if not DEBUG:
         cast=Csv(),
     )
     ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="merchantplusgh.com,www.merchantplusgh.com", cast=Csv())
+
+# ---------------------------------------------------------------------------
+# Celery — Background task processing
+# ---------------------------------------------------------------------------
+CELERY_BROKER_URL = config("CELERY_BROKER_URL", default="redis://localhost:6379/0")
+CELERY_RESULT_BACKEND = config("CELERY_RESULT_BACKEND", default="redis://localhost:6379/1")
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+
+# ---------------------------------------------------------------------------
+# Logging
+# ---------------------------------------------------------------------------
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "[{asctime}] {levelname} {name} {message}",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "INFO",
+    },
+    "loggers": {
+        "django": {"handlers": ["console"], "level": "WARNING", "propagate": False},
+        "middleware.lockout": {"handlers": ["console"], "level": "WARNING", "propagate": False},
+        "notifications": {"handlers": ["console"], "level": "INFO", "propagate": False},
+        "core.tasks": {"handlers": ["console"], "level": "INFO", "propagate": False},
+    },
+}

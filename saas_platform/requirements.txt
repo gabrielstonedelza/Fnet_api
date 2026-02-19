@@ -1,4 +1,6 @@
-# SaaS Financial Platform Dependencies
+# =============================================================================
+# Merchant+ SaaS Financial Platform — Python Dependencies
+# =============================================================================
 
 # Core framework
 Django>=4.2,<5.0
@@ -18,11 +20,29 @@ django-cors-headers>=4.0
 # Environment variables
 python-decouple>=3.8
 
-# Image handling
+# Image handling (customer photos, ID docs, avatars)
 Pillow>=10.0
 
-# Production server
+# Production ASGI/WSGI servers
 gunicorn>=21.0
+
+# API Documentation — auto-generated OpenAPI/Swagger
+drf-spectacular>=0.27
+
+# Background tasks & scheduling
+celery>=5.3
+django-celery-beat>=2.5
+redis>=5.0
+
+# Webhook delivery
+requests>=2.31
+
+# Testing
+pytest>=7.4
+pytest-django>=4.7
 
 # Utilities
 pytz>=2023.3
+
+# Static file serving (production without nginx)
+whitenoise>=6.5
